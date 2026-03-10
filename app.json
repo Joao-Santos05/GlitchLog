@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "GlitchLog",
-    "slug": "GlitchLog",
+    "slug": "glitchlog",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "glitchlog",
+    "scheme": "games",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
