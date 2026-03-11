@@ -50,12 +50,11 @@ const recentGamesMock = [
 
 export default function ProfileScreen() {
   return (
-    <ScrollView className="flex-1 bg-[#23213D]">
+    <ScrollView className="flex-1 bg-background">
       <ProfileHeader />
       <StatsRow stats={statsMock} />
       <FavoriteGames games={favoritesMock} />
 
-      {/* Linha divisória */}
       <View className="h-[1px] bg-gray-600 w-full mt-6 opacity-30" />
 
       <RPlayed games={recentGamesMock} />

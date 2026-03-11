@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const Game = () => {
+const games = () => {
   return (
     <View>
-      <Text>Game</Text>
+      <Text>games</Text>
     </View>
   );
 };
 
-export default Game;
+export default games;
