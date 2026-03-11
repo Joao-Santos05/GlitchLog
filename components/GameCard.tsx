@@ -1,7 +1,8 @@
+import { Game } from "@/interfaces/interfaces";
 import { Link } from "expo-router";
 import { Star } from "lucide-react-native";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 const GameCard = ({
   id,
@@ -10,36 +11,32 @@ const GameCard = ({
   vote_average,
   release_date,
 }: Game) => {
-  console.log(poster_path);
-
   return (
     <Link href={`/games/${id}`} asChild>
-      <TouchableOpacity className="w-[30%]">
-        {/* <Image
+      <TouchableOpacity className="flex-1 max-w-[30%]">
+        <Image
           source={{
-            uri: poster_path
-              ? `https://image.tmdb.org/t/p/w500${poster_path}`
-              : `https://placehold.co/600x400/1a1a1a/ffffff.png`,
+            uri:
+              poster_path || `https://placehold.co/600x400/1a1a1a/ffffff.png`,
           }}
-          className="w-full h-52 rounded-lg"
+          className="w-full h-36 rounded-lg"
           resizeMode="cover"
-        /> */}
+        />
 
         <Text className="text-sm font-bold text-white mt-2" numberOfLines={1}>
           {title}
         </Text>
 
-        <View className="flex-row items-center justify-start gap-x-1">
-          <Star size={4} />
-
-          <Text className="text-xs text-white font-bold uppercase">
-            {Math.round(vote_average / 2)}
+        <View className="flex-row items-center justify-start gap-x-1 mt-1">
+          <Star size={12} color="#FFD700" fill="#FFD700" />
+          <Text className="text-xs text-white font-bold">
+            {vote_average.toFixed(1)}
           </Text>
         </View>
 
         <View className="flex-row items-center justify-between">
-          <Text className="text-xs text-light-300 font-medium mt-1">
-            {release_date?.split("-")[0]}
+          <Text className="text-xs text-[#A499C9] font-medium mt-1">
+            {release_date?.split("-")[0] || "N/A"}
           </Text>
         </View>
       </TouchableOpacity>

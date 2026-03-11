@@ -1,77 +1,68 @@
-interface Game {
+export interface Game {
   id: number;
   title: string;
-  adult: boolean;
-  backdrop_path: string;
-  genre_ids: number[];
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string;
+  original_title?: string;
+  overview?: string; // Resume
+  poster_path: string | null; // Cover
+  backdrop_path?: string | null; // Bg
+  genre_ids?: number[];
+  popularity?: number;
   release_date: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
+  vote_average: number; // Grade
+  vote_count?: number;
+
+  // //
+  platforms?: string[];
+  esrb_rating?: string | null;
 }
 
-interface TrendingGame {
+export interface TrendingGame {
   searchTerm: string;
-  movie_id: number;
+  game_id: number; // Corrigido de movie_id para game_id
   title: string;
   count: number;
   poster_url: string;
 }
 
-interface GameDetails {
-  adult: boolean;
+export interface GameDetails {
+  id: number;
+  title: string;
+  original_title?: string;
+  overview: string | null;
+  poster_path: string | null;
   backdrop_path: string | null;
-  belongs_to_collection: {
-    id: number;
-    name: string;
-    poster_path: string;
-    backdrop_path: string;
-  } | null;
-  budget: number;
+  release_date: string;
+  vote_average: number;
+  vote_count: number;
+  popularity: number;
+  homepage: string | null;
+  status: string;
+  playtime: number | null; // Average hours to finish the game
+  esrb_rating: string | null; // Age Rating
+
   genres: {
     id: number;
     name: string;
   }[];
-  homepage: string | null;
-  id: number;
-  imdb_id: string | null;
-  original_language: string;
-  original_title: string;
-  overview: string | null;
-  popularity: number;
-  poster_path: string | null;
-  production_companies: {
+
+  platforms: {
     id: number;
-    logo_path: string | null;
-    name: string;
-    origin_country: string;
-  }[];
-  production_countries: {
-    iso_3166_1: string;
     name: string;
   }[];
-  release_date: string;
-  revenue: number;
-  runtime: number | null;
-  spoken_languages: {
-    english_name: string;
-    iso_639_1: string;
+
+  developers: {
+    id: number;
+    name: string;
+    image_url?: string | null;
+  }[];
+
+  publishers: {
+    id: number;
     name: string;
   }[];
-  status: string;
-  tagline: string | null;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
 }
 
-interface TrendingCardProps {
-  movie: TrendingGame;
+export interface TrendingCardProps {
+  game: TrendingGame;
   index: number;
 }

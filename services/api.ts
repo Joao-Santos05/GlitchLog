@@ -1,43 +1,46 @@
-export const TMDB_CONFIG = {
-  //   BASE_URL: "https://api.themoviedb.org/3",
-  //   API_KEY: process.env.EXPO_PUBLIC_MOVIE_API_KEY,
-  //   headers: {
-  //     accept: "application/json",
-  //     Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOVIE_API_KEY}`,
-  //   },
+import { Game } from "@/interfaces/interfaces";
+
+export const API_CONFIG = {
+  BASE_URL: "URL_DA_SUA_FUTURA_API_AQUI",
+  // API_KEY: process.env.EXPO_PUBLIC_GAME_API_KEY,
 };
 
-export const fetchGames = async ({ query }: { query: string }) => {
-  //   const endpoint = query
-  //     ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-  //     : `${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`;
-  //   const response = await fetch(endpoint, {
-  //     method: "GET",
-  //     headers: TMDB_CONFIG.headers,
-  //   });
-  //   if (!response.ok) {
-  //     // @ts-ignore
-  //     throw new Error("Failed to fetch games", response.statusText);
-  //   }
-  //   const data = await response.json();
-  //   return data.results;
-  // };
-  // export const fetchGameDetails = async (
-  //   gameId: string,
-  // ): Promise<GameDetails> => {
-  //   try {
-  //     const response = await fetch(
-  //       `${TMDB_CONFIG.BASE_URL}/Game/${GameId}?api_key=${TMDB_CONFIG.API_KEY}`,
-  //       {
-  //         method: "GET",
-  //         headers: TMDB_CONFIG.headers,
-  //       },
-  //     );
-  //     if (!response.ok) throw new Error("Failed to fetch Game details");
-  //     const data = await response.json();
-  //     return data;
-  //   } catch (error) {
-  //     console.log(error);
-  //     throw error;
-  //   }
+// Mock Data
+const mockGames: Game[] = [
+  {
+    id: 1,
+    title: "Hollow Knight",
+    vote_average: 9.5,
+    release_date: "2017-02-24",
+    poster_path:
+      "https://placehold.co/400x600/1a1a1a/ffffff.png?text=Hollow+Knight",
+    overview:
+      "Um jogo de ação e aventura épico em um reino arruinado de insetos e heróis.",
+    platforms: ["PC", "Switch", "PlayStation", "Xbox"],
+  },
+  {
+    id: 2,
+    title: "Celeste",
+    vote_average: 9.0,
+    release_date: "2018-01-25",
+    poster_path: "https://placehold.co/400x600/1a1a1a/ffffff.png?text=Celeste",
+    overview:
+      "Ajude Madeline a sobreviver aos seus demônios internos em sua jornada.",
+    platforms: ["PC", "Switch", "PlayStation"],
+  },
+];
+
+export const fetchGames = async ({
+  query,
+}: {
+  query: string;
+}): Promise<Game[]> => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  if (query) {
+    return mockGames.filter((game) =>
+      game.title.toLowerCase().includes(query.toLowerCase()),
+    );
+  }
+  return mockGames;
 };

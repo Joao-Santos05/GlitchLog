@@ -10,10 +10,10 @@ import {
   Heart,
   LibraryBig,
   ListFilterIcon,
-  LogOutIcon,
+  Menu,
   User2,
 } from "lucide-react-native";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 function CustomDrawerContent(props: any) {
@@ -23,7 +23,10 @@ function CustomDrawerContent(props: any) {
         {...props}
         contentContainerStyle={{ paddingBottom: 20 }}
       >
-        <View className="px-5 py-8 mt-4">
+        <View className="p-6 mb-3">
+          <Menu size={20} color={"white"} />
+        </View>
+        <View className="px-5">
           <View className="flex-row items-center">
             <Image
               source={{ uri: "https://i.pravatar.cc/150?img=11" }}
@@ -49,20 +52,10 @@ function CustomDrawerContent(props: any) {
           </View>
         </View>
 
-        <View className="px-3 mt-4">
+        <View className="mt-7">
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
-
-      <View className="p-6 mb-4">
-        <TouchableOpacity className="flex-row items-center ml-4">
-          <LogOutIcon size={20} color={"white"} />
-          <Text className="text-[#E2D4FF] text-base font-semibold">
-            {" "}
-            Logout
-          </Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
@@ -154,6 +147,15 @@ export default function ProfileLayout() {
             drawerIcon: ({ color }) => <Heart size={20} color={color} />,
           }}
         />
+
+        {/* <View>. make LOGOUT
+          <TouchableOpacity className="flex-row items-center ml-4">
+            <LogOutIcon size={20} color={"white"} />
+            <Text className="text-[#E2D4FF] text-base font-semibold">
+              Logout
+            </Text>
+          </TouchableOpacity>
+        </View> */}
       </Drawer>
     </GestureHandlerRootView>
   );
