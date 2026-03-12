@@ -35,8 +35,8 @@ export default function ReviewCard({ review, showGameCover = true }: Props) {
                   <Star
                     key={i}
                     size={10}
-                    color={i < review.stars ? "#FFD700" : "#4A5568"}
-                    fill={i < review.stars ? "#FFD700" : "transparent"}
+                    color={i < review.stars ? "#E9A6A6" : "#E9A6A6"}
+                    fill={i < review.stars ? "#E9A6A6" : "transparent"}
                   />
                 ))}
               </View>

@@ -17,14 +17,15 @@ export default function TabsLayout() {
         tabBarItemStyle: {
           justifyContent: "center",
           alignItems: "center",
-          paddingTop: 12,
+          paddingTop: 22,
         },
 
         tabBarStyle: {
           backgroundColor: "#372660",
           height: 90,
           position: "absolute",
-          borderTopWidth: 0,
+          borderTopWidth: 0.5,
+          borderTopColor: "#5b4967",
           elevation: 0,
         },
       }}
@@ -32,7 +33,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "",
           tabBarIcon: ({ color }) => (
             <GamepadDirectional size={24} color={color} />
           ),
@@ -41,21 +42,21 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="search"
         options={{
-          title: "Search",
+          title: "",
           tabBarIcon: ({ color }) => <Search size={24} color={color} />,
         }}
       />
       <Tabs.Screen
         name="games"
         options={{
-          title: "Games",
+          title: "",
           tabBarIcon: ({ color }) => <Gamepad2 size={24} color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: "",
           tabBarIcon: ({ color }) => <Headset size={24} color={color} />,
         }}
       />

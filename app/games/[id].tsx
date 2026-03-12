@@ -119,8 +119,8 @@ export default function GameDetailsScreen() {
                   <Star
                     key={i}
                     size={10}
-                    color="#FFD700"
-                    fill={i < 4 ? "#FFD700" : "transparent"}
+                    color="#E9A6A6"
+                    fill={i < 4 ? "#E9A6A6" : "transparent"}
                   />
                 ))}
               </View>

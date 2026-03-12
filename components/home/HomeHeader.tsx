@@ -2,7 +2,7 @@ import { Image, Text, View } from "react-native";
 
 export default function HomeHeader() {
   return (
-    <View className="px-6 mt-10 pt-12 pb-4 flex-row justify-between items-start">
+    <View className="px-6 pt-2 pb-4 flex-row justify-between items-start">
       <View>
         <Text className="text-white text-3xl font-bold">
           Hello, <Text className="text-[#FF8A65]">David!</Text>

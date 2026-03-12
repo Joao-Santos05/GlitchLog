@@ -80,43 +80,53 @@ export default function HomeScreen() {
   const router = useRouter();
 
   return (
-    <ScrollView className="flex-1 bg-background">
-      <HomeHeader />
+    <View className="flex-1 bg-background">
+      <View className="flex items-center justify-center border-b border-dark-300 pt-14 pb-2 bg-background z-10">
+        <Image
+          source={require("@/assets/icons/logotext.png")}
+          className="w-56 h-12"
+          resizeMode="contain"
+        />
+      </View>
 
-      <View className="mt-4">
-        <Text className="text-white text-lg font-bold px-6 mb-4">
-          Popular Games This Month
-        </Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 24 }}
-          className="gap-4"
-        >
-          {MOCK_GAMES.map((game) => (
-            <TouchableOpacity
-              key={game.id}
-              onPress={() => router.push(`/games/${game.id}`)}
-            >
-              <Image
-                source={{ uri: game.coverUrl }}
-                className="w-28 h-40 rounded-lg mr-2"
-              />
-            </TouchableOpacity>
+      <ScrollView className="flex-1 pt-4">
+        <HomeHeader />
+
+        <View className="mt-4">
+          <Text className="text-white text-lg font-bold px-6 mb-4">
+            Popular Games This Month
+          </Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 24 }}
+            className="gap-4"
+          >
+            {MOCK_GAMES.map((game) => (
+              <TouchableOpacity
+                key={game.id}
+                onPress={() => router.push(`/games/${game.id}`)}
+              >
+                <Image
+                  source={{ uri: game.coverUrl }}
+                  className="w-28 h-40 rounded-lg mr-2"
+                />
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+
+        <PopularLists lists={MOCK_LISTS} />
+
+        <View className="mt-8 px-6 pb-24">
+          <Text className="text-white text-lg font-bold mb-4">
+            Recent Friends Review
+          </Text>
+          {MOCK_REVIEWS.map((review) => (
+            <ReviewCard key={review.id} review={review} />
           ))}
-        </ScrollView>
-      </View>
-
-      <PopularLists lists={MOCK_LISTS} />
-
-      <View className="mt-8 px-6 pb-24">
-        <Text className="text-white text-lg font-bold mb-4">
-          Recent Friends Review
-        </Text>
-        {MOCK_REVIEWS.map((review) => (
-          <ReviewCard key={review.id} review={review} />
-        ))}
-      </View>
-    </ScrollView>
+        </View>
+      </ScrollView>
+    </View>
   );
 }

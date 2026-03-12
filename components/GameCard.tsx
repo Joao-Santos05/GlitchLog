@@ -27,11 +27,15 @@ const GameCard = ({
           {title}
         </Text>
 
-        <View className="flex-row items-center justify-start gap-x-1 mt-1">
-          <Star size={12} color="#FFD700" fill="#FFD700" />
-          <Text className="text-xs text-white font-bold">
-            {vote_average.toFixed(1)}
-          </Text>
+        <View className="flex-row mt-1">
+          {[...Array(5)].map((_, i) => (
+            <Star
+              key={i}
+              size={10}
+              color="#E9A6A6"
+              fill={i < 4 ? "#E9A6A6" : "transparent"}
+            />
+          ))}
         </View>
 
         <View className="flex-row items-center justify-between">
