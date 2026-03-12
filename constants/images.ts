@@ -1,5 +1,5 @@
-import bg from "@/assets/images/bg.png";
+// import bg from "@/assets/images/bg.png";
 
-export const images = {
-  bg,
-};
+// export const images = {
+//   bg,
+// };

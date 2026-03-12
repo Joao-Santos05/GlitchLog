@@ -1,5 +1,10 @@
 import { Tabs } from "expo-router";
-import { Gamepad2, GitFork, Headset, Search } from "lucide-react-native";
+import {
+  Gamepad2,
+  GamepadDirectional,
+  Headset,
+  Search,
+} from "lucide-react-native";
 
 export default function TabsLayout() {
   return (
@@ -28,7 +33,9 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => <Gamepad2 size={24} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <GamepadDirectional size={24} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -39,10 +46,10 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="notifications"
+        name="games"
         options={{
-          title: "Notifications",
-          tabBarIcon: ({ color }) => <GitFork size={24} color={color} />,
+          title: "Games",
+          tabBarIcon: ({ color }) => <Gamepad2 size={24} color={color} />,
         }}
       />
       <Tabs.Screen

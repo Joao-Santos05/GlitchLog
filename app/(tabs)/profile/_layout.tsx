@@ -5,9 +5,9 @@ import {
 } from "@react-navigation/drawer";
 import { Drawer } from "expo-router/drawer";
 import {
+  Bell,
   BookOpenCheck,
   Calendar,
-  Gamepad,
   Heart,
   LibraryBig,
   ListFilterIcon,
@@ -116,11 +116,11 @@ export default function ProfileLayout() {
         />
 
         <Drawer.Screen
-          name="(drawer)/games"
+          name="(drawer)/notifications"
           options={{
-            drawerLabel: "Games",
-            title: "Games",
-            drawerIcon: ({ color }) => <Gamepad size={20} color={color} />,
+            drawerLabel: "Notifications",
+            title: "Notifications",
+            drawerIcon: ({ color }) => <Bell size={20} color={color} />,
           }}
         />
 
