@@ -32,7 +32,7 @@ export default function GameDetailsScreen() {
   const router = useRouter();
 
   return (
-    <ScrollView className="flex-1 bg-[#1E1B30]">
+    <ScrollView className="flex-1 bg-[#372660]">
       <View className="relative h-72">
         <Image
           source={{ uri: "https://via.placeholder.com/800x600" }}
@@ -50,7 +50,7 @@ export default function GameDetailsScreen() {
         <View className="w-32 mr-5">
           <Image
             source={{ uri: "https://via.placeholder.com/200x300" }}
-            className="w-full h-48 rounded-xl border-2 border-[#1E1B30]"
+            className="w-full h-48 rounded-xl border-2 border-[#E9A6A6]"
           />
           <View className="flex-row justify-between mt-3">
             <View className="items-center">

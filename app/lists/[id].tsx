@@ -49,7 +49,7 @@ export default function ListDetailsScreen() {
   const router = useRouter();
 
   return (
-    <View className="flex-1 bg-[#1E1B30]">
+    <View className="flex-1 bg-[#372660]">
       <View className="px-6 pt-14 pb-4 flex-row items-center justify-between">
         <TouchableOpacity
           onPress={() => router.back()}
