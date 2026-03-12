@@ -122,7 +122,7 @@ export default function GamesScreen() {
                   />
                 ))}
               </View>
-              {item.liked && <Heart size={10} color="#FF8A65" fill="#FF8A65" />}
+              {item.liked && <Heart size={10} color="#f00000" fill="#f00000" />}
             </View>
           </TouchableOpacity>
         )}
