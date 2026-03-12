@@ -32,7 +32,7 @@ const Search = () => {
   }, [searchQuery, loadGames]);
 
   return (
-    <View className="flex-1 bg-[#2C225A]">
+    <View className="flex-1 bg-background">
       <FlatList
         data={games || []}
         renderItem={({ item }) => <GameCard {...item} />}
@@ -52,13 +52,13 @@ const Search = () => {
             </View>
 
             <View className="flex-row items-center bg-[#1A133A] rounded-xl px-4 py-3 my-5 mt-15 border border-[#F2E8FF]/20">
-              <SearchIcon size={20} color="#A499C9" />
+              <SearchIcon size={20} color="#C8ADFF" />
               <TextInput
                 placeholder="Search for games..."
-                placeholderTextColor="#A499C9"
+                placeholderTextColor="#C8ADFF"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                className="flex-1 ml-3 text-white text-base"
+                className="flex-1 ml-3 text-light-200 text-base"
               />
             </View>
 

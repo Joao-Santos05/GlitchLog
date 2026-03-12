@@ -6,27 +6,21 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#FFFFFF",
-        tabBarActiveBackgroundColor: "#C8ADFF",
-        tabBarInactiveTintColor: "#372660",
+        tabBarActiveTintColor: "#E9A6A6",
+        tabBarInactiveTintColor: "#C8ADFF",
 
         tabBarItemStyle: {
-          width: "100%",
-          height: "100%",
           justifyContent: "center",
           alignItems: "center",
+          paddingTop: 12,
         },
 
         tabBarStyle: {
-          backgroundColor: "#C8ADFF",
-          borderRadius: 50,
-          marginHorizontal: 20,
-          marginBottom: 36,
-          height: 55,
+          backgroundColor: "#372660",
+          height: 90,
           position: "absolute",
-          overflow: "hidden",
-          borderWidth: 1,
-          borderColor: "0C8ADFF",
+          borderTopWidth: 0,
+          elevation: 0,
         },
       }}
     >

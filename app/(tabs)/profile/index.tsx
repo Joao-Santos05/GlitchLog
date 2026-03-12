@@ -1,12 +1,16 @@
 import FavoriteGames from "@/components/profile/FavoriteGames";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import RPlayed from "@/components/profile/RPlayed";
-import RecentReviewCard from "@/components/profile/RecentReviewCard";
 import StatsRow from "@/components/profile/StatsRow";
+import ReviewCard from "@/components/shared/ReviewCard";
+import { Review } from "@/types";
+import { DrawerActions } from "@react-navigation/native";
+import { useNavigation } from "expo-router";
+import { Menu } from "lucide-react-native";
 import React from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-// Dados Mockados para simular a API no futuro
 const statsMock = [
   { label: "Total Games", value: "45" },
   { label: "Games This Year", value: "12" },
@@ -48,17 +52,62 @@ const recentGamesMock = [
   },
 ];
 
+const MOCK_REVIEWS: Review[] = [
+  {
+    id: "1",
+    game: {
+      id: "5",
+      title: "Kingdom Come",
+      coverUrl: "https://via.placeholder.com/150x200",
+      year: "2025",
+    },
+    reviewer: { name: "Adrian", avatarUrl: "https://i.pravatar.cc/150?img=3" },
+    stars: 4,
+    likes: 0,
+    comments: 8,
+    content:
+      "Playing through this absolute gem of a game reminded me of when in 2011 i took up skyrim...",
+  },
+];
+
 export default function ProfileScreen() {
+  const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
+
   return (
-    <ScrollView className="flex-1 bg-background">
-      <ProfileHeader />
-      <StatsRow stats={statsMock} />
-      <FavoriteGames games={favoritesMock} />
+    <View className="flex-1 bg-background">
+      <TouchableOpacity
+        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+        style={{
+          position: "absolute",
+          top: insets.top > 0 ? insets.top + 10 : 40,
+          left: 20,
+          zIndex: 50,
+          backgroundColor: "rgba(0,0,0,0.4)",
+          padding: 8,
+          borderRadius: 100,
+        }}
+      >
+        <Menu color="white" size={24} />
+      </TouchableOpacity>
 
-      <View className="h-[1px] bg-gray-600 w-full mt-6 opacity-30" />
+      <ScrollView className="flex-1">
+        <ProfileHeader />
+        <StatsRow stats={statsMock} />
+        <FavoriteGames games={favoritesMock} />
 
-      <RPlayed games={recentGamesMock} />
-      <RecentReviewCard />
-    </ScrollView>
+        <View className="h-[1px] bg-gray-600 w-full mt-6 opacity-30" />
+
+        <RPlayed games={recentGamesMock} />
+        <View className="mt-8 px-6 pb-24">
+          <Text className="text-white text-lg font-bold mb-4">
+            Recent Friends Review
+          </Text>
+          {MOCK_REVIEWS.map((review) => (
+            <ReviewCard key={review.id} review={review} />
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 }

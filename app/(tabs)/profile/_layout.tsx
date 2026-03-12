@@ -1,5 +1,6 @@
 import {
   DrawerContentScrollView,
+  DrawerItem,
   DrawerItemList,
 } from "@react-navigation/drawer";
 import { Drawer } from "expo-router/drawer";
@@ -10,11 +11,27 @@ import {
   Heart,
   LibraryBig,
   ListFilterIcon,
-  Menu,
+  LogOutIcon,
   User2,
 } from "lucide-react-native";
-import { Image, Text, View } from "react-native";
+import { Alert, Image, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+const handleLogout = () => {
+  Alert.alert("Logout", "Are you sure?", [
+    {
+      text: "Cancel",
+      style: "cancel",
+    },
+    {
+      text: "Exit",
+      style: "destructive",
+      onPress: () => {
+        console.log("User Logged Out");
+      },
+    },
+  ]);
+};
 
 function CustomDrawerContent(props: any) {
   return (
@@ -23,10 +40,7 @@ function CustomDrawerContent(props: any) {
         {...props}
         contentContainerStyle={{ paddingBottom: 20 }}
       >
-        <View className="p-6 mb-3">
-          <Menu size={20} color={"white"} />
-        </View>
-        <View className="px-5">
+        <View className="px-5 mt-6">
           <View className="flex-row items-center">
             <Image
               source={{ uri: "https://i.pravatar.cc/150?img=11" }}
@@ -54,6 +68,17 @@ function CustomDrawerContent(props: any) {
 
         <View className="mt-7">
           <DrawerItemList {...props} />
+          <DrawerItem
+            label="Logout"
+            icon={({ color }) => <LogOutIcon size={20} color={color} />}
+            onPress={handleLogout}
+            inactiveTintColor="#A499C9"
+            style={{
+              borderRadius: 20,
+              paddingHorizontal: 10,
+              marginBottom: 8,
+            }}
+          />
         </View>
       </DrawerContentScrollView>
     </View>
@@ -147,15 +172,6 @@ export default function ProfileLayout() {
             drawerIcon: ({ color }) => <Heart size={20} color={color} />,
           }}
         />
-
-        {/* <View>. make LOGOUT
-          <TouchableOpacity className="flex-row items-center ml-4">
-            <LogOutIcon size={20} color={"white"} />
-            <Text className="text-[#E2D4FF] text-base font-semibold">
-              Logout
-            </Text>
-          </TouchableOpacity>
-        </View> */}
       </Drawer>
     </GestureHandlerRootView>
   );
