@@ -2,17 +2,17 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export interface FilterOption {
-  label: string; // O que aparece escrito (ex: "5 Stars")
-  value: string | number; // O valor real por trás (ex: 5)
+  label: string;
+  value: string | number;
 }
 
 interface FilterDropdownProps {
-  activeLabel: string; // O texto que fica no botão principal
+  activeLabel: string;
   options: FilterOption[];
   isOpen: boolean;
   onToggle: () => void;
   onSelect: (value: string | number) => void;
-  widthClass?: string; // Para você controlar a largura do menu se precisar
+  widthClass?: string;
 }
 
 export default function FilterDropdown({
