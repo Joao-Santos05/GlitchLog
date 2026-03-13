@@ -1,21 +1,45 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Animated, Image, Text, TouchableOpacity, View } from "react-native";
 
-export default function ProfileHeader() {
+interface ProfileHeaderProps {
+  scrollY: Animated.Value;
+}
+
+export default function ProfileHeader({ scrollY }: ProfileHeaderProps) {
   return (
-    <View className="relative">
-      <Image
-        source={{
-          uri: "https://via.placeholder.com/600x200/8B4513/FFFFFF?text=Cover+Image",
-        }}
+    <View className="relative overflow-visible">
+      <Animated.Image
+        source={require("@/assets/images/BannerLogin.png")}
         className="w-full h-48"
+        style={{
+          transform: [
+            {
+              // A mágica acontece aqui: movemos pra cima (negativo)
+              // exatamente na metade da distância pra compensar o scale!
+              translateY: scrollY.interpolate({
+                inputRange: [-192, 0], // 192 é a altura exata da imagem (h-48)
+                outputRange: [-96, 0], // Sobe pela metade, cravando a base no lugar
+                extrapolateRight: "clamp", // Trava a animação ao rolar pra baixo
+              }),
+            },
+            {
+              // A escala dobra exatamente quando puxamos a altura inteira da imagem
+              scale: scrollY.interpolate({
+                inputRange: [-192, 0],
+                outputRange: [2, 1],
+                extrapolateRight: "clamp",
+              }),
+            },
+          ],
+        }}
       />
-      <View className="items-center -mt-14">
+
+      <View className="items-center -mt-14 z-10">
         <View className="relative">
           <Image
             source={{
-              uri: "https://via.placeholder.com/100/333333/FFFFFF?text=Avatar",
+              uri: "https://i.pravatar.cc/150?img=11",
             }}
             className="w-28 h-28 rounded-full border-4 border-[#23213D]"
           />
@@ -29,10 +53,10 @@ export default function ProfileHeader() {
         </View>
 
         <View className="flex-row gap-6 mt-2">
-          <Text className="text-gray-300 border-b border-gray-300">
+          <Text className="text-light-300 border-b border-light-300">
             500 Followers
           </Text>
-          <Text className="text-gray-300 border-b border-gray-300">
+          <Text className="text-light-300 border-b border-light-300">
             420 Followings
           </Text>
         </View>

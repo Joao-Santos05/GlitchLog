@@ -156,10 +156,10 @@ export default function ProfileLayout() {
         />
 
         <Drawer.Screen
-          name="(drawer)/playlist"
+          name="(drawer)/wishlist"
           options={{
-            drawerLabel: "Playlist",
-            title: "Playlist",
+            drawerLabel: "Wishlist",
+            title: "Wishlist",
             drawerIcon: ({ color }) => <LibraryBig size={20} color={color} />,
           }}
         />

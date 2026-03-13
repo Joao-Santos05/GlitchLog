@@ -56,7 +56,7 @@ export default function LoginScreen() {
         <View className="items-center mb-8">
           <Text className="text-white text-3xl font-bold mb-2">Login</Text>
           <Text className="text-gray-300 text-sm">
-            Please sign in to continue.
+            Please log in to continue.
           </Text>
         </View>
 
@@ -100,7 +100,7 @@ export default function LoginScreen() {
             Dont have an account? Please{" "}
           </Text>
           <TouchableOpacity onPress={() => router.push("/(auth)/signup")}>
-            <Text className="text-[#E9A6A6] text-xs font-bold">Sign Up</Text>
+            <Text className="text-light-300 text-xs font-bold">Sign Up</Text>
           </TouchableOpacity>
           <Text className="text-[#A499C9] text-xs"> first.</Text>
         </View>

@@ -3,12 +3,13 @@ import ProfileHeader from "@/components/profile/ProfileHeader";
 import RPlayed from "@/components/profile/RPlayed";
 import StatsRow from "@/components/profile/StatsRow";
 import ReviewCard from "@/components/shared/ReviewCard";
+import { Game } from "@/interfaces/interfaces";
 import { Review } from "@/types";
 import { DrawerActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import { Menu } from "lucide-react-native";
-import React from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useRef } from "react";
+import { Animated, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const statsMock = [
@@ -18,37 +19,121 @@ const statsMock = [
   { label: "Review", value: "25" },
 ];
 
-const favoritesMock = [
-  "https://via.placeholder.com/100x140/FFD700/000000?text=Cyberpunk",
-  "https://via.placeholder.com/100x140/4A5568/FFFFFF?text=Hogwarts",
-  "https://via.placeholder.com/100x140/718096/FFFFFF?text=Witcher",
-  "https://via.placeholder.com/100x140/3182CE/FFFFFF?text=Zelda",
+const favoritesMock: Game[] = [
+  {
+    id: 1,
+    title: "Alien",
+    poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
+    vote_average: 4,
+    release_date: "2014-10-07",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
+  },
+  {
+    id: 2,
+    title: "Detroit",
+    poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
+    vote_average: 5,
+    release_date: "2018-05-25",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
+  },
+  {
+    id: 3,
+    title: "Dispatch",
+    poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
+    vote_average: 4,
+    release_date: "2024-01-01",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
+  },
+  {
+    id: 4,
+    title: "Silksong",
+    poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
+    vote_average: 5,
+    release_date: "2025-12-31",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
+  },
 ];
 
-const recentGamesMock = [
+const recentGamesMock: Game[] = [
   {
-    id: "1",
+    id: 5,
     title: "Alien",
-    imageUrl: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
-    stars: 4,
+    poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
+    vote_average: 4,
+    release_date: "2014-10-07",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
   },
   {
-    id: "2",
+    id: 6,
     title: "Detroit",
-    imageUrl: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
-    stars: 5,
+    poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
+    vote_average: 5,
+    release_date: "2018-05-25",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
   },
   {
-    id: "3",
+    id: 7,
     title: "Dispatch",
-    imageUrl: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
-    stars: 4,
+    poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
+    vote_average: 4,
+    release_date: "2024-01-01",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
   },
   {
-    id: "4",
+    id: 8,
     title: "Silksong",
-    imageUrl: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
-    stars: 5,
+    poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
+    vote_average: 5,
+    release_date: "2025-12-31",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
   },
 ];
 
@@ -61,7 +146,7 @@ const MOCK_REVIEWS: Review[] = [
       coverUrl: "https://via.placeholder.com/150x200",
       year: "2025",
     },
-    reviewer: { name: "Adrian", avatarUrl: "https://i.pravatar.cc/150?img=3" },
+    reviewer: { name: "David", avatarUrl: "https://i.pravatar.cc/150?img=11" },
     stars: 4,
     likes: 0,
     comments: 8,
@@ -73,6 +158,7 @@ const MOCK_REVIEWS: Review[] = [
 export default function ProfileScreen() {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   return (
     <View className="flex-1 bg-background">
@@ -91,8 +177,15 @@ export default function ProfileScreen() {
         <Menu color="white" size={24} />
       </TouchableOpacity>
 
-      <ScrollView className="flex-1">
-        <ProfileHeader />
+      <Animated.ScrollView
+        className="flex-1"
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true },
+        )}
+        scrollEventThrottle={16}
+      >
+        <ProfileHeader scrollY={scrollY} />
         <StatsRow stats={statsMock} />
         <FavoriteGames games={favoritesMock} />
 
@@ -101,13 +194,13 @@ export default function ProfileScreen() {
         <RPlayed games={recentGamesMock} />
         <View className="mt-8 px-6 pb-24">
           <Text className="text-white text-lg font-bold mb-4">
-            Recent Friends Review
+            Recent Reviews
           </Text>
           {MOCK_REVIEWS.map((review) => (
             <ReviewCard key={review.id} review={review} />
           ))}
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </View>
   );
 }

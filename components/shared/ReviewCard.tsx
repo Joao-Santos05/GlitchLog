@@ -1,7 +1,8 @@
 import { Link } from "expo-router";
-import { MessageCircle, Star } from "lucide-react-native";
+import { MessageCircle } from "lucide-react-native";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { Review } from "../../types";
+import StarRating from "./StarRating"; // Seu componente de estrelas!
 
 interface Props {
   review: Review;
@@ -35,16 +36,12 @@ export default function ReviewCard({ review, showGameCover = true }: Props) {
                     {review.reviewer.name}
                   </Text>
                 </Text>
+
                 <View className="flex-row mr-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      size={10}
-                      color={i < review.stars ? "#E9A6A6" : "#E9A6A6"}
-                      fill={i < review.stars ? "#E9A6A6" : "transparent"}
-                    />
-                  ))}
+                  {/* CORREÇÃO AQUI: Usando a nota da review */}
+                  <StarRating rating={review.stars || 0} size={10} />
                 </View>
+
                 <MessageCircle size={10} color="#9CA3AF" />
                 <Text className="text-gray-400 text-[10px] ml-1">
                   {review.comments}
@@ -56,7 +53,6 @@ export default function ReviewCard({ review, showGameCover = true }: Props) {
             {review.content}
           </Text>
 
-          {/* Trocamos de TouchableOpacity para View, já que o card todo é clicável agora */}
           <View className="mt-2">
             <Text className="text-[#C8ADFF] text-xs">Read more ›</Text>
           </View>
@@ -64,7 +60,7 @@ export default function ReviewCard({ review, showGameCover = true }: Props) {
 
         {showGameCover && (
           <Image
-            source={{ uri: review.game.coverUrl }}
+            source={{ uri: review.game.coverUrl }} // Se atualizou sua interface Game, talvez precise mudar para review.game.poster_path
             className="w-20 h-28 rounded-md"
           />
         )}

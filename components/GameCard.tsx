@@ -1,6 +1,6 @@
+import StarRating from "@/components/shared/StarRating";
 import { Game } from "@/interfaces/interfaces";
 import { Link } from "expo-router";
-import { Star } from "lucide-react-native";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
@@ -28,14 +28,7 @@ const GameCard = ({
         </Text>
 
         <View className="flex-row mt-1">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              size={10}
-              color="#E9A6A6"
-              fill={i < 4 ? "#E9A6A6" : "transparent"}
-            />
-          ))}
+          <StarRating rating={vote_average || 0} size={10} />
         </View>
 
         <View className="flex-row items-center justify-between">

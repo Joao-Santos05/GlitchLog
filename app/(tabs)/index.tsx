@@ -1,30 +1,68 @@
+import { Game } from "@/interfaces/interfaces";
 import { useRouter } from "expo-router";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import HomeHeader from "../../components/home/HomeHeader";
 import PopularLists from "../../components/home/PopularLists";
 import ReviewCard from "../../components/shared/ReviewCard";
-import { Game, List, Review } from "../../types";
+import StarRating from "../../components/shared/StarRating";
+import { List, Review } from "../../types";
 
 const MOCK_GAMES: Game[] = [
   {
-    id: "1",
+    id: 1,
     title: "Expedition 33",
-    coverUrl: "https://via.placeholder.com/150x200",
+    poster_path: "https://via.placeholder.com/150x200",
+    vote_average: 4.5,
+    release_date: "2025-01-01",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
   },
   {
-    id: "2",
+    id: 2,
     title: "Resident Evil",
-    coverUrl: "https://via.placeholder.com/150x200",
+    poster_path: "https://via.placeholder.com/150x200",
+    vote_average: 5,
+    release_date: "2026-01-01",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
   },
   {
-    id: "3",
+    id: 3,
     title: "Death Stranding 2",
-    coverUrl: "https://via.placeholder.com/150x200",
+    poster_path: "https://via.placeholder.com/150x200",
+    vote_average: 4,
+    release_date: "2025-01-01",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
   },
   {
-    id: "4",
+    id: 4,
     title: "Silksong",
-    coverUrl: "https://via.placeholder.com/150x200",
+    poster_path: "https://via.placeholder.com/150x200",
+    vote_average: 5,
+    release_date: "2025-12-31",
+    overview: "",
+    backdrop_path: null,
+    vote_count: 0,
+    genres: [],
+    platforms: [],
+    developers: [],
+    publishers: [],
   },
 ];
 
@@ -106,11 +144,20 @@ export default function HomeScreen() {
               <TouchableOpacity
                 key={game.id}
                 onPress={() => router.push(`/games/${game.id}`)}
+                className="w-28 mr-2"
               >
                 <Image
-                  source={{ uri: game.coverUrl }}
-                  className="w-28 h-40 rounded-lg mr-2"
+                  source={{
+                    uri:
+                      game.poster_path ||
+                      "https://placehold.co/150x200/1a1a1a/ffffff.png",
+                  }}
+                  className="w-full h-40 rounded-lg"
                 />
+
+                <View className="flex-row justify-center mt-2">
+                  <StarRating rating={game.vote_average || 0} size={10} />
+                </View>
               </TouchableOpacity>
             ))}
           </ScrollView>

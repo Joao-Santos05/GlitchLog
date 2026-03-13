@@ -1,3 +1,5 @@
+import StarRating from "@/components/shared/StarRating";
+import { Game } from "@/interfaces/interfaces"; // Trazendo a interface padrão!
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   ArrowLeft,
@@ -7,11 +9,28 @@ import {
   ListPlus,
   PlaySquare,
   Plus,
-  Star,
 } from "lucide-react-native";
+import React from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import ReviewCard from "../../components/shared/ReviewCard";
 import { Review } from "../../types";
+
+// 1. Criamos um mock do jogo usando a sua interface global
+const MOCK_GAME_DETAILS: Game = {
+  id: 1,
+  title: "Clair Obscur: Expedition 33",
+  poster_path: "https://via.placeholder.com/200x300",
+  backdrop_path: "https://via.placeholder.com/800x600",
+  release_date: "2025-05-12",
+  vote_average: 4.6,
+  vote_count: 40000,
+  overview:
+    "Lead the members of Expedition 33 on a mission to destroy the Artificer so she can never paint death again...",
+  genres: [],
+  platforms: [],
+  developers: [{ id: 1, name: "Sandfall Interactive" }],
+  publishers: [],
+};
 
 const MOCK_GAME_REVIEW: Review = {
   id: "1",
@@ -33,9 +52,14 @@ export default function GameDetailsScreen() {
 
   return (
     <ScrollView className="flex-1 bg-[#372660]">
+      {/* Imagem de Fundo (Backdrop) */}
       <View className="relative h-72">
         <Image
-          source={{ uri: "https://via.placeholder.com/800x600" }}
+          source={{
+            uri:
+              MOCK_GAME_DETAILS.backdrop_path ||
+              "https://via.placeholder.com/800x600",
+          }}
           className="w-full h-full opacity-60 rounded-b-[40px]"
         />
         <TouchableOpacity
@@ -47,9 +71,14 @@ export default function GameDetailsScreen() {
       </View>
 
       <View className="px-6 -mt-20 flex-row">
+        {/* Coluna da Esquerda (Capa e Botões) */}
         <View className="w-32 mr-5">
           <Image
-            source={{ uri: "https://via.placeholder.com/200x300" }}
+            source={{
+              uri:
+                MOCK_GAME_DETAILS.poster_path ||
+                "https://via.placeholder.com/200x300",
+            }}
             className="w-full h-48 rounded-xl border-2 border-[#E9A6A6]"
           />
           <View className="flex-row justify-between mt-3">
@@ -68,7 +97,12 @@ export default function GameDetailsScreen() {
           </View>
 
           <View className="mt-6 gap-y-3">
-            <TouchableOpacity className="bg-[#D8B4E2] py-2.5 rounded-lg flex-row justify-center items-center">
+            <TouchableOpacity
+              onPress={() =>
+                router.push(`/reviews/new?gameId=${MOCK_GAME_DETAILS.id}`)
+              }
+              className="bg-[#D8B4E2] py-2.5 rounded-lg flex-row justify-center items-center"
+            >
               <Edit3 size={14} color="#1E1B30" className="mr-2" />
               <Text className="text-[#1E1B30] font-bold text-xs">
                 Rate or Review
@@ -89,22 +123,31 @@ export default function GameDetailsScreen() {
           </View>
         </View>
 
+        {/* Coluna da Direita (Textos e Ratings) */}
         <View className="flex-1 mt-24">
           <Text className="text-white text-2xl font-bold">
-            Clair Obscur: Expedition 33
+            {MOCK_GAME_DETAILS.title}
           </Text>
-          <Text className="text-gray-400 text-sm mt-1 mb-2">2025</Text>
-          <Text className="text-gray-300 text-xs mb-3">
-            Produced by{" "}
-            <Text className="font-bold text-white">Sandfall Interactive</Text>
+          <Text className="text-gray-400 text-sm mt-1 mb-2">
+            {MOCK_GAME_DETAILS.release_date.split("-")[0]}
           </Text>
+
+          {MOCK_GAME_DETAILS.developers.length > 0 && (
+            <Text className="text-gray-300 text-xs mb-3">
+              Produced by{" "}
+              <Text className="font-bold text-white">
+                {MOCK_GAME_DETAILS.developers[0].name}
+              </Text>
+            </Text>
+          )}
+
           <Text className="text-gray-400 text-[10px] leading-4 mb-6">
-            Lead the members of Expedition 33 on a mission to destroy the
-            Artificer so she can never paint death again...
+            {MOCK_GAME_DETAILS.overview}
           </Text>
 
           <Text className="text-white text-lg font-bold mb-3">Ratings</Text>
           <View className="flex-row items-end h-20 border-b border-gray-600/50 pb-2 mb-2">
+            {/* Gráfico de barras fictício */}
             {[1, 2, 3, 5, 8, 12, 20, 30, 45, 60].map((h, i) => (
               <View
                 key={i}
@@ -113,22 +156,19 @@ export default function GameDetailsScreen() {
               />
             ))}
             <View className="ml-4 items-center">
-              <Text className="text-white text-3xl font-bold">4.6</Text>
+              <Text className="text-white text-3xl font-bold">
+                {MOCK_GAME_DETAILS.vote_average}
+              </Text>
               <View className="flex-row mt-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={10}
-                    color="#E9A6A6"
-                    fill={i < 4 ? "#E9A6A6" : "transparent"}
-                  />
-                ))}
+                {/* 2. Aqui está a correção: passando a nota do nosso mock! */}
+                <StarRating rating={MOCK_GAME_DETAILS.vote_average} size={10} />
               </View>
             </View>
           </View>
         </View>
       </View>
 
+      {/* Seção de Casts/Crews */}
       <View className="mt-8 px-6">
         <View className="flex-row gap-6 border-b border-gray-700 pb-3">
           <TouchableOpacity className="bg-[#FF8A65] px-4 py-1 rounded-full">
@@ -157,6 +197,7 @@ export default function GameDetailsScreen() {
         </ScrollView>
       </View>
 
+      {/* Seção de Reviews */}
       <View className="mt-8 px-6 pb-24">
         <View className="flex-row justify-between items-center mb-4">
           <Text className="text-white text-lg font-bold">All Reviews</Text>

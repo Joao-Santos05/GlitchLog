@@ -5,7 +5,7 @@ export default function HomeHeader() {
     <View className="px-6 pt-2 pb-4 flex-row justify-between items-start">
       <View>
         <Text className="text-white text-3xl font-bold">
-          Hello, <Text className="text-[#FF8A65]">David!</Text>
+          Hello, <Text className="text-light-300">David!</Text>
         </Text>
         <Text className="text-gray-400 text-sm mt-1">
           {"Review or track games you've played..."}

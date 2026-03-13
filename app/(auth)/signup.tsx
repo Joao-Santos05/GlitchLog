@@ -110,7 +110,7 @@ export default function SignupScreen() {
             Already have an account? Go to the{" "}
           </Text>
           <TouchableOpacity onPress={() => router.push("/(auth)/login")}>
-            <Text className="text-[#E9A6A6] text-xs font-bold">Login Page</Text>
+            <Text className="text-light-300 text-xs font-bold">Login Page</Text>
           </TouchableOpacity>
           <Text className="text-[#A499C9] text-xs">.</Text>
         </View>
