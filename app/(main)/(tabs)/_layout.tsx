@@ -60,6 +60,21 @@ export default function TabsLayout() {
           tabBarIcon: ({ color }) => <Headset size={24} color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="notifications"
+        options={{ href: null, headerShown: false }}
+      />
+      <Tabs.Screen name="likes" options={{ href: null, headerShown: false }} />
+      <Tabs.Screen name="diary" options={{ href: null, headerShown: false }} />
+      <Tabs.Screen name="lists" options={{ href: null, headerShown: false }} />
+      <Tabs.Screen
+        name="wishlist"
+        options={{ href: null, headerShown: false }}
+      />
+      <Tabs.Screen
+        name="reviews"
+        options={{ href: null, headerShown: false }}
+      />
     </Tabs>
   );
 }

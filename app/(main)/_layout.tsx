@@ -1,8 +1,5 @@
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
-} from "@react-navigation/drawer";
+import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import { useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import {
   Bell,
@@ -31,6 +28,8 @@ const handleLogout = () => {
 };
 
 function CustomDrawerContent(props: any) {
+  const router = useRouter();
+
   return (
     <View className="flex-1 bg-[#2C225A]">
       <DrawerContentScrollView
@@ -64,7 +63,49 @@ function CustomDrawerContent(props: any) {
         </View>
 
         <View className="mt-7">
-          <DrawerItemList {...props} />
+          <DrawerItem
+            label="Profile"
+            icon={({ color }) => <User2 size={20} color={color} />}
+            inactiveTintColor="#A499C9"
+            onPress={() => router.push("/profile")}
+          />
+          <DrawerItem
+            label="Notifications"
+            icon={({ color }) => <Bell size={20} color={color} />}
+            inactiveTintColor="#A499C9"
+            onPress={() => router.push("/notifications")}
+          />
+          <DrawerItem
+            label="Diary"
+            icon={({ color }) => <Calendar size={20} color={color} />}
+            inactiveTintColor="#A499C9"
+            onPress={() => router.push("/diary")}
+          />
+          <DrawerItem
+            label="Reviews"
+            icon={({ color }) => <BookOpenCheck size={20} color={color} />}
+            inactiveTintColor="#A499C9"
+            onPress={() => router.push("/reviews")}
+          />
+          <DrawerItem
+            label="Lists"
+            icon={({ color }) => <ListFilterIcon size={20} color={color} />}
+            inactiveTintColor="#A499C9"
+            onPress={() => router.push("/lists")}
+          />
+          <DrawerItem
+            label="Wishlist"
+            icon={({ color }) => <LibraryBig size={20} color={color} />}
+            inactiveTintColor="#A499C9"
+            onPress={() => router.push("/wishlist")}
+          />
+          <DrawerItem
+            label="Likes"
+            icon={({ color }) => <Heart size={20} color={color} />}
+            inactiveTintColor="#A499C9"
+            onPress={() => router.push("/likes")}
+          />
+
           <DrawerItem
             label="Logout"
             icon={({ color }) => <LogOutIcon size={20} color={color} />}
@@ -72,8 +113,8 @@ function CustomDrawerContent(props: any) {
             inactiveTintColor="#A499C9"
             style={{
               borderRadius: 20,
-              paddingHorizontal: 10,
-              marginBottom: 8,
+              paddingHorizontal: 2,
+              marginTop: 20,
             }}
           />
         </View>
@@ -93,81 +134,9 @@ export default function MainLayout() {
             backgroundColor: "#2C225A",
             width: "70%",
           },
-          drawerActiveBackgroundColor: "#B8AAFF",
-          drawerActiveTintColor: "#2C225A",
-          drawerInactiveTintColor: "#A499C9",
-          drawerItemStyle: {
-            borderRadius: 20,
-            paddingHorizontal: 10,
-            marginBottom: 8,
-          },
         }}
       >
-        <Drawer.Screen
-          name="(tabs)"
-          options={{
-            drawerLabel: "Home",
-            title: "Home",
-            drawerIcon: ({ color }) => <User2 size={20} color={color} />,
-          }}
-        />
-        <Drawer.Screen
-          name="notifications"
-          options={{
-            drawerLabel: "Notifications",
-            title: "Notifications",
-            drawerIcon: ({ color }) => <Bell size={20} color={color} />,
-          }}
-        />
-
-        <Drawer.Screen
-          name="diary"
-          options={{
-            drawerLabel: "Diary",
-            title: "Diary",
-            drawerIcon: ({ color }) => <Calendar size={20} color={color} />,
-          }}
-        />
-
-        <Drawer.Screen
-          name="reviews"
-          options={{
-            drawerLabel: "Reviews",
-            title: "Reviews",
-            drawerIcon: ({ color }) => (
-              <BookOpenCheck size={20} color={color} />
-            ),
-          }}
-        />
-
-        <Drawer.Screen
-          name="lists"
-          options={{
-            drawerLabel: "Lists",
-            title: "Lists",
-            drawerIcon: ({ color }) => (
-              <ListFilterIcon size={20} color={color} />
-            ),
-          }}
-        />
-
-        <Drawer.Screen
-          name="wishlist"
-          options={{
-            drawerLabel: "Wishlist",
-            title: "Wishlist",
-            drawerIcon: ({ color }) => <LibraryBig size={20} color={color} />,
-          }}
-        />
-
-        <Drawer.Screen
-          name="likes"
-          options={{
-            drawerLabel: "Likes",
-            title: "Likes",
-            drawerIcon: ({ color }) => <Heart size={20} color={color} />,
-          }}
-        />
+        <Drawer.Screen name="(tabs)" options={{ headerShown: false }} />
       </Drawer>
     </GestureHandlerRootView>
   );
