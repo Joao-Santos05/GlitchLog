@@ -1,11 +1,12 @@
+import HomeHeader from "@/components/home/HomeHeader";
+import PopularLists from "@/components/home/PopularLists";
+import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
+import ReviewCard from "@/components/shared/ReviewCard";
+import StarRating from "@/components/shared/StarRating";
 import { Game } from "@/interfaces/interfaces";
+import { List, Review } from "@/types";
 import { useRouter } from "expo-router";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import HomeHeader from "../../components/home/HomeHeader";
-import PopularLists from "../../components/home/PopularLists";
-import ReviewCard from "../../components/shared/ReviewCard";
-import StarRating from "../../components/shared/StarRating";
-import { List, Review } from "../../types";
 
 const MOCK_GAMES: Game[] = [
   {
@@ -119,7 +120,9 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <View className="flex items-center justify-center border-b border-dark-300 pt-14 pb-2 bg-background z-10">
+      <DrawerMenuButton />
+
+      <View className="flex items-center justify-center border-b border-dark-300 pt-16 pb-2 bg-background">
         <Image
           source={require("@/assets/icons/logotext.png")}
           className="w-56 h-12"

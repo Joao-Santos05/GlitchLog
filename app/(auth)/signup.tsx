@@ -18,7 +18,7 @@ export default function SignupScreen() {
   const router = useRouter();
 
   const handleSignup = () => {
-    router.replace("/(tabs)");
+    router.replace("/(main)/(tabs)");
   };
 
   return (

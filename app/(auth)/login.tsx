@@ -17,7 +17,7 @@ export default function LoginScreen() {
   const router = useRouter();
 
   const handleLogin = () => {
-    router.replace("/(tabs)");
+    router.replace("/(main)/(tabs)");
   };
 
   return (

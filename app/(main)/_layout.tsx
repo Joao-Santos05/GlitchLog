@@ -19,10 +19,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const handleLogout = () => {
   Alert.alert("Logout", "Are you sure?", [
-    {
-      text: "Cancel",
-      style: "cancel",
-    },
+    { text: "Cancel", style: "cancel" },
     {
       text: "Exit",
       style: "destructive",
@@ -85,7 +82,7 @@ function CustomDrawerContent(props: any) {
   );
 }
 
-export default function ProfileLayout() {
+export default function MainLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
@@ -107,16 +104,15 @@ export default function ProfileLayout() {
         }}
       >
         <Drawer.Screen
-          name="index"
+          name="(tabs)"
           options={{
-            drawerLabel: "Profile",
-            title: "Profile",
+            drawerLabel: "Home",
+            title: "Home",
             drawerIcon: ({ color }) => <User2 size={20} color={color} />,
           }}
         />
-
         <Drawer.Screen
-          name="(drawer)/notifications"
+          name="notifications"
           options={{
             drawerLabel: "Notifications",
             title: "Notifications",
@@ -125,7 +121,7 @@ export default function ProfileLayout() {
         />
 
         <Drawer.Screen
-          name="(drawer)/diary"
+          name="diary"
           options={{
             drawerLabel: "Diary",
             title: "Diary",
@@ -134,7 +130,7 @@ export default function ProfileLayout() {
         />
 
         <Drawer.Screen
-          name="(drawer)/reviews"
+          name="reviews"
           options={{
             drawerLabel: "Reviews",
             title: "Reviews",
@@ -145,7 +141,7 @@ export default function ProfileLayout() {
         />
 
         <Drawer.Screen
-          name="(drawer)/lists"
+          name="lists"
           options={{
             drawerLabel: "Lists",
             title: "Lists",
@@ -156,7 +152,7 @@ export default function ProfileLayout() {
         />
 
         <Drawer.Screen
-          name="(drawer)/wishlist"
+          name="wishlist"
           options={{
             drawerLabel: "Wishlist",
             title: "Wishlist",
@@ -165,7 +161,7 @@ export default function ProfileLayout() {
         />
 
         <Drawer.Screen
-          name="(drawer)/likes"
+          name="likes"
           options={{
             drawerLabel: "Likes",
             title: "Likes",

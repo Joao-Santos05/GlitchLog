@@ -1,11 +1,9 @@
 import { Game } from "@/interfaces/interfaces";
 
 export const API_CONFIG = {
-  BASE_URL: "URL_DA_SUA_FUTURA_API_AQUI",
-  // API_KEY: process.env.EXPO_PUBLIC_GAME_API_KEY,
+  BASE_URL: "URL_DA_API_AQUI",
 };
 
-// Mock Data
 const mockGames: Game[] = [
   {
     id: 1,
@@ -16,7 +14,20 @@ const mockGames: Game[] = [
       "https://placehold.co/400x600/1a1a1a/ffffff.png?text=Hollow+Knight",
     overview:
       "Um jogo de ação e aventura épico em um reino arruinado de insetos e heróis.",
-    platforms: ["PC", "Switch", "PlayStation", "Xbox"],
+    backdrop_path: null,
+    vote_count: 25000,
+    genres: [
+      { id: 1, name: "Platformer" },
+      { id: 2, name: "Action" },
+    ],
+    platforms: [
+      { id: 1, name: "PC" },
+      { id: 2, name: "Switch" },
+      { id: 3, name: "PlayStation" },
+      { id: 4, name: "Xbox" },
+    ],
+    developers: [],
+    publishers: [],
   },
   {
     id: 2,
@@ -26,7 +37,19 @@ const mockGames: Game[] = [
     poster_path: "https://placehold.co/400x600/1a1a1a/ffffff.png?text=Celeste",
     overview:
       "Ajude Madeline a sobreviver aos seus demônios internos em sua jornada.",
-    platforms: ["PC", "Switch", "PlayStation"],
+    backdrop_path: null,
+    vote_count: 18000,
+    genres: [
+      { id: 1, name: "Platformer" },
+      { id: 3, name: "Drama" },
+    ],
+    platforms: [
+      { id: 1, name: "PC" },
+      { id: 2, name: "Switch" },
+      { id: 3, name: "PlayStation" },
+    ],
+    developers: [],
+    publishers: [],
   },
 ];
 

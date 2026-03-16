@@ -1,3 +1,4 @@
+import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import FilterDropdown, {
   FilterOption,
 } from "@/components/shared/FilterDropdown";
@@ -105,10 +106,8 @@ export default function GamesScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <View
-        className="px-6 pt-16 pb-4 flex-row items-center justify-between border-b border-dark-300 z-50 relative"
-        style={{ zIndex: 1000, elevation: 1000 }}
-      >
+      <DrawerMenuButton />
+      <View className="px-6 pt-32 pb-4 flex-row items-center justify-between border-b border-dark-300 relative">
         <Text className="text-white text-sm font-bold tracking-widest">
           GAMES
         </Text>

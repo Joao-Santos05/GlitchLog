@@ -2,15 +2,12 @@ import FavoriteGames from "@/components/profile/FavoriteGames";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import RPlayed from "@/components/profile/RPlayed";
 import StatsRow from "@/components/profile/StatsRow";
+import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import ReviewCard from "@/components/shared/ReviewCard";
 import { Game } from "@/interfaces/interfaces";
 import { Review } from "@/types";
-import { DrawerActions } from "@react-navigation/native";
-import { useNavigation } from "expo-router";
-import { Menu } from "lucide-react-native";
 import React, { useRef } from "react";
-import { Animated, Text, TouchableOpacity, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Animated, Text, View } from "react-native";
 
 const statsMock = [
   { label: "Total Games", value: "45" },
@@ -156,26 +153,11 @@ const MOCK_REVIEWS: Review[] = [
 ];
 
 export default function ProfileScreen() {
-  const navigation = useNavigation();
-  const insets = useSafeAreaInsets();
   const scrollY = useRef(new Animated.Value(0)).current;
 
   return (
     <View className="flex-1 bg-background">
-      <TouchableOpacity
-        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        style={{
-          position: "absolute",
-          top: insets.top > 0 ? insets.top + 10 : 40,
-          left: 20,
-          zIndex: 50,
-          backgroundColor: "rgba(0,0,0,0.4)",
-          padding: 8,
-          borderRadius: 100,
-        }}
-      >
-        <Menu color="white" size={24} />
-      </TouchableOpacity>
+      <DrawerMenuButton />
 
       <Animated.ScrollView
         className="flex-1"

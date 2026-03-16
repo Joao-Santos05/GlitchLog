@@ -1,4 +1,5 @@
 import GameCard from "@/components/GameCard";
+import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import FilterDropdown, {
   FilterOption,
 } from "@/components/shared/FilterDropdown";
@@ -38,7 +39,6 @@ const Search = () => {
 
   const scrollY = useRef(new Animated.Value(0)).current;
 
-  // Busca na API sem loop infinito
   useEffect(() => {
     let isMounted = true;
 
@@ -65,22 +65,17 @@ const Search = () => {
     };
   }, [searchQuery]);
 
-  // TRADUÇÃO E FILTRAGEM
   const filteredGames = (games || [])
     .map((game: any) => {
-      // 1. Normaliza a nota da API (que pode vir até 10 ou 100) para a escala de 0 a 5
       let rawRating = game.vote_average || game.rating || 0;
       if (rawRating > 10) rawRating = rawRating / 20;
       else if (rawRating > 5) rawRating = rawRating / 2;
 
-      // 2. Arredonda a nota para o 0.5 mais próximo.
-      // Isso garante que o Filtro e o GameCard falem a mesma língua!
       const roundedRating = Math.round(rawRating * 2) / 2;
 
       return { ...game, vote_average: roundedRating };
     })
     .filter((game: any) => {
-      // 3. Aplica o filtro de correspondência EXATA
       const matchesRating =
         selectedRating === 0 || game.vote_average === selectedRating;
       const matchesGenre =
@@ -95,6 +90,7 @@ const Search = () => {
 
   return (
     <View className="flex-1 bg-background">
+      <DrawerMenuButton />
       <Animated.FlatList
         data={filteredGames}
         renderItem={({ item }) => <GameCard {...item} />}
@@ -110,7 +106,7 @@ const Search = () => {
           justifyContent: "flex-start",
           gap: 16,
           marginVertical: 8,
-          zIndex: -1, // Joga os cards pra trás para o dropdown flutuar por cima
+          zIndex: -1,
         }}
         contentContainerStyle={{ paddingBottom: 100 }}
         ListHeaderComponentStyle={{
@@ -156,7 +152,6 @@ const Search = () => {
               />
             </View>
 
-            {/* BARRA DE FILTROS */}
             <View
               className="flex-row gap-6 mb-4 justify-end relative"
               style={{ zIndex: 1000, elevation: 1000 }}
