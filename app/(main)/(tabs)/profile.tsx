@@ -13,7 +13,7 @@ const statsMock = [
   { label: "Total Games", value: "45" },
   { label: "Games This Year", value: "12" },
   { label: "Lists", value: "4" },
-  { label: "Review", value: "25" },
+  { label: "Reviews", value: "25" },
 ];
 
 const favoritesMock: Game[] = [

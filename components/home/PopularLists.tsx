@@ -55,12 +55,12 @@ export default function PopularLists({ lists }: Props) {
                   source={{ uri: list.creator.avatarUrl }}
                   className="w-5 h-5 rounded-full mr-2"
                 />
-                <Text className="text-gray-400 text-xs">
+                <Text className="text-light-300 text-xs">
                   {list.creator.name}
                 </Text>
               </View>
               <View className="flex-row items-center gap-1">
-                <Heart size={10} color="#9CA3AF" />
+                <Heart size={10} color="red" fill={"red"} />
                 <Text className="text-gray-400 text-[10px]">{list.likes}</Text>
               </View>
             </View>

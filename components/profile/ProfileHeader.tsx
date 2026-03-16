@@ -15,16 +15,13 @@ export default function ProfileHeader({ scrollY }: ProfileHeaderProps) {
         style={{
           transform: [
             {
-              // A mágica acontece aqui: movemos pra cima (negativo)
-              // exatamente na metade da distância pra compensar o scale!
               translateY: scrollY.interpolate({
-                inputRange: [-192, 0], // 192 é a altura exata da imagem (h-48)
-                outputRange: [-96, 0], // Sobe pela metade, cravando a base no lugar
-                extrapolateRight: "clamp", // Trava a animação ao rolar pra baixo
+                inputRange: [-192, 0],
+                outputRange: [-96, 0],
+                extrapolateRight: "clamp",
               }),
             },
             {
-              // A escala dobra exatamente quando puxamos a altura inteira da imagem
               scale: scrollY.interpolate({
                 inputRange: [-192, 0],
                 outputRange: [2, 1],
@@ -52,13 +49,17 @@ export default function ProfileHeader({ scrollY }: ProfileHeaderProps) {
           <Text className="text-white text-2xl font-bold">David</Text>
         </View>
 
-        <View className="flex-row gap-6 mt-2">
-          <Text className="text-light-300 border-b border-light-300">
-            500 Followers
-          </Text>
-          <Text className="text-light-300 border-b border-light-300">
-            420 Followings
-          </Text>
+        <View className="flex-row gap-4 mt-3">
+          <View className="bg-[#C8ADFF] px-4 py-1.5 rounded-full">
+            <Text className="text-[#2C225A] text-sm font-semibold">
+              500 Followers
+            </Text>
+          </View>
+          <View className="bg-[#C8ADFF] px-4 py-1.5 rounded-full">
+            <Text className="text-[#2C225A] text-sm font-semibold">
+              420 Followings
+            </Text>
+          </View>
         </View>
       </View>
     </View>

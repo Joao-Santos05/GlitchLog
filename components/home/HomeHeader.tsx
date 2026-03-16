@@ -1,4 +1,5 @@
-import { Image, Text, View } from "react-native";
+import { router } from "expo-router";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export default function HomeHeader() {
   return (
@@ -12,10 +13,12 @@ export default function HomeHeader() {
         </Text>
       </View>
       <View className="relative">
-        <Image
-          source={{ uri: "https://i.pravatar.cc/150?img=11" }}
-          className="w-12 h-12 rounded-full"
-        />
+        <TouchableOpacity onPress={() => router.push(`/(main)/(tabs)/profile`)}>
+          <Image
+            source={{ uri: "https://i.pravatar.cc/150?img=11" }}
+            className="w-12 h-12 rounded-full"
+          />
+        </TouchableOpacity>
         <View className="absolute top-0 right-0 w-3 h-3 bg-purple-400 rounded-full border-2 border-[#1E1B30]" />
       </View>
     </View>
