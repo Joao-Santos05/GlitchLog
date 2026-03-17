@@ -165,7 +165,12 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
 
-        <PopularLists lists={MOCK_LISTS} />
+        <View className="mt-8 px-6">
+          <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full self-start">
+            Popular Lists This Month
+          </Text>
+          <PopularLists lists={MOCK_LISTS} />
+        </View>
 
         <View className="mt-8 px-6 pb-24">
           <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full self-start">

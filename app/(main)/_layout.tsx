@@ -9,6 +9,7 @@ import {
   LibraryBig,
   ListFilterIcon,
   LogOutIcon,
+  Settings2,
   User2,
 } from "lucide-react-native";
 import { Alert, Image, Text, View } from "react-native";
@@ -141,13 +142,26 @@ function CustomDrawerContent(props: any) {
           />
 
           <DrawerItem
+            label="Settings"
+            icon={({ color }) => <Settings2 size={20} color={color} />}
+            inactiveTintColor="#A499C9"
+            activeTintColor="#FFFFFF"
+            activeBackgroundColor={LIGHT_400_HEX}
+            focused={pathname === "/settings"}
+            onPress={() => router.push("/settings")}
+            style={{
+              borderRadius: 100,
+              marginTop: 30,
+            }}
+          />
+
+          <DrawerItem
             label="Logout"
             icon={({ color }) => <LogOutIcon size={20} color={color} />}
             onPress={handleLogout}
             inactiveTintColor="#A499C9"
             style={{
               borderRadius: 100,
-              marginTop: 20,
             }}
           />
         </View>

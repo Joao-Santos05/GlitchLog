@@ -66,7 +66,7 @@ export default function LikesScreen() {
             />
             <View className="flex-row items-center justify-between mt-1.5 px-0.5">
               <StarRating rating={item.rating} size={8} />
-              <Heart size={10} color="#FF89A3" fill="#FF89A3" />
+              <Heart size={10} color="red" fill="red" />
             </View>
           </TouchableOpacity>
         )}

@@ -78,6 +78,10 @@ export default function TabsLayout() {
         name="reviews"
         options={{ href: null, headerShown: false }}
       />
+      <Tabs.Screen
+        name="settings"
+        options={{ href: null, headerShown: false }}
+      />
     </Tabs>
   );
 }
