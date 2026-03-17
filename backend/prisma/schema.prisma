@@ -1,0 +1,117 @@
+// 1. Configurações Iniciais
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// 2. As Entidades (Tabelas) alinhadas 100% com o seu MER
+
+model User {
+  // Usando @map para o banco de dados ficar em minúsculo (padrão SQL), 
+  // mas no Node você vai usar os nomes exatos do diagrama (camelCase)
+  userId     Int    @id @default(autoincrement()) @map("user_id")
+  name       String
+  email      String @unique
+  senha_hash String 
+
+  // Ligações (Relacionamentos)
+  biblioteca LibraryEntry[]
+  reviews    Review[]
+  listas     List[]
+
+  // Auto-relacionamento de Seguidores
+  seguidores UserFollow[] @relation("Seguido")
+  seguindo   UserFollow[] @relation("Seguidor")
+
+  @@map("users")
+}
+
+model Game {
+  id_igdb    Int    @id
+  name       String
+
+  // Ligações
+  biblioteca LibraryEntry[]
+  reviews    Review[]
+  listItems  ListItem[]
+
+  @@map("games")
+}
+
+model List {
+  listId     Int     @id @default(autoincrement()) @map("list_id")
+  title      String
+  summary    String? // Opcional
+  isPublic   Boolean @default(true) @map("is_public")
+  
+  userId     Int     @map("user_id")
+  user       User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  listItems  ListItem[]
+
+  @@map("lists")
+}
+
+model LibraryEntry {
+  status             String  @default("Quero Jogar")
+  marco_campanha     Boolean @default(false)
+  marco_secundarias  Boolean @default(false)
+
+  userId             Int     @map("user_id")
+  id_igdb            Int     
+
+  user               User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  game               Game    @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
+
+  // Chave Composta da Entidade Fraca
+  @@id([userId, id_igdb])
+  @@map("library_entries")
+}
+
+model Review {
+  reviewId    Int     @id @default(autoincrement()) @map("review_id")
+  nota        Int
+  reviewText  String? @map("review_text")
+  
+  userId      Int     @map("user_id")
+  id_igdb     Int     
+
+  user        User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  game        Game    @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
+
+  // Garante que 1 usuário só faça 1 review por jogo
+  @@unique([userId, id_igdb])
+  @@map("reviews")
+}
+
+model ListItem {
+  ordem      Int
+  
+  listId     Int     @map("list_id")
+  id_igdb    Int     
+
+  list       List    @relation(fields: [listId], references: [listId], onDelete: Cascade)
+  game       Game    @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
+
+  // Chave Composta da Entidade Fraca
+  @@id([listId, id_igdb])
+  @@map("list_items")
+}
+
+// Tabela invisível no MER que resolve o losango "Segue" N:M
+model UserFollow {
+  data_follow DateTime @default(now())
+
+  id_seguidor Int
+  id_seguido  Int
+
+  seguidor User @relation("Seguidor", fields: [id_seguidor], references: [userId], onDelete: Cascade)
+  seguido  User @relation("Seguido", fields: [id_seguido], references: [userId], onDelete: Cascade)
+
+  // Chave Composta
+  @@id([id_seguidor, id_seguido])
+  @@map("user_follows")
+}
