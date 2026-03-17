@@ -27,7 +27,7 @@ export default function PopularLists({ lists }: Props) {
             className="w-36 mr-4"
             onPress={() => router.push(`/lists/${list.id}`)}
           >
-            <View className="flex-row h-28 w-full mb-3">
+            <View className="flex-row h-32 w-32 mb-3 rounded-md border border-[#4A3F75]">
               <Image
                 source={{ uri: list.coverUrls[0] }}
                 className="flex-1 h-full rounded-l-lg"

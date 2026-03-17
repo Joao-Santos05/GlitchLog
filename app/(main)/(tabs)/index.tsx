@@ -130,7 +130,7 @@ export default function HomeScreen() {
         />
       </View>
 
-      <ScrollView className="flex-1 pt-4">
+      <ScrollView className="flex-1 pt-4 mb-6">
         <HomeHeader />
 
         <View className="mt-8 px-6">
@@ -155,9 +155,8 @@ export default function HomeScreen() {
                       game.poster_path ||
                       "https://placehold.co/150x200/1a1a1a/ffffff.png",
                   }}
-                  className="w-full h-40 rounded-lg"
+                  className="w-full h-40 rounded-md border border-[#4A3F75]"
                 />
-
                 <View className="flex-row justify-center mt-2">
                   <StarRating rating={game.vote_average || 0} size={10} />
                 </View>

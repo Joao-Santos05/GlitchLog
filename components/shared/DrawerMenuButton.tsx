@@ -16,7 +16,7 @@ export default function DrawerMenuButton() {
         top: insets.top > 0 ? insets.top + 10 : 40,
         left: 20,
         zIndex: 100,
-        backgroundColor: "rgba(0,0,0,0.8)",
+        backgroundColor: "#1A133A",
         padding: 8,
         borderRadius: 100,
       }}

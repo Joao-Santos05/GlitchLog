@@ -1,5 +1,6 @@
+import GoBack from "@/components/shared/GoBack";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { ArrowLeft, Heart, MessageCircle, Share2 } from "lucide-react-native";
+import { Heart, MessageCircle, Share2 } from "lucide-react-native";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const MOCK_LIST = {
@@ -51,13 +52,8 @@ export default function ListDetailsScreen() {
   return (
     <View className="flex-1 bg-background">
       <View className="px-6 pt-14 pb-4 flex-row items-center justify-between">
-        <TouchableOpacity
-          onPress={() => router.back()}
-          className="w-10 h-10 bg-[#2B2844] rounded-full items-center justify-center"
-        >
-          <ArrowLeft color="white" size={20} />
-        </TouchableOpacity>
-        <TouchableOpacity className="w-10 h-10 bg-[#2B2844] rounded-full items-center justify-center">
+        <GoBack />
+        <TouchableOpacity className="w-10 h-10 bg-black/70 rounded-full items-center justify-center">
           <Share2 color="white" size={20} />
         </TouchableOpacity>
       </View>
@@ -87,7 +83,7 @@ export default function ListDetailsScreen() {
 
           <View className="flex-row items-center gap-6">
             <View className="flex-row items-center gap-2">
-              <Heart size={18} color="#EF4444" />
+              <Heart size={18} color={"red"} fill={"red"} />
               <Text className="text-white font-bold">{MOCK_LIST.likes}</Text>
             </View>
             <View className="flex-row items-center gap-2">
@@ -107,10 +103,10 @@ export default function ListDetailsScreen() {
               >
                 <Image
                   source={{ uri: game.coverUrl }}
-                  className="w-full aspect-[2/3] rounded-lg mb-2"
+                  className="w-full aspect-[2/3] rounded-md border border-[#4A3F75]"
                 />
                 <Text
-                  className="text-gray-300 text-xs text-center font-medium"
+                  className="text-gray-300 text-xs text-center font-medium mt-2"
                   numberOfLines={2}
                 >
                   {game.title}

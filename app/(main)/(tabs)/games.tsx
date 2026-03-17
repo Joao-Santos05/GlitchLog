@@ -173,7 +173,7 @@ export default function GamesScreen() {
                   game.poster_path ||
                   "https://placehold.co/600x400/1a1a1a/ffffff.png",
               }}
-              className="w-full aspect-[2/3] rounded-md border border-[#2D214F]"
+              className="w-full aspect-[2/3] rounded-md border border-[#4A3F75]"
             />
             <View className="flex-row items-center justify-between mt-1.5 px-0.5">
               <View className="flex-row mt-1">
