@@ -31,8 +31,8 @@ export default function WishlistScreen() {
     <View className="flex-1 bg-background">
       <DrawerMenuButton />
 
-      <View className="px-6 pt-28 pb-4 flex-row items-center justify-between z-50">
-        <Text className="text-white text-2xl font-bold">
+      <View className="px-6 pt-32 pb-4 flex-row items-center justify-between z-50">
+        <Text className="text-white text-2xl font-bold bg-light-400 px-4 py-1.5 rounded-full self-start">
           {"David's Wishlist"}
         </Text>
         <View className="flex-row items-center bg-[#2D214F] rounded-full px-3 py-1.5 border border-[#4A3F75]">

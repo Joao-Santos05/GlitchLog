@@ -108,7 +108,7 @@ export default function GamesScreen() {
     <View className="flex-1 bg-background">
       <DrawerMenuButton />
       <View className="px-6 pt-32 pb-4 flex-row items-center justify-between border-b border-dark-300 relative">
-        <Text className="text-white text-sm font-bold tracking-widest">
+        <Text className="text-white text-sm font-bold tracking-widest bg-light-400 px-4 py-1.5 rounded-full self-start">
           GAMES
         </Text>
 

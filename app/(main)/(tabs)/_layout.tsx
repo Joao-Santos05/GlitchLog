@@ -13,6 +13,9 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: "#ff8945",
         tabBarInactiveTintColor: "#C8ADFF",
+        sceneStyle: {
+          backgroundColor: "#2c225a",
+        },
 
         tabBarItemStyle: {
           justifyContent: "center",

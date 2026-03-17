@@ -51,7 +51,7 @@ export default function GameDetailsScreen() {
   const router = useRouter();
 
   return (
-    <ScrollView className="flex-1 bg-[#372660]">
+    <ScrollView className="flex-1 bg-background">
       {/* Imagem de Fundo (Backdrop) */}
       <View className="relative h-72">
         <Image

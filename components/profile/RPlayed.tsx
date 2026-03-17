@@ -14,9 +14,13 @@ export default function RPlayed({ games }: RPlayedProps) {
   return (
     <View className="mt-6 pl-4">
       <View className="flex-row justify-between items-center pr-4 mb-4">
-        <Text className="text-white text-base font-bold">Recently Played</Text>
+        <Text className="text-white text-base font-bold bg-light-400 px-4 py-1.5 rounded-full">
+          Recently Played
+        </Text>
         <TouchableOpacity>
-          <Text className="text-[#A499C9] text-xs">See All</Text>
+          <Text className="text-white text-xs font-bold bg-light-400 px-4 py-1.5 rounded-full">
+            See All
+          </Text>
         </TouchableOpacity>
       </View>
 

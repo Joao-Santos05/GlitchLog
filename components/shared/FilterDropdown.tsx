@@ -26,7 +26,7 @@ export default function FilterDropdown({
   return (
     <View className="relative z-50">
       <TouchableOpacity onPress={onToggle}>
-        <Text className="text-[#A499C9] text-xs font-bold uppercase">
+        <Text className="text-white text-xs font-bold uppercase bg-light-400 px-2 py-1.5 rounded-full self-start">
           {activeLabel} ▾
         </Text>
       </TouchableOpacity>

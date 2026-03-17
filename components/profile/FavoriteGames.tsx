@@ -13,7 +13,7 @@ export default function FavoriteGames({ games }: FavoriteGamesProps) {
 
   return (
     <View className="mt-8 px-4">
-      <Text className="text-white text-lg font-bold mb-4 text-center">
+      <Text className="text-white text-lg font-bold mb-4 text-center bg-light-400 px-4 py-1.5 rounded-full">
         Favorite Games
       </Text>
 

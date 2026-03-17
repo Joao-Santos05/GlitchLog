@@ -54,7 +54,7 @@ export default function LoginScreen() {
 
       <View className="flex-1 px-8 pt-16 mt-3">
         <View className="items-center mb-8">
-          <Text className="text-white text-3xl font-bold mb-2">Login</Text>
+          <Text className="text-white text-3xl font-bold mb-2 ">Login</Text>
           <Text className="text-gray-300 text-sm">
             Please log in to continue.
           </Text>

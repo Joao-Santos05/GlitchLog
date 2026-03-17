@@ -32,8 +32,10 @@ export default function NotificationsScreen() {
     <View className="flex-1 bg-background">
       <DrawerMenuButton />
 
-      <View className="px-6 pt-28 pb-4 border-b border-[#F2E8FF]/10 z-50">
-        <Text className="text-white text-2xl font-bold">Notifications</Text>
+      <View className="px-6 pt-32 pb-4 border-b border-[#F2E8FF]/10 z-50">
+        <Text className="text-white text-2xl font-bold bg-light-400 px-4 py-1.5 rounded-full self-start">
+          Notifications
+        </Text>
       </View>
 
       <FlatList
@@ -62,8 +64,8 @@ export default function NotificationsScreen() {
                 )}
                 {item.actionText}
               </Text>
-              <View className="flex-row items-center justify-between mt-2">
-                <Heart color={"#ff8945"} />
+              <View className="flex-row items-center justify-between p-1 mt-2">
+                <Heart color={"red"} fill={"red"} size={16} />
                 <Text className="text-[#A499C9] text-xs">{item.time}</Text>
               </View>
             </View>

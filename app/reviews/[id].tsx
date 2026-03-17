@@ -11,30 +11,28 @@ export default function ReviewDetailsScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      {/* HEADER SIMPLES DE VOLTAR */}
       <View
-        className="flex-row items-center px-6 pb-4"
+        className="flex-row justify-items-center px-6"
         style={{ paddingTop: insets.top > 0 ? insets.top + 10 : 40 }}
       >
-        <TouchableOpacity onPress={() => router.back()} className="mr-4 p-1">
+        <TouchableOpacity onPress={() => router.back()} className="mr-6 p-1">
           <ArrowLeft size={24} color="white" />
         </TouchableOpacity>
-        <Text className="text-white text-2xl font-bold">
-          {"David's Review"}
-        </Text>
-      </View>
-
-      <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 60 }}>
-        {/* AUTOR */}
-        <View className="flex-row items-center mb-6">
+        <View className="flex-row justify-items-center justify-center mb-4">
           <Image
             source={{ uri: "https://i.pravatar.cc/150?img=11" }}
             className="w-10 h-10 rounded-full mr-3"
           />
-          <Text className="text-light-200 font-medium">david_dvd</Text>
+          <Text className="text-white text-2xl font-bold">david_dvd</Text>
+          <Text className="text-white text-2xl font-bold">{"'s Review"}</Text>
         </View>
+      </View>
 
-        {/* JOGO E NOTA */}
+      <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 60 }}>
+        <Image
+          source={{ uri: "https://via.placeholder.com/150x200" }}
+          className="w-16 h-24 rounded-md border border-[#4A3F75] mb-4"
+        />
         <Text className="text-white text-lg font-bold">
           Resident Evil Requiem{" "}
           <Text className="text-[#A499C9] text-sm font-normal">2026</Text>
@@ -44,7 +42,6 @@ export default function ReviewDetailsScreen() {
         </View>
         <Text className="text-[#A499C9] text-xs mb-4">12 March 2026</Text>
 
-        {/* TEXTO DA REVIEW */}
         <Text className="text-light-200 text-base leading-6 mb-6">
           Exploration balances tight interior spaces with larger, decaying
           environments that invite cautious movement. Resources are scarce
@@ -58,14 +55,10 @@ export default function ReviewDetailsScreen() {
           bursts of chaos, though some late sections lean more heavily on action
           than atmosphere.
         </Text>
-
-        {/* LIKES */}
         <View className="flex-row items-center border-b border-[#F2E8FF]/10 pb-4 mb-4">
-          <Heart size={14} color="#FF89A3" fill="#FF89A3" className="mr-2" />
-          <Text className="text-[#A499C9] text-sm">697 Likes</Text>
+          <Heart size={14} color="red" fill="red" className="mr-2" />
+          <Text className="text-[#A499C9] text-sm px-2">697 Likes</Text>
         </View>
-
-        {/* COMENTÁRIOS */}
         <Text className="text-white text-lg font-bold mb-4">56 Comments</Text>
 
         <View className="flex-row mb-6">
@@ -94,7 +87,7 @@ export default function ReviewDetailsScreen() {
               <Text className="text-[#A499C9] text-xs font-bold">Dave</Text>
               <Text className="text-[#A499C9] text-xs">6d</Text>
             </View>
-            <Text className="text-light-200 text-sm">👏👏👏</Text>
+            <Text className="text-light-200 text-sm">:0</Text>
           </View>
         </View>
       </ScrollView>

@@ -175,7 +175,7 @@ export default function ProfileScreen() {
 
         <RPlayed games={recentGamesMock} />
         <View className="mt-8 px-6 pb-24">
-          <Text className="text-white text-lg font-bold mb-4">
+          <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full">
             Recent Reviews
           </Text>
           {MOCK_REVIEWS.map((review) => (

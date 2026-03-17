@@ -50,13 +50,13 @@ export default function ProfileHeader({ scrollY }: ProfileHeaderProps) {
         </View>
 
         <View className="flex-row gap-4 mt-3">
-          <View className="bg-[#C8ADFF] px-4 py-1.5 rounded-full">
-            <Text className="text-[#2C225A] text-sm font-semibold">
+          <View className="bg-light-400 px-4 py-1.5 rounded-full">
+            <Text className="text-white text-sm font-semibold">
               500 Followers
             </Text>
           </View>
-          <View className="bg-[#C8ADFF] px-4 py-1.5 rounded-full">
-            <Text className="text-[#2C225A] text-sm font-semibold">
+          <View className="bg-light-400 px-4 py-1.5 rounded-full">
+            <Text className="text-white text-sm font-semibold">
               420 Followings
             </Text>
           </View>

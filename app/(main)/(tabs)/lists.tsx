@@ -1,6 +1,6 @@
 import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import { useRouter } from "expo-router";
-import { Plus, SearchIcon } from "lucide-react-native";
+import { Heart, Plus, SearchIcon } from "lucide-react-native";
 import React from "react";
 import {
   FlatList,
@@ -66,9 +66,10 @@ export default function ListsScreen() {
     <View className="flex-1 bg-background">
       <DrawerMenuButton />
 
-      {/* HEADER */}
-      <View className="px-6 pt-28 pb-4 flex-row items-center justify-between z-50">
-        <Text className="text-white text-2xl font-bold">Lists</Text>
+      <View className="px-6 pt-32 pb-4 flex-row items-center justify-between z-50">
+        <Text className="text-white text-2xl font-bold bg-light-400 px-4 py-1.5 rounded-full self-start">
+          Lists
+        </Text>
         <View className="flex-row items-center bg-[#2D214F] rounded-full px-3 py-1.5 border border-[#4A3F75]">
           <TextInput
             placeholder="search"
@@ -83,27 +84,26 @@ export default function ListsScreen() {
         contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* MY LISTS */}
-        <Text className="text-white text-lg font-bold mb-4">My Lists</Text>
+        <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full">
+          My Lists
+        </Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           className="mb-8"
         >
-          {/* Create Button */}
           <TouchableOpacity
             className="mr-4 items-center"
             onPress={() => router.push("/lists/new")}
           >
             <View className="w-24 h-24 bg-[#4A3F75] rounded-xl items-center justify-center border border-[#A499C9]/30 mb-2">
-              <Plus size={24} color="#FF89A3" />
+              <Plus size={24} color="#ff8945" />
             </View>
             <Text className="text-[#A499C9] text-xs font-bold">
               Create List
             </Text>
           </TouchableOpacity>
 
-          {/* User's Lists */}
           {MY_LISTS.map((list) => (
             <TouchableOpacity
               key={list.id}
@@ -136,8 +136,9 @@ export default function ListsScreen() {
           ))}
         </ScrollView>
 
-        {/* POPULAR LISTS */}
-        <Text className="text-white text-lg font-bold mb-4">Popular Lists</Text>
+        <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full">
+          Popular Lists
+        </Text>
         <FlatList
           data={POPULAR_LISTS}
           horizontal
@@ -173,9 +174,10 @@ export default function ListsScreen() {
                   {item.author}
                 </Text>
               </View>
-              <View className="flex-row items-center">
-                <Text className="text-[#FF89A3] text-[10px] mr-2">
-                  ♥ {item.likes}
+              <View className="flex-row items-center p-1">
+                <Heart color={"red"} fill={"red"} size={8} />
+                <Text className="text-red-500 text-[10px] mr-2 px-1">
+                  {item.likes}
                 </Text>
                 <Text className="text-[#A499C9] text-[10px]">
                   💬 {item.comments}

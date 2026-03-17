@@ -1,5 +1,5 @@
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { useRouter } from "expo-router";
+import { usePathname, useRouter } from "expo-router"; // <-- Importe o usePathname aqui
 import { Drawer } from "expo-router/drawer";
 import {
   Bell,
@@ -29,12 +29,18 @@ const handleLogout = () => {
 
 function CustomDrawerContent(props: any) {
   const router = useRouter();
+  const pathname = usePathname(); // <-- Pega a rota que está aberta no momento
+
+  // Coloque aqui o Hexadecimal exato do seu bg-light-400
+  const LIGHT_400_HEX = "#5A4FCF";
 
   return (
     <View className="flex-1 bg-[#2C225A]">
       <DrawerContentScrollView
         {...props}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{
+          paddingBottom: 20,
+        }}
       >
         <View className="px-5 mt-6">
           <View className="flex-row items-center">
@@ -49,12 +55,12 @@ function CustomDrawerContent(props: any) {
           </View>
 
           <View className="flex-row mt-6 gap-x-3">
-            <View className="border border-[#F2E8FF]/30 rounded-full px-4 py-1.5">
+            <View className="bg-light-400 rounded-full px-4 py-2">
               <Text className="text-white text-xs font-semibold">
                 500 Followers
               </Text>
             </View>
-            <View className="border border-[#F2E8FF]/30 rounded-full px-4 py-1.5">
+            <View className="bg-light-400 rounded-full px-4 py-2">
               <Text className="text-white text-xs font-semibold">
                 420 Followings
               </Text>
@@ -62,48 +68,76 @@ function CustomDrawerContent(props: any) {
           </View>
         </View>
 
-        <View className="mt-7">
+        <View className="mt-7 px-2">
           <DrawerItem
             label="Profile"
             icon={({ color }) => <User2 size={20} color={color} />}
             inactiveTintColor="#A499C9"
+            activeTintColor="#FFFFFF"
+            activeBackgroundColor={LIGHT_400_HEX}
+            focused={pathname === "/profile"}
             onPress={() => router.push("/profile")}
+            style={{ borderRadius: 100 }} // Deixa o fundo redondo igual uma pílula!
           />
           <DrawerItem
             label="Notifications"
             icon={({ color }) => <Bell size={20} color={color} />}
             inactiveTintColor="#A499C9"
+            activeTintColor="#FFFFFF"
+            activeBackgroundColor={LIGHT_400_HEX}
+            focused={pathname === "/notifications"}
             onPress={() => router.push("/notifications")}
+            style={{ borderRadius: 100 }}
           />
           <DrawerItem
             label="Diary"
             icon={({ color }) => <Calendar size={20} color={color} />}
             inactiveTintColor="#A499C9"
+            activeTintColor="#FFFFFF"
+            activeBackgroundColor={LIGHT_400_HEX}
+            focused={pathname === "/diary"}
             onPress={() => router.push("/diary")}
+            style={{ borderRadius: 100 }}
           />
           <DrawerItem
             label="Reviews"
             icon={({ color }) => <BookOpenCheck size={20} color={color} />}
             inactiveTintColor="#A499C9"
+            activeTintColor="#FFFFFF"
+            activeBackgroundColor={LIGHT_400_HEX}
+            focused={pathname === "/reviews"}
             onPress={() => router.push("/reviews")}
+            style={{ borderRadius: 100 }}
           />
           <DrawerItem
             label="Lists"
             icon={({ color }) => <ListFilterIcon size={20} color={color} />}
             inactiveTintColor="#A499C9"
+            activeTintColor="#FFFFFF"
+            activeBackgroundColor={LIGHT_400_HEX}
+            focused={pathname === "/lists"}
             onPress={() => router.push("/lists")}
+            style={{ borderRadius: 100 }}
           />
           <DrawerItem
             label="Wishlist"
             icon={({ color }) => <LibraryBig size={20} color={color} />}
             inactiveTintColor="#A499C9"
+            activeTintColor="#FFFFFF"
+            activeBackgroundColor={LIGHT_400_HEX}
+            focused={pathname === "/wishlist"}
             onPress={() => router.push("/wishlist")}
+            style={{ borderRadius: 100 }}
           />
           <DrawerItem
             label="Likes"
             icon={({ color }) => <Heart size={20} color={color} />}
             inactiveTintColor="#A499C9"
+            activeTintColor="#FFFFFF"
+            activeBackgroundColor={LIGHT_400_HEX}
+            focused={pathname === "/likes"}
             onPress={() => router.push("/likes")}
+            style={{ borderRadius: 100 }}
           />
 
           <DrawerItem
@@ -112,8 +146,7 @@ function CustomDrawerContent(props: any) {
             onPress={handleLogout}
             inactiveTintColor="#A499C9"
             style={{
-              borderRadius: 20,
-              paddingHorizontal: 2,
+              borderRadius: 100,
               marginTop: 20,
             }}
           />

@@ -122,10 +122,10 @@ export default function HomeScreen() {
     <View className="flex-1 bg-background">
       <DrawerMenuButton />
 
-      <View className="flex items-center justify-center border-b border-dark-300 pt-16 pb-2 bg-background">
+      <View className="flex items-center justify-center border-b border-dark-300 pt-16 pb-6 bg-background">
         <Image
           source={require("@/assets/icons/logotext.png")}
-          className="w-56 h-12"
+          className="w-56 h-12 bg-dark-200 px-4 rounded-full"
           resizeMode="contain"
         />
       </View>
@@ -133,8 +133,8 @@ export default function HomeScreen() {
       <ScrollView className="flex-1 pt-4">
         <HomeHeader />
 
-        <View className="mt-4">
-          <Text className="text-white text-lg font-bold px-6 mb-4">
+        <View className="mt-8 px-6">
+          <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full self-start">
             Popular Games This Month
           </Text>
           <ScrollView
@@ -169,7 +169,7 @@ export default function HomeScreen() {
         <PopularLists lists={MOCK_LISTS} />
 
         <View className="mt-8 px-6 pb-24">
-          <Text className="text-white text-lg font-bold mb-4">
+          <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full self-start">
             Recent Friends Review
           </Text>
           {MOCK_REVIEWS.map((review) => (
