@@ -37,7 +37,7 @@ export class UserController {
                 return;
             }
 
-            // 2. Buscamos o usuário no banco de dados
+            // Buscamos o usuário no banco de dados
             const usuario = await prisma.user.findUnique({
                 where: { email: email }
             });
@@ -48,13 +48,13 @@ export class UserController {
                 return;
             }
 
-            // 3. Conferimos a senha (temporariamente comparando o texto direto)
+            // Conferimos a senha (temporariamente comparando o texto direto)
             if (senha !== usuario.senha_hash) {
                 res.status(401).json({ erro: "Senha incorreta." });
                 return;
             }
 
-            // 4. A mágica acontece: Geramos o Token!
+            // Geramos o Token JWT
             const segredo = process.env.JWT_SECRET as string;
             
             // O token vai guardar o ID e o Nome do usuário, e vale por 7 dias
@@ -64,7 +64,7 @@ export class UserController {
                 { expiresIn: '7d' } 
             );
 
-            // 5. Devolvemos o token e os dados básicos para o Front-end
+            // Devolvemos o token e os dados básicos para o Front-end
             res.status(200).json({
                 mensagem: "Login realizado com sucesso!",
                 token: token,
