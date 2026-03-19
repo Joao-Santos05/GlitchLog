@@ -20,7 +20,6 @@ export class GameController {
                 limit: 10
             });
 
-            // 3. O TRUQUE DA IMAGEM EM ALTA RESOLUÇÃO:
             // Percorremos a lista de jogos para "limpar" as URLs das capas
             const jogosLimpos = jogosBrutos.map((jogo: any) => {
                 if (jogo.cover && jogo.cover.url) {

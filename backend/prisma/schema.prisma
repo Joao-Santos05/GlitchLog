@@ -9,7 +9,8 @@ datasource db {
 
 model User {
   userId     Int     @id @default(autoincrement()) @map("user_id")
-  name       String
+  name       String         // O nome real ou apelido (pode ter espaços)
+  username   String         @unique // O "arroba", usado na URL
   email      String  @unique
   senha_hash String 
   bio        String? 
