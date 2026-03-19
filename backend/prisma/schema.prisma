@@ -1,4 +1,4 @@
-// 1. Configurações Iniciais
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,20 +7,24 @@ datasource db {
   provider = "postgresql"
 }
 
-// 2. As Entidades (Tabelas) alinhadas 100% com o seu MER
-
 model User {
-  // Usando @map para o banco de dados ficar em minúsculo (padrão SQL), 
-  // mas no Node você vai usar os nomes exatos do diagrama (camelCase)
-  userId     Int    @id @default(autoincrement()) @map("user_id")
-  name       String
-  email      String @unique
+  userId     Int     @id @default(autoincrement()) @map("user_id")
+  name       String         // O nome real ou apelido (pode ter espaços)
+  username   String         @unique // O "arroba", usado na URL
+  email      String  @unique
   senha_hash String 
+  bio        String? 
+  avatar_url String?
 
-  // Ligações (Relacionamentos)
-  biblioteca LibraryEntry[]
-  reviews    Review[]
-  listas     List[]
+  // Relacionamentos N:1
+  biblioteca    LibraryEntry[]
+  reviews       Review[]
+  listas        List[]
+  
+  comentarios   Comment[]
+  notificacoes  Notification[]
+  favoritos     FavoriteGame[]
+  curtidas      ReviewLike[]
 
   // Auto-relacionamento de Seguidores
   seguidores UserFollow[] @relation("Seguido")
@@ -30,88 +34,143 @@ model User {
 }
 
 model Game {
-  id_igdb    Int    @id
-  name       String
+  id_igdb Int    @id
+  name    String
 
-  // Ligações
+  // Relacionamentos N:1
   biblioteca LibraryEntry[]
   reviews    Review[]
   listItems  ListItem[]
+  favoritos  FavoriteGame[] // Jogo pode estar nos favoritos de vários usuários
 
   @@map("games")
 }
 
-model List {
-  listId     Int     @id @default(autoincrement()) @map("list_id")
-  title      String
-  summary    String? // Opcional
-  isPublic   Boolean @default(true) @map("is_public")
-  
-  userId     Int     @map("user_id")
-  user       User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
-
-  listItems  ListItem[]
-
-  @@map("lists")
-}
-
 model LibraryEntry {
-  status             String  @default("Quero Jogar")
-  marco_campanha     Boolean @default(false)
-  marco_secundarias  Boolean @default(false)
+  status            String    @default("Quero Jogar")
+  marco_campanha    Boolean   @default(false)
+  marco_secundarias Boolean   @default(false)
+  started_at        DateTime?
+  finished_at       DateTime?
 
-  userId             Int     @map("user_id")
-  id_igdb            Int     
+  userId  Int @map("user_id")
+  id_igdb Int     
 
-  user               User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  game               Game    @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  game Game @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
 
-  // Chave Composta da Entidade Fraca
   @@id([userId, id_igdb])
   @@map("library_entries")
 }
 
-model Review {
-  reviewId    Int     @id @default(autoincrement()) @map("review_id")
-  nota        Int
-  reviewText  String? @map("review_text")
+model List {
+  listId   Int     @id @default(autoincrement()) @map("list_id")
+  title    String
+  summary  String?
+  isPublic Boolean @default(true) @map("is_public")
   
-  userId      Int     @map("user_id")
-  id_igdb     Int     
+  userId Int @map("user_id")
+  user   User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
-  user        User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  game        Game    @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
+  listItems ListItem[]
 
-  // Garante que 1 usuário só faça 1 review por jogo
-  @@unique([userId, id_igdb])
-  @@map("reviews")
+  @@map("lists")
 }
 
 model ListItem {
-  ordem      Int
+  ordem Int
   
-  listId     Int     @map("list_id")
-  id_igdb    Int     
+  listId  Int @map("list_id")
+  id_igdb Int     
 
-  list       List    @relation(fields: [listId], references: [listId], onDelete: Cascade)
-  game       Game    @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
+  list List @relation(fields: [listId], references: [listId], onDelete: Cascade)
+  game Game @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
 
-  // Chave Composta da Entidade Fraca
   @@id([listId, id_igdb])
   @@map("list_items")
 }
 
-// Tabela invisível no MER que resolve o losango "Segue" N:M
+model Review {
+  reviewId   Int     @id @default(autoincrement()) @map("review_id")
+  nota       Int
+  reviewText String? @map("review_text")
+  
+  userId  Int @map("user_id")
+  id_igdb Int     
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  game Game @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
+
+  comentarios Comment[]
+  curtidas    ReviewLike[]
+
+  @@unique([userId, id_igdb]) // 1 usuário só faz 1 review por jogo
+  @@map("reviews")
+}
+
+model Comment {
+  commentID Int      @id @default(autoincrement()) @map("comment_id")
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  userId   Int @map("user_id")
+  reviewId Int @map("review_id")
+
+  user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  review Review @relation(fields: [reviewId], references: [reviewId], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model ReviewLike {
+  createdAt DateTime @default(now()) @map("created_at")
+
+  userId   Int @map("user_id")
+  reviewId Int @map("review_id")
+
+  user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  review Review @relation(fields: [reviewId], references: [reviewId], onDelete: Cascade)
+
+  // O usuário só pode curtir a mesma review 1 vez
+  @@id([userId, reviewId])
+  @@map("review_likes")
+}
+
 model UserFollow {
-  data_follow DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
 
-  id_seguidor Int
-  id_seguido  Int
+  followerID  Int @map("follower_id")
+  followingID Int @map("following_id")
 
-  seguidor User @relation("Seguidor", fields: [id_seguidor], references: [userId], onDelete: Cascade)
-  seguido  User @relation("Seguido", fields: [id_seguido], references: [userId], onDelete: Cascade)
+  seguidor User @relation("Seguidor", fields: [followerID], references: [userId], onDelete: Cascade)
+  seguido  User @relation("Seguido", fields: [followingID], references: [userId], onDelete: Cascade)
 
-  // Chave Composta
-  @@id([id_seguidor, id_seguido])
+  @@id([followerID, followingID])
   @@map("user_follows")
+}
+
+model Notification {
+  notificationID Int      @id @default(autoincrement()) @map("notification_id")
+  type           String   // Ex: "NEW_FOLLOWER", "NEW_LIKE"
+  isRead         Boolean  @default(false) @map("is_read")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  userId Int @map("user_id")
+  user   User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model FavoriteGame {
+  slot Int // Posição de 1 a 4 lá no Front-end
+
+  userId  Int @map("user_id")
+  id_igdb Int
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  game Game @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
+
+  // Garante que o usuário não coloque 2 jogos no mesmo slot
+  @@id([userId, slot]) 
+  @@map("favorite_games")
 }

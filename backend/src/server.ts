@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express, { type Request, type Response } from 'express';
 import userRoutes from './routes/UserRoutes';
 import gameRoutes from './routes/GameRoutes';
+import libraryRoutes from './routes/LibraryRoutes';
 
 const app = express();
 const PORT = 3000;
@@ -10,6 +11,7 @@ app.use(express.json());
 
 app.use('/api/usuarios', userRoutes);
 app.use('/api/jogos', gameRoutes);
+app.use('/api/biblioteca', libraryRoutes);
 
 // Uma rota de status simples para teste
 app.get('/api/status', (req: Request, res: Response) => {
