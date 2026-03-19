@@ -30,7 +30,7 @@ export default function FavoriteGames({ games }: FavoriteGamesProps) {
                   game.poster_path ||
                   "https://placehold.co/600x400/1a1a1a/ffffff.png",
               }}
-              className="w-full aspect-[2/3] rounded-lg"
+              className="w-full aspect-[2/3] rounded-md border border-light-200"
             />
 
             <View className="flex-row justify-center mt-1.5">

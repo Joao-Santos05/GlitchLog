@@ -41,7 +41,7 @@ export default function RPlayed({ games }: RPlayedProps) {
                       game.poster_path ||
                       "https://placehold.co/600x400/1a1a1a/ffffff.png",
                   }}
-                  className="w-full aspect-[2/3] rounded-lg mb-2"
+                  className="w-full aspect-[2/3] rounded-md mb-2 border border-light-200"
                 />
               </TouchableOpacity>
 
