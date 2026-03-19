@@ -82,6 +82,23 @@ export default function TabsLayout() {
         name="settings"
         options={{ href: null, headerShown: false }}
       />
+      <Tabs.Screen
+        name="manageaccount"
+        options={{ href: null, headerShown: false }}
+      />
+      <Tabs.Screen
+        name="privacysecurity"
+        options={{ href: null, headerShown: false }}
+      />
+      <Tabs.Screen
+        name="language"
+        options={{ href: null, headerShown: false }}
+      />
+      <Tabs.Screen
+        name="helpcenter"
+        options={{ href: null, headerShown: false }}
+      />
+      <Tabs.Screen name="tos" options={{ href: null, headerShown: false }} />
     </Tabs>
   );
 }

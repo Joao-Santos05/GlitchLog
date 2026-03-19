@@ -32,7 +32,6 @@ function CustomDrawerContent(props: any) {
   const router = useRouter();
   const pathname = usePathname(); // <-- Pega a rota que está aberta no momento
 
-  // Coloque aqui o Hexadecimal exato do seu bg-light-400
   const LIGHT_400_HEX = "#5A4FCF";
 
   return (
