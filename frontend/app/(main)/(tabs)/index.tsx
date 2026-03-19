@@ -95,6 +95,21 @@ const MOCK_LISTS: List[] = [
     likes: 887,
     comments: 121,
   },
+  {
+    id: "3",
+    title: "Trash Games",
+    coverUrls: [
+      "https://via.placeholder.com/100",
+      "https://via.placeholder.com/100",
+      "https://via.placeholder.com/100",
+    ],
+    creator: {
+      name: "AAAAAAAAAAAAAAA",
+      avatarUrl: "https://i.pravatar.cc/150?img=3",
+    },
+    likes: 69,
+    comments: 24,
+  },
 ];
 
 const MOCK_REVIEWS: Review[] = [

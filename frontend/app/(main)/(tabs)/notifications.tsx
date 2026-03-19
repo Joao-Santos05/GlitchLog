@@ -1,9 +1,11 @@
 import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
-import { Heart } from "lucide-react-native";
+import NotificationCard, {
+  NotificationData,
+} from "@/components/shared/NotificationCard";
 import React from "react";
-import { FlatList, Image, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 
-const MOCK_NOTIFICATIONS = [
+const MOCK_NOTIFICATIONS: NotificationData[] = [
   {
     id: "1",
     type: "follow",
@@ -42,35 +44,7 @@ export default function NotificationsScreen() {
         data={MOCK_NOTIFICATIONS}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
-        renderItem={({ item }) => (
-          <View className="bg-[#2D214F] rounded-xl p-4 mb-4 flex-row items-center border border-[#4A3F75]/50">
-            {item.user ? (
-              <Image
-                source={{ uri: item.user.avatar }}
-                className="w-12 h-12 rounded-full mr-4"
-              />
-            ) : (
-              <Image
-                source={{ uri: item.game?.cover }}
-                className="w-10 h-14 rounded-md mr-4"
-              />
-            )}
-            <View className="flex-1">
-              <Text className="text-light-200 text-sm">
-                {item.user && (
-                  <Text className="font-bold text-white">
-                    {item.user.name}{" "}
-                  </Text>
-                )}
-                {item.actionText}
-              </Text>
-              <View className="flex-row items-center justify-between p-1 mt-2">
-                <Heart color={"red"} fill={"red"} size={16} />
-                <Text className="text-[#A499C9] text-xs">{item.time}</Text>
-              </View>
-            </View>
-          </View>
-        )}
+        renderItem={({ item }) => <NotificationCard notification={item} />}
       />
     </View>
   );
