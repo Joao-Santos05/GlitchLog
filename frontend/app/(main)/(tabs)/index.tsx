@@ -1,6 +1,7 @@
 import HomeHeader from "@/components/home/HomeHeader";
 import PopularLists from "@/components/home/PopularLists";
 import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
+import GlitchText from "@/components/shared/GlitchText";
 import ReviewCard from "@/components/shared/ReviewCard";
 import StarRating from "@/components/shared/StarRating";
 import { Game } from "@/interfaces/interfaces";
@@ -138,13 +139,8 @@ export default function HomeScreen() {
       <DrawerMenuButton />
 
       <View className="flex items-center justify-center border-b border-dark-300 pt-16 pb-6 bg-background">
-        <Image
-          source={require("@/assets/icons/logotext.png")}
-          className="w-56 h-12 bg-dark-200 px-4 rounded-full"
-          resizeMode="contain"
-        />
+        <GlitchText text="GlitchLog" fontSize={48} />
       </View>
-
       <ScrollView className="flex-1 pt-4 mb-6">
         <HomeHeader />
 

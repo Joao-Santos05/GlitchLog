@@ -112,7 +112,7 @@ export default function ListsScreen() {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            className="mb-8"
+            className="mb-8 pt-7"
           >
             <TouchableOpacity
               className="mr-4 items-center"

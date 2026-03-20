@@ -30,9 +30,11 @@ export default function TabsLayout() {
           borderTopWidth: 0.5,
           borderTopColor: "#5b4967",
           elevation: 0,
+          zIndex: 10,
         },
       }}
     >
+      {/* ABAS VISÍVEIS */}
       <Tabs.Screen
         name="index"
         options={{
@@ -63,6 +65,8 @@ export default function TabsLayout() {
           tabBarIcon: ({ color }) => <Headset size={24} color={color} />,
         }}
       />
+
+      {/* ROTAS OCULTAS DA TAB BAR */}
       <Tabs.Screen
         name="notifications"
         options={{ href: null, headerShown: false }}

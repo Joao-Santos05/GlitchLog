@@ -1,5 +1,6 @@
-import SettingsRow from "@/components/settings/Item";
+import SettingsRow from "@/components/settings/Item"; // Ajuste o caminho se necessário
 import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
+import { useRouter } from "expo-router"; // 1. Importamos o roteador
 import {
   Bell,
   FileText,
@@ -13,6 +14,8 @@ import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 export default function SettingsScreen() {
+  const router = useRouter(); // 2. Inicializamos o roteador
+
   // Estados mockados para os switches
   const [pushEnabled, setPushEnabled] = useState(true);
   const [emailEnabled, setEmailEnabled] = useState(false);
@@ -37,8 +40,16 @@ export default function SettingsScreen() {
           Account
         </Text>
         <View className="bg-[#2D214F] rounded-2xl px-4 border border-[#4A3F75]">
-          <SettingsRow icon={User} label="Manage Account" />
-          <SettingsRow icon={Lock} label="Privacy & Security" />
+          <SettingsRow
+            icon={User}
+            label="Manage Account"
+            onPress={() => router.push("/manageaccount")}
+          />
+          <SettingsRow
+            icon={Lock}
+            label="Privacy & Security"
+            onPress={() => router.push("/privacysecurity")}
+          />
         </View>
 
         {/* SEÇÃO: PREFERÊNCIAS */}
@@ -53,7 +64,11 @@ export default function SettingsScreen() {
             value={pushEnabled}
             onToggle={setPushEnabled}
           />
-          <SettingsRow icon={Globe} label="Language" />
+          <SettingsRow
+            icon={Globe}
+            label="Language"
+            onPress={() => router.push("/language")}
+          />
         </View>
 
         {/* SEÇÃO: SUPORTE & SOBRE */}
@@ -61,8 +76,16 @@ export default function SettingsScreen() {
           Support & About
         </Text>
         <View className="bg-[#2D214F] rounded-2xl px-4 border border-[#4A3F75]">
-          <SettingsRow icon={HelpCircle} label="Help Center" />
-          <SettingsRow icon={FileText} label="Terms of Service" />
+          <SettingsRow
+            icon={HelpCircle}
+            label="Help Center"
+            onPress={() => router.push("/helpcenter")}
+          />
+          <SettingsRow
+            icon={FileText}
+            label="Terms of Service"
+            onPress={() => router.push("/tos")}
+          />
         </View>
 
         {/* SEÇÃO: ZONA DE PERIGO */}
@@ -74,6 +97,7 @@ export default function SettingsScreen() {
             icon={Trash2}
             label="Delete Account"
             isDestructive={true}
+            onPress={() => console.log("Abre modal de confirmação de exclusão")}
           />
         </View>
 
