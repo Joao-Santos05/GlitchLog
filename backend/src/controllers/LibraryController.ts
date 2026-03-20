@@ -132,4 +132,92 @@ export class LibraryController {
             res.status(500).json({ erro: "Erro ao buscar a biblioteca." });
         }
     }
+
+    static async atualizarStatus(req: Request, res: Response) {
+        try {
+            const userId = (req as any).userId; // Veio do token JWT
+            const { id_igdb } = req.params;
+            const { status, marco_campanha, marco_secundarias } = req.body;
+
+            const jogoId = Number(id_igdb);
+
+            if (isNaN(jogoId)) {
+                res.status(400).json({ erro: "ID do jogo inválido." });
+                return;
+            }
+
+            // Busca se o jogo realmente está na biblioteca DESTE usuário
+            const entradaNaBiblioteca = await prisma.libraryEntry.findFirst({
+                where: { userId: userId, id_igdb: jogoId }
+            });
+
+            if (!entradaNaBiblioteca) {
+                res.status(404).json({ erro: "Este jogo não está na sua biblioteca." });
+                return;
+            }
+
+            let dataInicio = entradaNaBiblioteca.started_at;
+            let dataFim = entradaNaBiblioteca.finished_at;
+
+            if (status === "Jogando" && entradaNaBiblioteca.status !== "Jogando" && !dataInicio) {
+                dataInicio = new Date();
+            }
+
+            if (status === "Zerado" && entradaNaBiblioteca.status !== "Zerado" && !dataFim) {
+                dataFim = new Date();
+            }
+
+            // Atualiza os dados no banco
+            await prisma.libraryEntry.updateMany({
+                where: { userId: userId, id_igdb: jogoId },
+                data: {
+                    status: status || entradaNaBiblioteca.status,
+                    marco_campanha: marco_campanha !== undefined ? marco_campanha : entradaNaBiblioteca.marco_campanha,
+                    marco_secundarias: marco_secundarias !== undefined ? marco_secundarias : entradaNaBiblioteca.marco_secundarias,
+                    started_at: dataInicio,
+                    finished_at: dataFim
+                }
+            });
+
+            res.status(200).json({ mensagem: "Status do jogo atualizado com sucesso!" });
+
+        } catch (erro) {
+            console.error(erro);
+            res.status(500).json({ erro: "Erro ao atualizar o jogo na biblioteca." });
+        }
+    }
+
+    static async removerJogo(req: Request, res: Response) {
+        try {
+            const userId = (req as any).userId; // Protegido pelo JWT
+            const { id_igdb } = req.params;
+            
+            const jogoId = Number(id_igdb);
+
+            if (isNaN(jogoId)) {
+                res.status(400).json({ erro: "ID do jogo inválido." });
+                return;
+            }
+
+            // Usamos deleteMany porque estamos buscando por duas colunas (userId e id_igdb)
+            const deletado = await prisma.libraryEntry.deleteMany({
+                where: { 
+                    userId: userId, 
+                    id_igdb: jogoId 
+                }
+            });
+
+            // Se o deleteMany retornar count 0, significa que o jogo não tava lá
+            if (deletado.count === 0) {
+                res.status(404).json({ erro: "Jogo não encontrado na sua biblioteca." });
+                return;
+            }
+
+            res.status(200).json({ mensagem: "Jogo removido da sua biblioteca." });
+
+        } catch (erro) {
+            console.error(erro);
+            res.status(500).json({ erro: "Erro ao remover o jogo da biblioteca." });
+        }
+    }
 }
