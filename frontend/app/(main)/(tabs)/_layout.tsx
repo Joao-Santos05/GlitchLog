@@ -1,4 +1,5 @@
 import { Tabs } from "expo-router";
+import { Platform } from "react-native";
 import {
   Gamepad2,
   GamepadDirectional,
@@ -13,24 +14,25 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: "#ff8945",
         tabBarInactiveTintColor: "#C8ADFF",
-        sceneStyle: {
-          backgroundColor: "#2c225a",
-        },
+        sceneStyle: { backgroundColor: "#2c225a" },
 
         tabBarItemStyle: {
           justifyContent: "center",
           alignItems: "center",
-          paddingTop: 22,
+          // 2. Ajuste fino para os ícones ficarem centralizados e fugirem da barrinha do iPhone
+          paddingTop: 10,
+          paddingBottom: Platform.OS === "ios" ? 20 : 0,
         },
 
         tabBarStyle: {
           backgroundColor: "#2c225a",
-          height: 90,
-          position: "absolute",
+          height: Platform.OS === "ios" ? 90 : 70, // Fica elegante e proporcional nos dois sistemas
+
+          // position: "absolute", <--- BANIDO PARA SEMPRE DO IOS!
+
           borderTopWidth: 0.5,
           borderTopColor: "#5b4967",
           elevation: 0,
-          zIndex: 10,
         },
       }}
     >
@@ -66,7 +68,7 @@ export default function TabsLayout() {
         }}
       />
 
-      {/* ROTAS OCULTAS DA TAB BAR */}
+      {/* ROTAS OCULTAS */}
       <Tabs.Screen
         name="notifications"
         options={{ href: null, headerShown: false }}

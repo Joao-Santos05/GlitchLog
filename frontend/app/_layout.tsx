@@ -1,44 +1,55 @@
-// import { useFonts } from "expo-font";
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-// import * as SplashScreen from "expo-splash-screen";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-// import { useEffect } from "react";
+import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./globals.css";
 
-// SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  // const [loaded, error] = useFonts({
-  //   Neotriad: require("../assets/fonts/Neotriad.otf"),
-  // });
+  const [fontsLoaded, fontError] = useFonts({
+    // @ts-ignore
+    Neotriad: require("../assets/fonts/Neotriad.otf"),
+  });
 
-  // useEffect(() => {
-  //   if (error) {
-  //     console.error("font error", error);
-  //   }
-  //   if (loaded || error) {
-  //     SplashScreen.hideAsync();
-  //   }
-  // }, [loaded, error]);
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
 
-  // if (!loaded && !error) {
-  //   return null;
-  // }
+  if (!fontsLoaded && !fontError) return null;
 
   return (
-    <>
-      <StatusBar hidden={true} />
-
-      <Stack>
-        <Stack.Screen name="(main)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="games/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="reviews/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="reviews/new" options={{ headerShown: false }} />
-        <Stack.Screen name="lists/new" options={{ headerShown: false }} />
-        <Stack.Screen name="lists/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="lists/edit/[id]" options={{ headerShown: false }} />
-      </Stack>
-    </>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <StatusBar hidden={true} />
+        {/* Apenas carrega as rotas! Sem views flutuantes invisíveis. */}
+        <Stack>
+          {/* index é a nossa nova tela de Loading */}
+          <Stack.Screen
+            name="index"
+            options={{ headerShown: false, animation: "fade" }}
+          />
+          <Stack.Screen
+            name="(main)"
+            options={{ headerShown: false, animation: "fade" }}
+          />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="games/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="reviews/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="reviews/new" options={{ headerShown: false }} />
+          <Stack.Screen name="lists/new" options={{ headerShown: false }} />
+          <Stack.Screen name="lists/[id]" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="lists/edit/[id]"
+            options={{ headerShown: false }}
+          />
+        </Stack>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }

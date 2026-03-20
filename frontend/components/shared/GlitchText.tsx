@@ -6,16 +6,14 @@ interface GlitchTextProps {
   fontSize?: number;
 }
 
-export default function GlitchText({ text, fontSize = 40 }: GlitchTextProps) {
-  // Estado para controlar a "tremida" do glitch
+export default function GlitchText({ text, fontSize = 38 }: GlitchTextProps) {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Esse intervalo simula os keyframes do CSS, rodando a cada 50ms
     const interval = setInterval(() => {
       setOffset({
-        x: (Math.random() - 0.5) * 6, // Tremida horizontal (entre -3 e 3)
-        y: (Math.random() - 0.5) * 2, // Tremida vertical (entre -1 e 1)
+        x: (Math.random() - 0.5) * 6,
+        y: (Math.random() - 0.5) * 2,
       });
     }, 50);
 
@@ -23,14 +21,12 @@ export default function GlitchText({ text, fontSize = 40 }: GlitchTextProps) {
   }, []);
 
   return (
-    // 1. box-none na View principal: "Deixe o dedo passar pelo espaço vazio"
     <View
       className="relative items-center justify-center"
       pointerEvents="box-none"
     >
-      {/* 1ª Camada: Sombra Ciano (Fundo) */}
       <Text
-        pointerEvents="none" // 2. none nas letras: "Deixe o dedo passar pelas letras"
+        pointerEvents="none"
         style={{
           fontSize,
           fontFamily: "Neotriad",
@@ -46,9 +42,8 @@ export default function GlitchText({ text, fontSize = 40 }: GlitchTextProps) {
         {text}
       </Text>
 
-      {/* 2ª Camada: Sombra Vermelha (Fundo) */}
       <Text
-        pointerEvents="none" // <-- Aqui também!
+        pointerEvents="none"
         style={{
           fontSize,
           fontFamily: "Neotriad",
@@ -64,9 +59,8 @@ export default function GlitchText({ text, fontSize = 40 }: GlitchTextProps) {
         {text}
       </Text>
 
-      {/* 3ª Camada: Texto Branco Principal (Frente) */}
       <Text
-        pointerEvents="none" // <-- E aqui também!
+        pointerEvents="none"
         style={{
           fontSize,
           fontFamily: "Neotriad",
