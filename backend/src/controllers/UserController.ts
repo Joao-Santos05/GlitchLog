@@ -92,18 +92,6 @@ export class UserController {
         }
     }
 
-
-    // Lógica do GET
-    static async listarUsuarios(req: Request, res: Response) {
-        try {
-            const usuarios = await prisma.user.findMany();
-            res.status(200).json(usuarios);
-        } catch (erro) {
-            console.error(erro);
-            res.status(500).json({ erro: "Erro ao buscar os usuários." });
-        }
-    }
-
     // Lógica do DELETE
     static async excluirUsuario(req: Request, res: Response) {
         try {
@@ -134,6 +122,165 @@ export class UserController {
         } catch (erro) {
             console.error(erro);
             res.status(500).json({ erro: "Erro interno ao excluir a conta." });
+        }
+    }
+static async listarUsuarios(req: Request, res: Response) {
+        try {
+            // NOTA: Criar um 'adminMiddleware'. 
+            // Esta rota deve ser bloqueada em produção para não expor a base inteira, 
+            // ficando disponível apenas para o painel de administração.
+            const usuarios = await prisma.user.findMany({
+                select: {
+                    userId: true,
+                    username: true,
+                    bio: true,
+                    avatar_url: true 
+                }
+            });
+            res.status(200).json(usuarios);
+        } catch (erro) {
+            console.error(erro);
+            res.status(500).json({ erro: "Erro ao buscar os usuários." });
+        }
+    }
+
+    static async buscarPerfilPublico(req: Request, res: Response) {
+        try {
+            const { username } = req.params;
+
+            const usuario = await prisma.user.findUnique({
+                where: { username: username }, 
+                select: {
+                    userId: true,
+                    username: true,
+                    bio: true,
+                    avatar_url: true,
+                    createdAt: true
+                    // NOTA: Adicionar um 'include' aqui para o Prisma já trazer 
+                    // a lista de reviews e os jogos da biblioteca (ou favoritos) desse usuário!
+                }
+            });
+
+            if (!usuario) {
+                res.status(404).json({ erro: "Usuário não encontrado." });
+                return;
+            }
+
+            res.status(200).json(usuario);
+        } catch (erro) {
+            console.error(erro);
+            res.status(500).json({ erro: "Erro ao buscar o perfil do usuário." });
+        }
+    }
+
+    static async meuPerfil(req: Request, res: Response) {
+        try {
+            const userId = (req as any).userId; 
+
+            const meuPerfil = await prisma.user.findUnique({
+                where: { userId: userId },
+                select: {
+                    userId: true,
+                    username: true,
+                    email: true, // Revelamos o email só para o próprio dono!
+                    bio: true,
+                    avatar_url: true, 
+                    createdAt: true
+                }
+            });
+
+            if (!meuPerfil) {
+                res.status(404).json({ erro: "Usuário não encontrado." });
+                return;
+            }
+
+            res.status(200).json(meuPerfil);
+        } catch (erro) {
+            console.error(erro);
+            res.status(500).json({ erro: "Erro ao buscar os dados do perfil." });
+        }
+    }
+
+    static async atualizarPerfil(req: Request, res: Response) {
+        try {
+            const userId = (req as any).userId; 
+            const { username, bio, email, oldPassword, newPassword, avatar_url } = req.body;
+
+            const usuarioAtual = await prisma.user.findUnique({
+                where: { userId: userId }
+            });
+
+            if (!usuarioAtual) {
+                res.status(404).json({ erro: "Usuário não encontrado." });
+                return;
+            }
+
+            if (username || email) {
+                const conflito = await prisma.user.findFirst({
+                    where: {
+                        OR: [
+                            { username: username ? username : undefined },
+                            { email: email ? email : undefined }
+                        ],
+                        NOT: { userId: userId } 
+                    }
+                });
+
+                if (conflito) {
+                    res.status(409).json({ erro: "Este nome de usuário ou e-mail já está em uso." });
+                    return;
+                }
+            }
+
+            // NOTA: A troca de e-mail está sendo feita de forma direta. 
+            // O ideal para produção é gerar um token, enviar um e-mail de confirmação 
+            // (usando AWS SES ou SendGrid) e só atualizar o banco após o clique.
+            const mudandoEmail = email && email !== usuarioAtual.email;
+            const mudandoSenha = newPassword !== undefined && newPassword !== "";
+            let senhaFinal = usuarioAtual.password;
+
+            if (mudandoEmail || mudandoSenha) {
+                if (!oldPassword) {
+                    res.status(400).json({ erro: "Para alterar seu e-mail ou senha, confirme sua senha atual." });
+                    return;
+                }
+
+                const senhaBate = await bcrypt.compare(oldPassword, usuarioAtual.password);
+                if (!senhaBate) {
+                    res.status(401).json({ erro: "A senha atual está incorreta." });
+                    return;
+                }
+
+                if (mudandoSenha) {
+                    senhaFinal = await bcrypt.hash(newPassword, 10);
+                    // NOTA: Implementar invalidação de tokens JWT.
+                    // Adicionar uma 'tokenVersion' no banco ou usar Redis para deslogar 
+                    // o usuário de todos os outros dispositivos ao trocar a senha.
+                }
+            }
+
+            const usuarioAtualizado = await prisma.user.update({
+                where: { userId: userId },
+                data: {
+                    username: username || usuarioAtual.username,
+                    bio: bio !== undefined ? bio : usuarioAtual.bio,
+                    avatar_url: avatar_url !== undefined ? avatar_url : usuarioAtual.avatar_url,
+                    email: email || usuarioAtual.email,
+                    password: senhaFinal 
+                },
+                select: {
+                    userId: true,
+                    username: true,
+                    email: true,
+                    bio: true,
+                    avatar_url: true 
+                }
+            });
+
+            res.status(200).json({ mensagem: "Perfil atualizado com sucesso!", perfil: usuarioAtualizado });
+        } catch (erro) {
+            console.error(erro);
+            res.status(500).json({ erro: "Erro interno ao atualizar o perfil." });
         }
     }
 }
