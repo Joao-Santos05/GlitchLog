@@ -34,14 +34,24 @@ model User {
 }
 
 model Game {
-  id_igdb Int    @id
-  name    String
+  id_igdb            Int            @id
+  name               String
+  bio                String?        // Sinopse/Summary do jogo
+  cover_url          String?        // Capa em alta resolução
+  background_url     String?        // Artwork 1080p para o fundo
+  release_year       Int?           // Ano de lançamento
+  developer          String?        // Empresa desenvolvedora principal
+  genre              String?        // Lista de gêneros (ex: "RPG, Adventure")
+  platforms          String?        // Lista de plataformas (ex: "PC, PS5")
+  rating             Float?         // Nota do jogo (ex: 4.7)
+  rating_count       Int?           // Quantidade de avaliações
+  similar_games_json String?        // Lista de jogos similares em formato JSON
 
-  // Relacionamentos N:1
-  biblioteca LibraryEntry[]
-  reviews    Review[]
-  listItems  ListItem[]
-  favoritos  FavoriteGame[] // Jogo pode estar nos favoritos de vários usuários
+  // Relacionamentos N:1 (Mantidos perfeitamente iguais aos seus)
+  biblioteca         LibraryEntry[]
+  reviews            Review[]
+  listItems          ListItem[]
+  favoritos          FavoriteGame[]
 
   @@map("games")
 }
