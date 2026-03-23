@@ -48,7 +48,6 @@ export default function ListDetailsScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      {/* Header Voltar */}
       <View
         className="px-6 pb-2"
         style={{ paddingTop: insets.top > 0 ? insets.top + 10 : 40 }}
@@ -62,16 +61,12 @@ export default function ListDetailsScreen() {
         contentContainerStyle={{ padding: 24, paddingBottom: 60 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* INFO DA LISTA REESTRUTURADA */}
         <View className="flex-row mb-8">
-          {/* Capa da Lista na Esquerda */}
           <View className="w-24 h-24 bg-[#1A133A] rounded-xl items-center justify-center border border-[#4A3F75] mr-4">
             <Gamepad2 size={32} color="#A499C9" />
           </View>
 
-          {/* Textos e Botões na Direita */}
           <View className="flex-1 justify-center">
-            {/* 1. PERFIL EM CIMA */}
             <View className="flex-row items-center mb-1.5">
               <Image
                 source={{ uri: "https://i.pravatar.cc/150?img=11" }}
@@ -80,7 +75,6 @@ export default function ListDetailsScreen() {
               <Text className="text-light-200 text-xs font-bold">David</Text>
             </View>
 
-            {/* 2. TÍTULO NO MEIO */}
             <View className="flex-row items-center mb-2">
               <Text className="text-white text-2xl font-bold mr-2">
                 My List
@@ -90,7 +84,6 @@ export default function ListDetailsScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* 3. BOTÃO DE DESCRIÇÃO EMBAIXO */}
             <TouchableOpacity className="self-start">
               <Text className="text-[#A499C9] text-[11px] font-medium bg-[#2D214F] px-2 py-1 rounded-md border border-[#4A3F75]">
                 + Add description
@@ -99,7 +92,6 @@ export default function ListDetailsScreen() {
           </View>
         </View>
 
-        {/* CONTROLES / AÇÕES */}
         <View className="flex-row justify-between items-center mb-8 border-b border-[#F2E8FF]/10 pb-4">
           <View className="flex-row gap-4">
             <TouchableOpacity>
@@ -115,7 +107,6 @@ export default function ListDetailsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* GAMES ADDED */}
         <Text className="text-white text-base font-bold mb-4">
           Games added:
         </Text>
@@ -134,7 +125,6 @@ export default function ListDetailsScreen() {
           ))}
         </ScrollView>
 
-        {/* SUGGESTED GAMES */}
         <Text className="text-white text-base font-bold mb-4">
           Suggested games:
         </Text>
@@ -162,7 +152,6 @@ export default function ListDetailsScreen() {
           ))}
         </ScrollView>
 
-        {/* UPDATE BUTTON */}
         <View className="items-center mt-4">
           <TouchableOpacity className="bg-[#4A3F75] rounded-full px-8 py-2">
             <Text className="text-white font-bold">Update</Text>

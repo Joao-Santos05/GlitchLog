@@ -1,6 +1,6 @@
 import GoBack from "@/components/shared/GoBack";
 import StarRating from "@/components/shared/StarRating";
-import { Game } from "@/interfaces/interfaces"; // Trazendo a interface padrão!
+import { Game } from "@/interfaces/interfaces";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   Edit3,
@@ -22,7 +22,6 @@ import {
 import ReviewCard from "../../components/shared/ReviewCard";
 import { Review } from "../../types";
 
-// 1. Criamos um mock do jogo usando a sua interface global
 const MOCK_GAME_DETAILS: Game = {
   id: 1,
   title: "Clair Obscur: Expedition 33",
@@ -159,7 +158,6 @@ export default function GameDetailsScreen() {
               Ratings
             </Text>
             <View className="flex-row items-end h-20 border-b border-gray-600/50 mb-2 mt-14">
-              {/* Gráfico de barras fictício */}
               {[1, 2, 3, 5, 8, 12, 20, 30, 45, 60].map((h, i) => (
                 <View
                   key={i}
@@ -172,7 +170,6 @@ export default function GameDetailsScreen() {
                   {MOCK_GAME_DETAILS.vote_average}
                 </Text>
                 <View className="flex-row mt-1">
-                  {/* 2. Aqui está a correção: passando a nota do nosso mock! */}
                   <StarRating
                     rating={MOCK_GAME_DETAILS.vote_average}
                     size={10}
@@ -183,7 +180,6 @@ export default function GameDetailsScreen() {
           </View>
         </View>
 
-        {/* Seção de Casts/Crews */}
         <View className="mt-8 px-6">
           <View className="flex-row gap-6 border-b border-gray-700 pb-3">
             <TouchableOpacity className="bg-[#FF8A65] px-4 py-1 rounded-full">
@@ -212,7 +208,6 @@ export default function GameDetailsScreen() {
           </ScrollView>
         </View>
 
-        {/* Seção de Reviews */}
         <View className="mt-8 px-6 pb-24">
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-white text-lg font-bold">All Reviews</Text>

@@ -64,7 +64,6 @@ export default function NewReviewScreen() {
               Give your rating
             </Text>
             <View className="flex-row items-center justify-between pr-4">
-              {/* Para ficar interativo, você pode criar um TouchableOpacity sobre cada estrela futuramente, por enquanto usamos o visual */}
               <TouchableOpacity
                 onPress={() => setRating(rating === 5 ? 0 : rating + 1)}
               >
@@ -103,7 +102,6 @@ export default function NewReviewScreen() {
           <TouchableOpacity
             className="bg-[#B8AAFF] px-8 py-3 rounded-full"
             onPress={() => {
-              // Lógica de salvar e voltar
               router.back();
             }}
           >

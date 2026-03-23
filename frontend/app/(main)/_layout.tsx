@@ -1,5 +1,5 @@
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { usePathname, useRouter } from "expo-router"; // <-- Importe o usePathname aqui
+import { usePathname, useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import {
   Bell,
@@ -30,7 +30,7 @@ const handleLogout = () => {
 
 function CustomDrawerContent(props: any) {
   const router = useRouter();
-  const pathname = usePathname(); // <-- Pega a rota que está aberta no momento
+  const pathname = usePathname();
 
   const LIGHT_400_HEX = "#5A4FCF";
 
@@ -77,7 +77,7 @@ function CustomDrawerContent(props: any) {
             activeBackgroundColor={LIGHT_400_HEX}
             focused={pathname === "/profile"}
             onPress={() => router.push("/profile")}
-            style={{ borderRadius: 100 }} // Deixa o fundo redondo igual uma pílula!
+            style={{ borderRadius: 100 }}
           />
           <DrawerItem
             label="Notifications"
