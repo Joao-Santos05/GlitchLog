@@ -8,8 +8,15 @@ import {
   Plus,
   Share2,
 } from "lucide-react-native";
-import React from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useState, useCallback } from "react";
+import {
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const GAMES_ADDED = [
@@ -45,6 +52,14 @@ const SUGGESTED_GAMES = [
 export default function ListDetailsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   return (
     <View className="flex-1 bg-background">
@@ -60,6 +75,15 @@ export default function ListDetailsScreen() {
       <ScrollView
         contentContainerStyle={{ padding: 24, paddingBottom: 60 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
       >
         <View className="flex-row mb-8">
           <View className="w-24 h-24 bg-[#1A133A] rounded-xl items-center justify-center border border-[#4A3F75] mr-4">

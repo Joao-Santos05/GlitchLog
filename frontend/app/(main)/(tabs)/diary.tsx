@@ -1,7 +1,7 @@
 import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import StarRating from "@/components/shared/StarRating";
 import { Heart } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Image,
   Modal,
@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  RefreshControl,
 } from "react-native";
 
 const MONTHS = [
@@ -28,6 +29,7 @@ const MONTHS = [
 
 export default function DiaryScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [refreshing, setRefreshing] = useState(false);
 
   const [weekStart, setWeekStart] = useState(() => {
     const d = new Date();
@@ -35,6 +37,13 @@ export default function DiaryScreen() {
     d.setDate(d.getDate() - d.getDay());
     return d;
   });
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   const [isMonthPickerVisible, setIsMonthPickerVisible] = useState(false);
   const [pickerYear, setPickerYear] = useState(new Date().getFullYear());
@@ -91,6 +100,15 @@ export default function DiaryScreen() {
       <ScrollView
         contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
       >
         <View className="mb-8">
           <View className="flex-row justify-between items-center mb-4 px-2">

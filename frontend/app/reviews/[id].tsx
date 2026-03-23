@@ -1,13 +1,28 @@
 import StarRating from "@/components/shared/StarRating";
 import { useRouter } from "expo-router";
 import { ArrowLeft, Heart } from "lucide-react-native";
-import React from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useState, useCallback } from "react";
+import {
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ReviewDetailsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   return (
     <View className="flex-1 bg-background">
@@ -28,7 +43,18 @@ export default function ReviewDetailsScreen() {
         </View>
       </View>
 
-      <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 60 }}>
+      <ScrollView
+        contentContainerStyle={{ padding: 24, paddingBottom: 60 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
+      >
         <Image
           source={{ uri: "https://via.placeholder.com/150x200" }}
           className="w-16 h-24 rounded-md border border-[#4A3F75] mb-4"

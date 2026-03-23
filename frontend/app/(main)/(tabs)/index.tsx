@@ -7,7 +7,15 @@ import StarRating from "@/components/shared/StarRating";
 import { Game } from "@/interfaces/interfaces";
 import { List, Review } from "@/types";
 import { useRouter } from "expo-router";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useState, useCallback } from "react";
+import {
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+} from "react-native";
 
 const MOCK_GAMES: Game[] = [
   {
@@ -133,6 +141,14 @@ const MOCK_REVIEWS: Review[] = [
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   return (
     <View className="flex-1 bg-background">
@@ -141,7 +157,19 @@ export default function HomeScreen() {
       <View className="flex items-center justify-center border-b border-dark-300 pt-16 pb-6 bg-background">
         <GlitchText text="GlitchLog" fontSize={48} />
       </View>
-      <ScrollView className="flex-1 pt-4 mb-6">
+
+      <ScrollView
+        className="flex-1 pt-4 mb-6"
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
+      >
         <HomeHeader />
 
         <View className="mt-8 px-6">

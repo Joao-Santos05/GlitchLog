@@ -6,8 +6,8 @@ import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import ReviewCard from "@/components/shared/ReviewCard";
 import { Game } from "@/interfaces/interfaces";
 import { Review } from "@/types";
-import React, { useRef } from "react";
-import { Animated, Text, View } from "react-native";
+import React, { useRef, useState, useCallback } from "react";
+import { Animated, Text, View, RefreshControl, Platform } from "react-native";
 
 const statsMock = [
   { label: "Total Games", value: "45" },
@@ -154,6 +154,14 @@ const MOCK_REVIEWS: Review[] = [
 
 export default function ProfileScreen() {
   const scrollY = useRef(new Animated.Value(0)).current;
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   return (
     <View className="flex-1 bg-background">
@@ -166,6 +174,27 @@ export default function ProfileScreen() {
           { useNativeDriver: true },
         )}
         scrollEventThrottle={16}
+        onScrollEndDrag={(e) => {
+          if (
+            Platform.OS === "ios" &&
+            e.nativeEvent.contentOffset.y < -60 &&
+            !refreshing
+          ) {
+            onRefresh();
+          }
+        }}
+        refreshControl={
+          Platform.OS === "android" ? (
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor="transparent"
+              colors={["transparent"]}
+              progressBackgroundColor="transparent"
+              progressViewOffset={-1000}
+            />
+          ) : undefined
+        }
       >
         <ProfileHeader scrollY={scrollY} />
         <StatsRow stats={statsMock} />

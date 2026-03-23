@@ -7,14 +7,17 @@ import RatingFilterDropdown from "@/components/shared/RatingFilterDropdown";
 import { icons } from "@/constants/icons";
 import { fetchGames } from "@/services/api";
 import { SearchIcon } from "lucide-react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   ActivityIndicator,
   Animated,
   Text,
   TextInput,
   View,
+  RefreshControl,
+  Platform,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const GENRES_OPTIONS: FilterOption[] = [
   { label: "All Genres", value: "All" },
@@ -27,52 +30,58 @@ const GENRES_OPTIONS: FilterOption[] = [
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
-
   const [games, setGames] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
-
+  const [refreshing, setRefreshing] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState<string>("All");
   const [selectedRating, setSelectedRating] = useState<number>(0);
   const [isGenreOpen, setIsGenreOpen] = useState(false);
   const [isRatingOpen, setIsRatingOpen] = useState(false);
 
   const scrollY = useRef(new Animated.Value(0)).current;
+  const insets = useSafeAreaInsets();
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const load = async () => {
-      setLoading(true);
+  const loadData = useCallback(
+    async (isRefreshing = false) => {
+      if (!isRefreshing) setLoading(true);
       setError(null);
       try {
         const res = await fetchGames({ query: searchQuery });
-        if (isMounted) setGames(res);
+        setGames(res);
       } catch (err: any) {
-        if (isMounted) setError(err);
+        setError(err);
       } finally {
-        if (isMounted) setLoading(false);
+        if (!isRefreshing) setLoading(false);
+        if (isRefreshing) setRefreshing(false);
       }
-    };
+    },
+    [searchQuery],
+  );
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    loadData(true);
+  }, [loadData]);
+
+  useEffect(() => {
+    let isMounted = true;
     const timeoutId = setTimeout(() => {
-      load();
+      if (isMounted) loadData();
     }, 500);
 
     return () => {
       clearTimeout(timeoutId);
       isMounted = false;
     };
-  }, [searchQuery]);
+  }, [loadData]);
 
   const filteredGames = (games || [])
     .map((game: any) => {
       let rawRating = game.vote_average || game.rating || 0;
       if (rawRating > 10) rawRating = rawRating / 20;
       else if (rawRating > 5) rawRating = rawRating / 2;
-
       const roundedRating = Math.round(rawRating * 2) / 2;
-
       return { ...game, vote_average: roundedRating };
     })
     .filter((game: any) => {
@@ -84,7 +93,6 @@ const Search = () => {
           game.genres.some(
             (g: any) => g.name?.toLowerCase() === selectedGenre.toLowerCase(),
           ));
-
       return matchesRating && matchesGenre;
     });
 
@@ -102,6 +110,15 @@ const Search = () => {
           { useNativeDriver: true },
         )}
         scrollEventThrottle={16}
+        onScrollEndDrag={(e) => {
+          if (
+            Platform.OS === "ios" &&
+            e.nativeEvent.contentOffset.y < -60 &&
+            !refreshing
+          ) {
+            onRefresh();
+          }
+        }}
         columnWrapperStyle={{
           justifyContent: "flex-start",
           gap: 16,
@@ -109,14 +126,27 @@ const Search = () => {
           zIndex: -1,
         }}
         contentContainerStyle={{ paddingBottom: 100 }}
+        refreshControl={
+          Platform.OS === "android" ? (
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor="transparent"
+              colors={["transparent"]}
+              progressBackgroundColor="transparent"
+              progressViewOffset={-1000}
+            />
+          ) : undefined
+        }
         ListHeaderComponentStyle={{
           zIndex: 1000,
           elevation: 1000,
           paddingBottom: 10,
+          paddingTop: insets.top > 0 ? insets.top + 20 : 30,
         }}
         ListHeaderComponent={
           <View style={{ zIndex: 1000, elevation: 1000 }}>
-            <View className="w-full flex-row justify-center mt-20 relative h-14 z-10">
+            <View className="w-full flex-row justify-center mt-10 relative h-14 z-10">
               <Animated.Image
                 source={icons.logo}
                 className="w-12 h-14"
@@ -151,6 +181,14 @@ const Search = () => {
                 className="flex-1 ml-3 text-white text-base"
               />
             </View>
+
+            {(loading || refreshing) && (
+              <ActivityIndicator
+                size="large"
+                color="#C8ADFF"
+                style={{ marginTop: 10, marginBottom: 20 }}
+              />
+            )}
 
             <View
               className="flex-row gap-6 mb-4 justify-end relative"
@@ -187,14 +225,6 @@ const Search = () => {
               />
             </View>
 
-            {loading && (
-              <ActivityIndicator
-                size="large"
-                color="#C8ADFF"
-                className="my-5"
-              />
-            )}
-
             {error && (
               <Text className="text-red-400 text-center my-3 font-semibold">
                 Error: {error.message}
@@ -213,7 +243,7 @@ const Search = () => {
           </View>
         }
         ListEmptyComponent={
-          !loading && !error ? (
+          !loading && !error && !refreshing ? (
             <View className="mt-10 px-5 items-center">
               <Text className="text-center text-[#A499C9] text-base">
                 {searchQuery.trim()

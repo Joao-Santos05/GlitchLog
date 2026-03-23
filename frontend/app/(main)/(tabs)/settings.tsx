@@ -3,6 +3,7 @@ import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import { useRouter } from "expo-router";
 import {
   Bell,
+  Check,
   FileText,
   Globe,
   HelpCircle,
@@ -10,15 +11,33 @@ import {
   Trash2,
   User,
 } from "lucide-react-native";
-import React, { useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import React, { useState, useCallback } from "react";
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+} from "react-native";
+
+const AVAILABLE_LANGUAGES = ["English", "Português", "Español", "Français"];
 
 export default function SettingsScreen() {
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
 
   const [pushEnabled, setPushEnabled] = useState(true);
   const [emailEnabled, setEmailEnabled] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   return (
     <View className="flex-1 bg-background">
@@ -33,7 +52,17 @@ export default function SettingsScreen() {
       <ScrollView
         contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
       >
+        {/* --- ACCOUNT --- */}
         <Text className="text-[#A499C9] font-bold text-xs uppercase tracking-wider mb-2 mt-4 px-2">
           Account
         </Text>
@@ -50,10 +79,11 @@ export default function SettingsScreen() {
           />
         </View>
 
+        {/* --- PREFERENCES --- */}
         <Text className="text-[#A499C9] font-bold text-xs uppercase tracking-wider mb-2 mt-8 px-2">
           Preferences
         </Text>
-        <View className="bg-[#2D214F] rounded-2xl px-4 border border-[#4A3F75]">
+        <View className="bg-[#2D214F] rounded-2xl px-4 border border-[#4A3F75] overflow-hidden">
           <SettingsRow
             icon={Bell}
             label="Push Notifications"
@@ -63,11 +93,48 @@ export default function SettingsScreen() {
           />
           <SettingsRow
             icon={Globe}
-            label="Language"
-            onPress={() => router.push("/language")}
+            label={`Language (${selectedLanguage})`}
+            onPress={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
+            isExpanded={isLanguageMenuOpen}
           />
+
+          {/* DROPDOWN MENU */}
+          {isLanguageMenuOpen && (
+            <View className="bg-[#1f153a] rounded-xl mb-3 mt-1 border border-[#4A3F75]/50 overflow-hidden">
+              {AVAILABLE_LANGUAGES.map((lang, index) => {
+                const isSelected = lang === selectedLanguage;
+
+                return (
+                  <TouchableOpacity
+                    key={lang}
+                    onPress={() => {
+                      setSelectedLanguage(lang);
+                      setIsLanguageMenuOpen(false);
+                    }}
+                    className={`flex-row items-center justify-between px-4 py-3 ${
+                      index !== AVAILABLE_LANGUAGES.length - 1
+                        ? "border-b border-[#4A3F75]/30"
+                        : ""
+                    }`}
+                  >
+                    <Text
+                      className={
+                        isSelected
+                          ? "text-[#ff8945] font-bold"
+                          : "text-gray-300"
+                      }
+                    >
+                      {lang}
+                    </Text>
+                    {isSelected && <Check size={18} color="#ff8945" />}
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
         </View>
 
+        {/* --- SUPPORT & ABOUT --- */}
         <Text className="text-[#A499C9] font-bold text-xs uppercase tracking-wider mb-2 mt-8 px-2">
           Support & About
         </Text>
@@ -84,6 +151,7 @@ export default function SettingsScreen() {
           />
         </View>
 
+        {/* --- DANGER ZONE --- */}
         <Text className="text-red-400/80 font-bold text-xs uppercase tracking-wider mb-2 mt-8 px-2">
           Danger Zone
         </Text>
