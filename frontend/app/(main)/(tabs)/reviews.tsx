@@ -2,8 +2,14 @@ import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import ReviewCard from "@/components/shared/ReviewCard";
 import { Review } from "@/types";
 import { useRouter } from "expo-router";
-import React from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useState, useCallback } from "react";
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+} from "react-native";
 
 const MOCK_REVIEWS: Review[] = [
   {
@@ -58,6 +64,14 @@ const MOCK_POPULAR = [
 
 export default function ReviewsTab() {
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   return (
     <View className="flex-1 bg-background">
@@ -72,6 +86,15 @@ export default function ReviewsTab() {
       <ScrollView
         contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
       >
         <Text className="text-white text-xl font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full">
           New from friends

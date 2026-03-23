@@ -1,7 +1,15 @@
 import GoBack from "@/components/shared/GoBack";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Heart, MessageCircle, Share2 } from "lucide-react-native";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useState, useCallback } from "react";
+import {
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+} from "react-native";
 
 const MOCK_LIST = {
   id: "1",
@@ -48,6 +56,14 @@ const MOCK_LIST = {
 export default function ListDetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   return (
     <View className="flex-1 bg-background">
@@ -58,7 +74,18 @@ export default function ListDetailsScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
+      >
         <View className="px-6 pt-4 pb-6 border-b border-gray-700">
           <Text className="text-white text-3xl font-bold mb-4">
             {MOCK_LIST.title}

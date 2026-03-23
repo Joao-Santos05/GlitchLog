@@ -10,7 +10,7 @@ import {
   PlaySquare,
   Plus,
 } from "lucide-react-native";
-import React, { useRef } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import {
   Animated,
   Image,
@@ -18,7 +18,11 @@ import {
   Text,
   TouchableOpacity,
   View,
+  RefreshControl,
+  ActivityIndicator,
+  Platform,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ReviewCard from "../../components/shared/ReviewCard";
 import { Review } from "../../types";
 
@@ -40,7 +44,11 @@ const MOCK_GAME_DETAILS: Game = {
 
 const MOCK_GAME_REVIEW: Review = {
   id: "1",
-  game: { id: "1", title: "Expedition 33", coverUrl: "" },
+  game: {
+    id: "1",
+    title: "Expedition 33",
+    coverUrl: "https://via.placeholder.com/150x200",
+  },
   reviewer: {
     name: "Dabliuziar",
     avatarUrl: "https://i.pravatar.cc/150?img=8",
@@ -56,6 +64,16 @@ export default function GameDetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const scrollY = useRef(new Animated.Value(0)).current;
+  const [refreshing, setRefreshing] = useState(false);
+  const [loading] = useState(false);
+  const insets = useSafeAreaInsets();
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   return (
     <View className="flex-1 bg-background">
@@ -66,6 +84,27 @@ export default function GameDetailsScreen() {
           { useNativeDriver: true },
         )}
         scrollEventThrottle={16}
+        onScrollEndDrag={(e) => {
+          if (
+            Platform.OS === "ios" &&
+            e.nativeEvent.contentOffset.y < -60 &&
+            !refreshing
+          ) {
+            onRefresh();
+          }
+        }}
+        refreshControl={
+          Platform.OS === "android" ? (
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor="transparent"
+              colors={["transparent"]}
+              progressBackgroundColor="transparent"
+              progressViewOffset={-1000}
+            />
+          ) : undefined
+        }
       >
         <View className="relative h-72">
           <Image
@@ -76,10 +115,26 @@ export default function GameDetailsScreen() {
             }}
             className="w-full h-full opacity-60 rounded-b-[40px]"
           />
-          <View className="absolute top-12 left-6 w-10 h-10items-center justify-center">
-            <GoBack />
+          <View
+            className="absolute w-full h-10 flex-row items-center justify-center"
+            style={{ top: insets.top > 0 ? insets.top + 20 : 56 }}
+          >
+            <View className="absolute left-6 z-10 w-10 h-10 items-center justify-center">
+              <GoBack />
+            </View>
+            {refreshing && (
+              <View className="w-10 h-10 bg-black/70 rounded-full items-center justify-center">
+                <ActivityIndicator size="small" color="#C8ADFF" />
+              </View>
+            )}
           </View>
         </View>
+
+        {loading && (
+          <View className="flex-row justify-center py-8">
+            <ActivityIndicator size="large" color="#ff8945" />
+          </View>
+        )}
 
         <View className="px-6 -mt-20 flex-row">
           <View className="w-32 mr-5">

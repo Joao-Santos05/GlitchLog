@@ -2,7 +2,7 @@ import PopularLists from "@/components/home/PopularLists";
 import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import { useRouter } from "expo-router";
 import { Plus, SearchIcon } from "lucide-react-native";
-import React from "react";
+import React, { useState, useCallback } from "react";
 import {
   Image,
   ScrollView,
@@ -10,6 +10,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  RefreshControl,
 } from "react-native";
 
 const MY_LISTS = [
@@ -79,6 +80,14 @@ const POPULAR_LISTS = [
 
 export default function ListsScreen() {
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   return (
     <View className="flex-1 bg-background">
@@ -101,6 +110,15 @@ export default function ListsScreen() {
       <ScrollView
         contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
       >
         <View className="px-6 mt-4">
           <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full">

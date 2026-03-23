@@ -92,7 +92,9 @@ export default function TabsLayout() {
       />
       <Tabs.Screen
         name="language"
-        options={{ href: null, headerShown: false }}
+        options={{
+          href: null,
+        }}
       />
       <Tabs.Screen
         name="helpcenter"

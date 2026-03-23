@@ -1,7 +1,7 @@
 import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import StarRating from "@/components/shared/StarRating";
 import { SearchIcon, Trash2 } from "lucide-react-native";
-import React from "react";
+import React, { useState, useCallback } from "react";
 import {
   FlatList,
   ImageBackground,
@@ -9,6 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  RefreshControl,
 } from "react-native";
 
 const MOCK_WISHLIST = [
@@ -27,6 +28,14 @@ const MOCK_WISHLIST = [
 ];
 
 export default function WishlistScreen() {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
   return (
     <View className="flex-1 bg-background">
       <DrawerMenuButton />
@@ -49,6 +58,15 @@ export default function WishlistScreen() {
         data={MOCK_WISHLIST}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
         renderItem={({ item }) => (
           <View className="mb-5 rounded-xl overflow-hidden border border-[#4A3F75] bg-[#2D214F]">
             <ImageBackground

@@ -2,8 +2,15 @@ import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import StarRating from "@/components/shared/StarRating";
 import { useRouter } from "expo-router";
 import { Heart } from "lucide-react-native";
-import React from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import React, { useState, useCallback } from "react";
+import {
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+} from "react-native";
 
 const MOCK_LIKES = [
   {
@@ -34,6 +41,14 @@ const MOCK_LIKES = [
 
 export default function LikesScreen() {
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   return (
     <View className="flex-1 bg-background">
@@ -55,6 +70,15 @@ export default function LikesScreen() {
           gap: 12,
           marginBottom: 16,
         }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
         renderItem={({ item }) => (
           <TouchableOpacity
             className="w-[22%]"

@@ -2,8 +2,8 @@ import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import NotificationCard, {
   NotificationData,
 } from "@/components/shared/NotificationCard";
-import React from "react";
-import { FlatList, Text, View } from "react-native";
+import React, { useState, useCallback } from "react";
+import { FlatList, Text, View, RefreshControl } from "react-native";
 
 const MOCK_NOTIFICATIONS: NotificationData[] = [
   {
@@ -30,6 +30,14 @@ const MOCK_NOTIFICATIONS: NotificationData[] = [
 ];
 
 export default function NotificationsScreen() {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
   return (
     <View className="flex-1 bg-background">
       <DrawerMenuButton />
@@ -44,6 +52,15 @@ export default function NotificationsScreen() {
         data={MOCK_NOTIFICATIONS}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
         renderItem={({ item }) => <NotificationCard notification={item} />}
       />
     </View>

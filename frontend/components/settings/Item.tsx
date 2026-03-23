@@ -1,4 +1,4 @@
-import { ChevronRight } from "lucide-react-native";
+import { ChevronRight, ChevronDown } from "lucide-react-native";
 import React from "react";
 import { Switch, Text, TouchableOpacity, View } from "react-native";
 
@@ -10,6 +10,7 @@ interface SettingsRowProps {
   onToggle?: (value: boolean) => void;
   isDestructive?: boolean;
   onPress?: () => void;
+  isExpanded?: boolean;
 }
 
 export default function SettingsRow({
@@ -20,6 +21,7 @@ export default function SettingsRow({
   onToggle,
   isDestructive = false,
   onPress,
+  isExpanded,
 }: SettingsRowProps) {
   return (
     <TouchableOpacity
@@ -43,10 +45,14 @@ export default function SettingsRow({
           {label}
         </Text>
       </View>
+      {type === "link" &&
+        !isDestructive &&
+        (isExpanded ? (
+          <ChevronDown size={20} color="#ff8945" />
+        ) : (
+          <ChevronRight size={20} color="#7D70A3" />
+        ))}
 
-      {type === "link" && !isDestructive && (
-        <ChevronRight size={20} color="#7D70A3" />
-      )}
       {type === "switch" && (
         <Switch
           value={value}

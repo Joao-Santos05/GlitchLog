@@ -6,8 +6,15 @@ import RatingFilterDropdown from "@/components/shared/RatingFilterDropdown";
 import StarRating from "@/components/shared/StarRating";
 import { Game } from "@/interfaces/interfaces";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import React, { useState, useCallback } from "react";
+import {
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+} from "react-native";
 
 const MOCK_GAMES: Game[] = [
   {
@@ -93,6 +100,14 @@ export default function GamesScreen() {
   const [selectedRating, setSelectedRating] = useState<number>(0);
   const [isGenreOpen, setIsGenreOpen] = useState(false);
   const [isRatingOpen, setIsRatingOpen] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
 
   const filteredGames = MOCK_GAMES.filter((game) => {
     const gameRating = Math.round((game.vote_average || 0) * 2) / 2;
@@ -157,6 +172,15 @@ export default function GamesScreen() {
           zIndex: -1,
         }}
         showsVerticalScrollIndicator={true}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ff8945"
+            colors={["#ff8945"]}
+            progressBackgroundColor="#2D214F"
+          />
+        }
         ListEmptyComponent={
           <Text className="text-gray-400 text-center mt-10">
             No games found with {selectedRating.toFixed(1)} stars.
