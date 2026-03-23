@@ -23,9 +23,8 @@ export default function SettingsRow({
 }: SettingsRowProps) {
   return (
     <TouchableOpacity
-      // 3. Tirei o isDestructive do disabled, para podermos clicar no "Delete Account" depois!
       disabled={type === "switch"}
-      onPress={onPress} // 4. Passamos a função para o botão
+      onPress={onPress}
       className="flex-row items-center justify-between py-4 border-b border-[#4A3F75]/50"
     >
       <View className="flex-row items-center">

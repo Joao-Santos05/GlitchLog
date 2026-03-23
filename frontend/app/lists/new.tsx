@@ -17,7 +17,6 @@ export default function CreateListScreen() {
 
   const handleCreate = () => {
     const finalName = listName.trim() === "" ? "Untitled" : listName;
-    // Aqui você enviaria pra API. Por enquanto, só redirecionamos pra lista criada (ID fictício 1)
     router.replace(`/lists/edit/1`);
   };
 

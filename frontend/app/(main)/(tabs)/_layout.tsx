@@ -32,7 +32,6 @@ export default function TabsLayout() {
         },
       }}
     >
-      {/* ABAS VISÍVEIS */}
       <Tabs.Screen
         name="index"
         options={{
@@ -64,7 +63,6 @@ export default function TabsLayout() {
         }}
       />
 
-      {/* ROTAS OCULTAS */}
       <Tabs.Screen
         name="notifications"
         options={{ href: null, headerShown: false }}

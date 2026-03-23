@@ -159,8 +159,6 @@ export default function DiaryScreen() {
 
         <Text className="text-white font-bold text-lg mb-4">{fullDateStr}</Text>
 
-        {/* LISTA DE ATIVIDADES DO DIA (Mock) */}
-        {/* Quando você integrar com API, você vai filtrar os dados usando a variável `selectedDate`! */}
         <View className="bg-background rounded-xl p-3 mb-4 flex-row items-center border border-[#4A3F75]">
           <Image
             source={{ uri: "https://placehold.co/100x150" }}

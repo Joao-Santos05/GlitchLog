@@ -98,14 +98,11 @@ export default function ListsScreen() {
         </View>
       </View>
 
-      {/* Tirei o padding horizontal daqui e passei pras Views filhas, pra evitar margens duplas */}
       <ScrollView
         contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* SESSÃO: MY LISTS */}
         <View className="px-6 mt-4">
-          {/* Adicionado o "self-start" aqui para a pílula não esticar */}
           <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full">
             My Lists
           </Text>

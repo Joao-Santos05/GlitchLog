@@ -1,6 +1,6 @@
-import SettingsRow from "@/components/settings/Item"; // Ajuste o caminho se necessário
+import SettingsRow from "@/components/settings/Item";
 import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
-import { useRouter } from "expo-router"; // 1. Importamos o roteador
+import { useRouter } from "expo-router";
 import {
   Bell,
   FileText,
@@ -14,9 +14,8 @@ import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 export default function SettingsScreen() {
-  const router = useRouter(); // 2. Inicializamos o roteador
+  const router = useRouter();
 
-  // Estados mockados para os switches
   const [pushEnabled, setPushEnabled] = useState(true);
   const [emailEnabled, setEmailEnabled] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
@@ -35,7 +34,6 @@ export default function SettingsScreen() {
         contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* SEÇÃO: CONTA */}
         <Text className="text-[#A499C9] font-bold text-xs uppercase tracking-wider mb-2 mt-4 px-2">
           Account
         </Text>
@@ -52,7 +50,6 @@ export default function SettingsScreen() {
           />
         </View>
 
-        {/* SEÇÃO: PREFERÊNCIAS */}
         <Text className="text-[#A499C9] font-bold text-xs uppercase tracking-wider mb-2 mt-8 px-2">
           Preferences
         </Text>
@@ -71,7 +68,6 @@ export default function SettingsScreen() {
           />
         </View>
 
-        {/* SEÇÃO: SUPORTE & SOBRE */}
         <Text className="text-[#A499C9] font-bold text-xs uppercase tracking-wider mb-2 mt-8 px-2">
           Support & About
         </Text>
@@ -88,7 +84,6 @@ export default function SettingsScreen() {
           />
         </View>
 
-        {/* SEÇÃO: ZONA DE PERIGO */}
         <Text className="text-red-400/80 font-bold text-xs uppercase tracking-wider mb-2 mt-8 px-2">
           Danger Zone
         </Text>
@@ -101,7 +96,6 @@ export default function SettingsScreen() {
           />
         </View>
 
-        {/* Versão do App */}
         <Text className="text-[#7D70A3] text-center text-xs mt-10">
           GlitchLog v1.0.0
         </Text>

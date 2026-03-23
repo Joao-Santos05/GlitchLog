@@ -55,7 +55,6 @@ export default function WishlistScreen() {
               source={{ uri: item.image }}
               className="w-full h-40 justify-end"
             >
-              {/* Gradiente escuro para o texto ler bem */}
               <View className="p-3 bg-black/60 flex-row items-end justify-between">
                 <View>
                   <Text className="text-white font-bold text-base mb-1">
