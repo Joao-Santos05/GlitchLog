@@ -1,44 +1,68 @@
-// import { useFonts } from "expo-font";
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-// import * as SplashScreen from "expo-splash-screen";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-// import { useEffect } from "react";
+import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { LogBox } from "react-native";
 import "./globals.css";
 
-// SplashScreen.preventAutoHideAsync();
+const originalWarn = console.warn;
+console.warn = (...args) => {
+  if (
+    args[0] &&
+    typeof args[0] === "string" &&
+    args[0].includes("Multiple instances of Three.js")
+  ) {
+    return;
+  }
+  originalWarn(...args);
+};
+
+LogBox.ignoreLogs(["WARNING: Multiple instances of Three.js being imported"]);
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  // const [loaded, error] = useFonts({
-  //   Neotriad: require("../assets/fonts/Neotriad.otf"),
-  // });
+  const [fontsLoaded, fontError] = useFonts({
+    // @ts-ignore
+    Neotriad: require("../assets/fonts/Neotriad.otf"),
+  });
 
-  // useEffect(() => {
-  //   if (error) {
-  //     console.error("font error", error);
-  //   }
-  //   if (loaded || error) {
-  //     SplashScreen.hideAsync();
-  //   }
-  // }, [loaded, error]);
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
 
-  // if (!loaded && !error) {
-  //   return null;
-  // }
+  if (!fontsLoaded && !fontError) return null;
 
   return (
-    <>
-      <StatusBar hidden={true} />
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: "#2c225a" }}>
+      <SafeAreaProvider style={{ backgroundColor: "#2c225a" }}>
+        <StatusBar hidden={true} />
 
-      <Stack>
-        <Stack.Screen name="(main)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="games/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="reviews/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="reviews/new" options={{ headerShown: false }} />
-        <Stack.Screen name="lists/new" options={{ headerShown: false }} />
-        <Stack.Screen name="lists/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="lists/edit/[id]" options={{ headerShown: false }} />
-      </Stack>
-    </>
+        <Stack
+          screenOptions={{
+            contentStyle: { backgroundColor: "#2c225a" },
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="index" options={{ animation: "none" }} />
+          <Stack.Screen
+            name="(main)"
+            options={{ animation: "fade", animationDuration: 1000 }}
+          />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="games/[id]" />
+          <Stack.Screen name="reviews/[id]" />
+          <Stack.Screen name="reviews/new" />
+          <Stack.Screen name="lists/new" />
+          <Stack.Screen name="lists/[id]" />
+          <Stack.Screen name="lists/edit/[id]" />
+        </Stack>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
