@@ -19,17 +19,13 @@ export default function TabsLayout() {
         tabBarItemStyle: {
           justifyContent: "center",
           alignItems: "center",
-          // 2. Ajuste fino para os ícones ficarem centralizados e fugirem da barrinha do iPhone
           paddingTop: 10,
           paddingBottom: Platform.OS === "ios" ? 20 : 0,
         },
 
         tabBarStyle: {
           backgroundColor: "#2c225a",
-          height: Platform.OS === "ios" ? 90 : 70, // Fica elegante e proporcional nos dois sistemas
-
-          // position: "absolute", <--- BANIDO PARA SEMPRE DO IOS!
-
+          height: Platform.OS === "ios" ? 90 : 70,
           borderTopWidth: 0.5,
           borderTopColor: "#5b4967",
           elevation: 0,

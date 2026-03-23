@@ -5,7 +5,22 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { LogBox } from "react-native";
 import "./globals.css";
+
+const originalWarn = console.warn;
+console.warn = (...args) => {
+  if (
+    args[0] &&
+    typeof args[0] === "string" &&
+    args[0].includes("Multiple instances of Three.js")
+  ) {
+    return;
+  }
+  originalWarn(...args);
+};
+
+LogBox.ignoreLogs(["WARNING: Multiple instances of Three.js being imported"]);
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,30 +39,28 @@ export default function RootLayout() {
   if (!fontsLoaded && !fontError) return null;
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: "#2c225a" }}>
+      <SafeAreaProvider style={{ backgroundColor: "#2c225a" }}>
         <StatusBar hidden={true} />
-        {/* Apenas carrega as rotas! Sem views flutuantes invisíveis. */}
-        <Stack>
-          {/* index é a nossa nova tela de Loading */}
-          <Stack.Screen
-            name="index"
-            options={{ headerShown: false, animation: "fade" }}
-          />
+
+        <Stack
+          screenOptions={{
+            contentStyle: { backgroundColor: "#2c225a" },
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="index" options={{ animation: "none" }} />
           <Stack.Screen
             name="(main)"
-            options={{ headerShown: false, animation: "fade" }}
+            options={{ animation: "fade", animationDuration: 1000 }}
           />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="games/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="reviews/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="reviews/new" options={{ headerShown: false }} />
-          <Stack.Screen name="lists/new" options={{ headerShown: false }} />
-          <Stack.Screen name="lists/[id]" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="lists/edit/[id]"
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="games/[id]" />
+          <Stack.Screen name="reviews/[id]" />
+          <Stack.Screen name="reviews/new" />
+          <Stack.Screen name="lists/new" />
+          <Stack.Screen name="lists/[id]" />
+          <Stack.Screen name="lists/edit/[id]" />
         </Stack>
       </SafeAreaProvider>
     </GestureHandlerRootView>
