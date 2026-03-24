@@ -101,15 +101,15 @@ model ListItem {
 }
 
 model Review {
-  reviewId   Int     @id @default(autoincrement()) @map("review_id")
-  nota       Int
-  reviewText String? @map("review_text")
+  reviewId   Int      @id @default(autoincrement()) @map("review_id")
+  nota       Float   
+  reviewText String?  @map("review_text")
   
-  userId  Int @map("user_id")
-  id_igdb Int     
+  userId     Int      @map("user_id")
+  id_igdb    Int      
 
-  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  game Game @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  game       Game     @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
 
   comentarios Comment[]
   curtidas    ReviewLike[]

@@ -4,9 +4,12 @@ import { authMiddleware } from '../middlewares/AuthMiddleware';
 
 const router = Router();
 
-router.post('/', UserController.criarUsuario);
+router.post('/cadastrar', UserController.criarUsuario);
 router.post('/login', UserController.login);
-router.get('/', authMiddleware, UserController.listarUsuarios);
 router.delete('/', authMiddleware, UserController.excluirUsuario);
+router.get('/', UserController.listarUsuarios); 
+router.get('/:username', UserController.buscarPerfilPublico);
+router.get('/perfil', authMiddleware, UserController.meuPerfil);
+router.put('/perfil', authMiddleware, UserController.atualizarPerfil);
 
 export default router;
