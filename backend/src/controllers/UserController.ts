@@ -7,9 +7,9 @@ export class UserController {
     // Lógica do POST
    static async criarUsuario(req: Request, res: Response) {
         try {
-            const { name, username, email, senha } = req.body;
+            const { nome, username, email, senha } = req.body;
 
-            if (!name || !username || !email || !senha) {
+            if (!nome || !username || !email || !senha) {
                 res.status(400).json({ erro: "Nome, username, email e senha são obrigatórios." });
                 return;
             }
@@ -19,7 +19,7 @@ export class UserController {
             
             const novoUsuario = await prisma.user.create({
                 data: { 
-                    name: name, 
+                    name: nome, 
                     username: username.toLowerCase(), // Salvamos sempre minúsculo para evitar confusão na URL
                     email: email, 
                     senha_hash: senhaCriptografada 
@@ -149,13 +149,12 @@ static async listarUsuarios(req: Request, res: Response) {
             const { username } = req.params;
 
             const usuario = await prisma.user.findUnique({
-                where: { username: username }, 
+                where: { username: String(username) }, 
                 select: {
                     userId: true,
                     username: true,
                     bio: true,
                     avatar_url: true,
-                    createdAt: true
                     // NOTA: Adicionar um 'include' aqui para o Prisma já trazer 
                     // a lista de reviews e os jogos da biblioteca (ou favoritos) desse usuário!
                 }
@@ -185,7 +184,6 @@ static async listarUsuarios(req: Request, res: Response) {
                     email: true, // Revelamos o email só para o próprio dono!
                     bio: true,
                     avatar_url: true, 
-                    createdAt: true
                 }
             });
 
@@ -237,7 +235,7 @@ static async listarUsuarios(req: Request, res: Response) {
             // (usando AWS SES ou SendGrid) e só atualizar o banco após o clique.
             const mudandoEmail = email && email !== usuarioAtual.email;
             const mudandoSenha = newPassword !== undefined && newPassword !== "";
-            let senhaFinal = usuarioAtual.password;
+            let senhaFinal = usuarioAtual.senha_hash;
 
             if (mudandoEmail || mudandoSenha) {
                 if (!oldPassword) {
@@ -245,7 +243,7 @@ static async listarUsuarios(req: Request, res: Response) {
                     return;
                 }
 
-                const senhaBate = await bcrypt.compare(oldPassword, usuarioAtual.password);
+                const senhaBate = await bcrypt.compare(oldPassword, usuarioAtual.senha_hash);
                 if (!senhaBate) {
                     res.status(401).json({ erro: "A senha atual está incorreta." });
                     return;
@@ -266,7 +264,7 @@ static async listarUsuarios(req: Request, res: Response) {
                     bio: bio !== undefined ? bio : usuarioAtual.bio,
                     avatar_url: avatar_url !== undefined ? avatar_url : usuarioAtual.avatar_url,
                     email: email || usuarioAtual.email,
-                    password: senhaFinal 
+                    senha_hash: senhaFinal 
                 },
                 select: {
                     userId: true,
