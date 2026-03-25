@@ -130,13 +130,13 @@ function CustomDrawerContent(props: any) {
             style={{ borderRadius: 100 }}
           />
           <DrawerItem
-            label="Likes"
+            label="My Games"
             icon={({ color }) => <Heart size={20} color={color} />}
             inactiveTintColor="#A499C9"
             activeTintColor="#FFFFFF"
             activeBackgroundColor={LIGHT_400_HEX}
-            focused={pathname === "/likes"}
-            onPress={() => router.push("/likes")}
+            focused={pathname === "/mygames"}
+            onPress={() => router.push("/mygames")}
             style={{ borderRadius: 100 }}
           />
 

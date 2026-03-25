@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import { Platform } from "react-native";
 import {
-  Gamepad2,
+  BookSearch,
   GamepadDirectional,
   Headset,
   Search,
@@ -49,10 +49,10 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="games"
+        name="discover"
         options={{
           title: "",
-          tabBarIcon: ({ color }) => <Gamepad2 size={24} color={color} />,
+          tabBarIcon: ({ color }) => <BookSearch size={24} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -67,7 +67,10 @@ export default function TabsLayout() {
         name="notifications"
         options={{ href: null, headerShown: false }}
       />
-      <Tabs.Screen name="likes" options={{ href: null, headerShown: false }} />
+      <Tabs.Screen
+        name="mygames"
+        options={{ href: null, headerShown: false }}
+      />
       <Tabs.Screen name="diary" options={{ href: null, headerShown: false }} />
       <Tabs.Screen name="lists" options={{ href: null, headerShown: false }} />
       <Tabs.Screen
