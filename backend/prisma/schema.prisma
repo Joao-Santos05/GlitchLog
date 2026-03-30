@@ -1,41 +1,30 @@
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") // Certifique-se de ter isso no seu .env
-}
-
-// Enum para padronizar os status e evitar erros de digitação
-enum LogStatus {
-  QUERO_JOGAR
-  JOGANDO
-  FINALIZADO
-  ABANDONADO
 }
 
 model User {
-  userId     Int      @id @default(autoincrement()) @map("user_id")
-  name       String         
-  username   String   @unique 
-  email      String   @unique
+  userId     Int     @id @default(autoincrement()) @map("user_id")
+  name       String         // O nome real ou apelido (pode ter espaços)
+  username   String         @unique // O "arroba", usado na URL
+  email      String  @unique
   senha_hash String 
   bio        String? 
   avatar_url String?
 
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-
   // Relacionamentos N:1
-  biblioteca   LibraryEntry[]
-  reviews      Review[]
-  listas       List[]
+  biblioteca    LibraryEntry[]
+  reviews       Review[]
+  listas        List[]
   
-  comentarios  Comment[]
-  notificacoes Notification[]
-  favoritos    FavoriteGame[]
-  curtidas     ReviewLike[]
+  comentarios   Comment[]
+  notificacoes  Notification[]
+  favoritos     FavoriteGame[]
+  curtidas      ReviewLike[]
 
   // Auto-relacionamento de Seguidores
   seguidores UserFollow[] @relation("Seguido")
@@ -45,23 +34,20 @@ model User {
 }
 
 model Game {
-  id_igdb            Int      @id
+  id_igdb            Int            @id
   name               String
-  bio                String?  
-  cover_url          String?  
-  background_url     String?  
-  release_date       DateTime? @map("release_date") // Atualizado para DateTime
-  developer          String?  
-  genre              String?  
-  platforms          String?  
-  rating             Float?   
-  rating_count       Int?     
-  similar_games_json String?  
+  bio                String?        // Sinopse/Summary do jogo
+  cover_url          String?        // Capa em alta resolução
+  background_url     String?        // Artwork 1080p para o fundo
+  release_year       Int?           // Ano de lançamento
+  developer          String?        // Empresa desenvolvedora principal
+  genre              String?        // Lista de gêneros (ex: "RPG, Adventure")
+  platforms          String?        // Lista de plataformas (ex: "PC, PS5")
+  rating             Float?         // Nota do jogo (ex: 4.7)
+  rating_count       Int?           // Quantidade de avaliações
+  similar_games_json String?        // Lista de jogos similares em formato JSON
 
-  createdAt          DateTime @default(now()) @map("created_at")
-  updatedAt          DateTime @updatedAt @map("updated_at")
-
-  // Relacionamentos N:1
+  // Relacionamentos N:1 (Mantidos perfeitamente iguais aos seus)
   biblioteca         LibraryEntry[]
   reviews            Review[]
   listItems          ListItem[]
@@ -71,14 +57,11 @@ model Game {
 }
 
 model LibraryEntry {
-  status            LogStatus @default(QUERO_JOGAR) // Usando o Enum
+  status            String    @default("Quero Jogar")
   marco_campanha    Boolean   @default(false)
   marco_secundarias Boolean   @default(false)
   started_at        DateTime?
   finished_at       DateTime?
-
-  createdAt         DateTime  @default(now()) @map("created_at")
-  updatedAt         DateTime  @updatedAt @map("updated_at")
 
   userId  Int @map("user_id")
   id_igdb Int     
@@ -91,14 +74,11 @@ model LibraryEntry {
 }
 
 model List {
-  listId    Int      @id @default(autoincrement()) @map("list_id")
-  title     String
-  summary   String?
-  isPublic  Boolean  @default(true) @map("is_public")
+  listId   Int     @id @default(autoincrement()) @map("list_id")
+  title    String
+  summary  String?
+  isPublic Boolean @default(true) @map("is_public")
   
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
   userId Int @map("user_id")
   user   User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
@@ -125,9 +105,6 @@ model Review {
   nota       Float   
   reviewText String?  @map("review_text")
   
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-
   userId     Int      @map("user_id")
   id_igdb    Int      
 
@@ -137,7 +114,7 @@ model Review {
   comentarios Comment[]
   curtidas    ReviewLike[]
 
-  @@unique([userId, id_igdb]) 
+  @@unique([userId, id_igdb]) // 1 usuário só faz 1 review por jogo
   @@map("reviews")
 }
 
@@ -145,7 +122,6 @@ model Comment {
   commentID Int      @id @default(autoincrement()) @map("comment_id")
   content   String
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
 
   userId   Int @map("user_id")
   reviewId Int @map("review_id")
@@ -165,6 +141,7 @@ model ReviewLike {
   user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
   review Review @relation(fields: [reviewId], references: [reviewId], onDelete: Cascade)
 
+  // O usuário só pode curtir a mesma review 1 vez
   @@id([userId, reviewId])
   @@map("review_likes")
 }
@@ -184,7 +161,7 @@ model UserFollow {
 
 model Notification {
   notificationID Int      @id @default(autoincrement()) @map("notification_id")
-  type           String   
+  type           String   // Ex: "NEW_FOLLOWER", "NEW_LIKE"
   isRead         Boolean  @default(false) @map("is_read")
   createdAt      DateTime @default(now()) @map("created_at")
 
@@ -195,7 +172,7 @@ model Notification {
 }
 
 model FavoriteGame {
-  slot Int 
+  slot Int // Posição de 1 a 4 lá no Front-end
 
   userId  Int @map("user_id")
   id_igdb Int
@@ -203,6 +180,7 @@ model FavoriteGame {
   user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
   game Game @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
 
+  // Garante que o usuário não coloque 2 jogos no mesmo slot
   @@id([userId, slot]) 
   @@map("favorite_games")
 }
