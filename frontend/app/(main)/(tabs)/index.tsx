@@ -152,9 +152,8 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <DrawerMenuButton />
-
       <View className="flex items-center justify-center border-b border-dark-300 pt-16 pb-6 bg-background">
+        <DrawerMenuButton />
         <GlitchText text="GlitchLog" fontSize={48} />
       </View>
 

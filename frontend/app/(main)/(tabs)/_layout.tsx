@@ -19,7 +19,7 @@ export default function TabsLayout() {
         tabBarItemStyle: {
           justifyContent: "center",
           alignItems: "center",
-          paddingTop: 10,
+          paddingTop: 25,
           paddingBottom: Platform.OS === "ios" ? 20 : 0,
         },
 

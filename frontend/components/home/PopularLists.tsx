@@ -12,7 +12,7 @@ export default function PopularLists({ lists }: Props) {
   const router = useRouter();
 
   return (
-    <View className="mt-8">
+    <View>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
