@@ -11,7 +11,6 @@
 [![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](#)
 
 <br />
-<img src="../GlitchLog/frontend/assets/icons/logotext.png" alt="GlitchLog" width="100%" />
 
 </div>
 
@@ -112,5 +111,8 @@ To get a local copy up and running, follow these simple steps.
 ---
 
 <div align="center">
-  <p>Built with 👾 and ☕ by <a href="https://github.com/Joao-Santos05">João Santos, </a><a href="https://github.com/Arduinh0">Arthur Camilotti and </a><a href="https://github.com/henriquestevan">Henrique Estevan</a></p>
+  <p>Built with 👾 and ☕ by</p>
+   <a href="https://github.com/Joao-Santos05">João Santos, </a>
+   <a href="https://github.com/Arduinh0">Arthur Camilotti </a>
+   <a href="https://github.com/henriquestevan">and Henrique Estevan</a>
 </div>
