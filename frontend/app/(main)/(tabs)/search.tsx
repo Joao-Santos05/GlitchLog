@@ -4,7 +4,6 @@ import FilterDropdown, {
   FilterOption,
 } from "@/components/shared/FilterDropdown";
 import RatingFilterDropdown from "@/components/shared/RatingFilterDropdown";
-import { icons } from "@/constants/icons";
 import { fetchGames } from "@/services/api";
 import { SearchIcon } from "lucide-react-native";
 import React, { useEffect, useRef, useState, useCallback } from "react";
@@ -17,7 +16,7 @@ import {
   RefreshControl,
   Platform,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import GlitchText from "@/components/shared/GlitchText";
 
 const GENRES_OPTIONS: FilterOption[] = [
   { label: "All Genres", value: "All" },
@@ -40,7 +39,6 @@ const Search = () => {
   const [isRatingOpen, setIsRatingOpen] = useState(false);
 
   const scrollY = useRef(new Animated.Value(0)).current;
-  const insets = useSafeAreaInsets();
 
   const loadData = useCallback(
     async (isRefreshing = false) => {
@@ -98,7 +96,10 @@ const Search = () => {
 
   return (
     <View className="flex-1 bg-background">
-      <DrawerMenuButton />
+      <View className="flex items-center justify-center border-b border-dark-300 pt-16 pb-6 bg-background z-20">
+        <DrawerMenuButton />
+        <GlitchText text="Search" fontSize={48} />
+      </View>
       <Animated.FlatList
         data={filteredGames}
         renderItem={({ item }) => <GameCard {...item} />}
@@ -141,36 +142,10 @@ const Search = () => {
         ListHeaderComponentStyle={{
           zIndex: 1000,
           elevation: 1000,
-          paddingBottom: 10,
-          paddingTop: insets.top > 0 ? insets.top + 20 : 30,
+          paddingTop: 10,
         }}
         ListHeaderComponent={
           <View style={{ zIndex: 1000, elevation: 1000 }}>
-            <View className="w-full flex-row justify-center mt-10 relative h-14 z-10">
-              <Animated.Image
-                source={icons.logo}
-                className="w-12 h-14"
-                style={{
-                  transform: [
-                    {
-                      translateY: scrollY.interpolate({
-                        inputRange: [-56, 0],
-                        outputRange: [-28, 0],
-                        extrapolateRight: "clamp",
-                      }),
-                    },
-                    {
-                      scale: scrollY.interpolate({
-                        inputRange: [-56, 0],
-                        outputRange: [2, 1],
-                        extrapolateRight: "clamp",
-                      }),
-                    },
-                  ],
-                }}
-              />
-            </View>
-
             <View className="flex-row items-center bg-[#1A133A] rounded-xl px-4 py-3 my-5 border border-[#F2E8FF]/20 z-10">
               <SearchIcon size={20} color="#C8ADFF" />
               <TextInput
@@ -181,14 +156,6 @@ const Search = () => {
                 className="flex-1 ml-3 text-white text-base"
               />
             </View>
-
-            {(loading || refreshing) && (
-              <ActivityIndicator
-                size="large"
-                color="#C8ADFF"
-                style={{ marginTop: 10, marginBottom: 20 }}
-              />
-            )}
 
             <View
               className="flex-row gap-6 mb-4 justify-end relative"
@@ -224,6 +191,14 @@ const Search = () => {
                 widthClass="w-32"
               />
             </View>
+
+            {(loading || refreshing) && (
+              <ActivityIndicator
+                size="large"
+                color="#C8ADFF"
+                style={{ marginTop: 10, marginBottom: 20 }}
+              />
+            )}
 
             {error && (
               <Text className="text-red-400 text-center my-3 font-semibold">

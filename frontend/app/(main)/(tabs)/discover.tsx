@@ -1,4 +1,5 @@
 import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
+import GlitchText from "@/components/shared/GlitchText";
 import { Bookmark, Heart, Sparkles } from "lucide-react-native";
 import React, { useRef, useState } from "react";
 import {
@@ -258,13 +259,16 @@ export default function DiscoverScreen() {
         className="absolute top-0 left-0 right-0 bottom-0 z-0 border-[20px] border-[#10B981]/20 rounded-[45px]"
       />
 
-      <DrawerMenuButton />
+      <View className="flex items-center justify-center border-b border-dark-300 pt-16 pb-6 bg-background z-20">
+        <DrawerMenuButton />
+        <GlitchText text="Discover" fontSize={48} />
+      </View>
 
       {/* ÁREA CENTRAL DO CARD */}
       <View
         className="flex-1 px-5 relative z-10"
         style={{
-          marginTop: Platform.OS === "ios" ? insets.top + 60 : 80,
+          marginTop: 12, // Apenas 12px de distância da linha do Header!
           marginBottom: 20,
         }}
       >
@@ -279,7 +283,7 @@ export default function DiscoverScreen() {
       <Animated.View
         className="absolute w-full items-center z-50 px-5"
         style={[
-          { top: Platform.OS === "ios" ? insets.top + 20 : 30 },
+          { top: Platform.OS === "ios" ? insets.top + 85 : 95 },
           {
             transform: [
               {
@@ -292,7 +296,7 @@ export default function DiscoverScreen() {
           },
         ]}
       >
-        <View className="bg-[#1A133A] border border-[#ff8945] px-6 py-3 rounded-full flex-row items-center shadow-lg shadow-orange-500/30">
+        <View className="bg-[#1A133A] border border-[#ff8945] px-6 py-3 rounded-full flex-row items-center shadow-lg shadow-orange-500/30 mt-2">
           <Bookmark size={18} color="#ff8945" fill="#ff8945" />
           <Text className="text-white font-bold ml-2 text-sm">
             Added to Wishlist
