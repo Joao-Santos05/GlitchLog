@@ -4,6 +4,7 @@ import { Animated, Image, Text, TouchableOpacity, View } from "react-native";
 
 interface ProfileHeaderProps {
   scrollY: Animated.Value;
+  user?: any;
 }
 
 export default function ProfileHeader({ scrollY }: ProfileHeaderProps) {

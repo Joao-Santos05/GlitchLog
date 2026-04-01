@@ -9,10 +9,10 @@ import {
   PanResponder,
   Text,
   View,
-  Platform,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+const screenHeight = Dimensions.get("screen").height;
 const { width, height } = Dimensions.get("window");
 const SWIPE_THRESHOLD = 120;
 const SWIPE_OUT_DURATION = 250;
@@ -35,12 +35,6 @@ const MOCK_DISCOVERY_GAMES = [
     title: "Galactic Frontier",
     poster_path: "https://via.placeholder.com/400x600/4A3F75/FFFFFF",
     genres: ["Sci-Fi", "Strategy"],
-  },
-  {
-    id: 4,
-    title: "Abyssal Descent",
-    poster_path: "https://via.placeholder.com/400x600/000000/FFFFFF",
-    genres: ["Horror", "Survival"],
   },
 ];
 
@@ -85,7 +79,6 @@ export default function DiscoverScreen() {
     if (direction === "down") {
       showWishlistToast();
     }
-
     position.setValue({ x: 0, y: 0 });
     setGames((prevGames) => prevGames.slice(1));
   };
@@ -135,33 +128,58 @@ export default function DiscoverScreen() {
     ],
   };
 
-  const leftGlowOpacity = position.x.interpolate({
-    inputRange: [-width / 2.5, 0],
+  // VERMELHO (ESQUERDA)
+  const redOpacity = position.x.interpolate({
+    inputRange: [-width / 2, 0],
     outputRange: [1, 0],
     extrapolate: "clamp",
   });
+  const redBorderWidth = position.x.interpolate({
+    inputRange: [-width / 2, 0],
+    outputRange: [25, 0],
+    extrapolate: "clamp",
+  });
+  const redGlow = position.x.interpolate({
+    inputRange: [-width / 2, 0],
+    outputRange: [50, 0],
+    extrapolate: "clamp",
+  });
 
-  const rightGlowOpacity = position.x.interpolate({
-    inputRange: [0, width / 2.5],
+  // VERDE (DIREITA)
+  const greenOpacity = position.x.interpolate({
+    inputRange: [0, width / 2],
     outputRange: [0, 1],
+    extrapolate: "clamp",
+  });
+  const greenBorderWidth = position.x.interpolate({
+    inputRange: [0, width / 2],
+    outputRange: [0, 25],
+    extrapolate: "clamp",
+  });
+  const greenGlow = position.x.interpolate({
+    inputRange: [0, width / 2],
+    outputRange: [0, 50],
+    extrapolate: "clamp",
+  });
+
+  // LARANJA (BAIXO - WISHLIST)
+  const orangeOpacity = position.y.interpolate({
+    inputRange: [0, height / 3],
+    outputRange: [0, 1],
+    extrapolate: "clamp",
+  });
+  const orangeBorderWidth = position.y.interpolate({
+    inputRange: [0, height / 3],
+    outputRange: [0, 25],
+    extrapolate: "clamp",
+  });
+  const orangeGlow = position.y.interpolate({
+    inputRange: [0, height / 3],
+    outputRange: [0, 50],
     extrapolate: "clamp",
   });
 
   const renderCards = () => {
-    if (games.length === 0) {
-      return (
-        <View className="flex-1 items-center justify-center">
-          <Sparkles size={48} color="#C8ADFF" />
-          <Text className="text-white text-xl font-bold mt-4">
-            {"{You're all caught up!}"}
-          </Text>
-          <Text className="text-[#A499C9] text-center mt-2 px-10">
-            We are looking for more games to recommend based on your tastes.
-          </Text>
-        </View>
-      );
-    }
-
     return games
       .map((game, index) => {
         if (index === 0) {
@@ -178,7 +196,6 @@ export default function DiscoverScreen() {
                 },
               ]}
               {...panResponder.panHandlers}
-              className="items-center justify-center"
             >
               <View className="w-full h-full rounded-3xl overflow-hidden bg-[#1A133A] border border-[#4A3F75]">
                 <Image
@@ -208,8 +225,9 @@ export default function DiscoverScreen() {
                 width: "100%",
                 height: "100%",
                 zIndex: -index,
+                transform: [{ scale: 0.97 }],
+                opacity: 0.6,
               }}
-              className="items-center justify-center scale-[0.97] opacity-60"
             >
               <View className="w-full h-full rounded-3xl overflow-hidden bg-[#1A133A] border border-[#4A3F75]">
                 <Image
@@ -236,54 +254,101 @@ export default function DiscoverScreen() {
   };
 
   return (
-    <View className="flex-1 bg-background overflow-hidden relative">
+    <View className="flex-1 bg-background relative overflow-hidden">
       <Animated.View
-        style={{ opacity: leftGlowOpacity }}
         pointerEvents="none"
-        className="absolute top-0 left-0 right-0 bottom-0 z-0 border-[8px] border-[#ef4444]/40 rounded-[45px]"
+        style={{
+          opacity: redOpacity,
+          position: "absolute",
+          top: -insets.top,
+          left: 0,
+          right: 0,
+          height: screenHeight,
+          borderWidth: redBorderWidth,
+          borderColor: "#ef4444",
+          shadowColor: "#ef4444",
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 1,
+          shadowRadius: redGlow,
+          elevation: 25,
+          zIndex: 9999,
+        }}
       />
+
       <Animated.View
-        style={{ opacity: leftGlowOpacity }}
         pointerEvents="none"
-        className="absolute top-0 left-0 right-0 bottom-0 z-0 border-[20px] border-[#ef4444]/20 rounded-[45px]"
+        style={{
+          opacity: greenOpacity,
+          position: "absolute",
+          top: -insets.top,
+          left: 0,
+          right: 0,
+          height: screenHeight,
+          borderWidth: greenBorderWidth,
+          borderColor: "#10B981",
+          shadowColor: "#10B981",
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 1,
+          shadowRadius: greenGlow,
+          elevation: 25,
+          zIndex: 9999,
+        }}
       />
 
       <Animated.View
-        style={{ opacity: rightGlowOpacity }}
         pointerEvents="none"
-        className="absolute top-0 left-0 right-0 bottom-0 z-0 border-[8px] border-[#10B981]/40 rounded-[45px]"
-      />
-      <Animated.View
-        style={{ opacity: rightGlowOpacity }}
-        pointerEvents="none"
-        className="absolute top-0 left-0 right-0 bottom-0 z-0 border-[20px] border-[#10B981]/20 rounded-[45px]"
+        style={{
+          opacity: orangeOpacity,
+          position: "absolute",
+          top: -insets.top,
+          left: 0,
+          right: 0,
+          height: screenHeight,
+          borderWidth: orangeBorderWidth,
+          borderColor: "#ff8945",
+          shadowColor: "#ff8945",
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 1,
+          shadowRadius: orangeGlow,
+          elevation: 25,
+          zIndex: 9999,
+        }}
       />
 
-      <View className="flex items-center justify-center border-b border-dark-300 pt-16 pb-6 bg-background z-20">
+      {/* HEADER FIXO */}
+      <View
+        className="flex items-center justify-center border-b border-dark-300 z-20 bg-background/90"
+        style={{ paddingTop: Math.max(insets.top, 20) + 16, paddingBottom: 24 }}
+      >
         <DrawerMenuButton />
         <GlitchText text="Discover" fontSize={48} />
       </View>
 
-      {/* ÁREA CENTRAL DO CARD */}
+      {/* MENSAGEM DE FIM DOS CARDS E ÁREA DO CARD */}
       <View
-        className="flex-1 px-5 relative z-10"
-        style={{
-          marginTop: 12, // Apenas 12px de distância da linha do Header!
-          marginBottom: 20,
-        }}
+        className="flex-1 px-5 z-10 w-full"
+        style={{ marginTop: 24, marginBottom: 24 }}
       >
-        <View
-          style={{ width: width - 40, height: "100%", position: "relative" }}
-        >
-          {renderCards()}
-        </View>
+        {games.length === 0 && (
+          <View className="absolute inset-0 items-center justify-center z-0">
+            <Sparkles size={48} color="#C8ADFF" />
+            <Text className="text-white text-xl font-bold mt-4">
+              {"{You're all caught up!}"}
+            </Text>
+            <Text className="text-[#A499C9] text-center mt-2 px-10">
+              We are looking for more games to recommend based on your tastes.
+            </Text>
+          </View>
+        )}
+
+        <View className="w-full h-full relative z-10">{renderCards()}</View>
       </View>
 
       {/* TOAST DE WISHLIST */}
       <Animated.View
         className="absolute w-full items-center z-50 px-5"
         style={[
-          { top: Platform.OS === "ios" ? insets.top + 85 : 95 },
+          { top: insets.top + 100 },
           {
             transform: [
               {
@@ -296,7 +361,7 @@ export default function DiscoverScreen() {
           },
         ]}
       >
-        <View className="bg-[#1A133A] border border-[#ff8945] px-6 py-3 rounded-full flex-row items-center shadow-lg shadow-orange-500/30 mt-2">
+        <View className="bg-[#1A133A] border border-[#ff8945] px-6 py-3 rounded-full flex-row items-center shadow-lg shadow-orange-500/30">
           <Bookmark size={18} color="#ff8945" fill="#ff8945" />
           <Text className="text-white font-bold ml-2 text-sm">
             Added to Wishlist
@@ -305,12 +370,7 @@ export default function DiscoverScreen() {
       </Animated.View>
 
       {/* BOTÕES DE AÇÃO INFERIORES */}
-      <View
-        className="w-full flex-row px-4 items-center z-40"
-        style={{
-          paddingBottom: insets.bottom > 0 ? insets.bottom + 10 : 30,
-        }}
-      >
+      <View className="w-full flex-row px-4 items-center justify-between z-40 pb-6">
         {/* F Key Keycap */}
         <View className="flex-1 items-center">
           <View className="bg-[#111019] border border-[#ef444440] w-14 h-14 rounded-full justify-center items-center shadow-lg shadow-red-500/20">

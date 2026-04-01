@@ -44,7 +44,21 @@ export interface Game {
   }[];
 }
 
-export interface TrendingCardProps {
-  game: TrendingGame;
-  index: number;
+export interface Review {
+  id: string;
+  game: {
+    id: string;
+    title: string;
+    coverUrl: string;
+    year: string;
+  };
+  reviewer: {
+    id: string;
+    name: string;
+    avatarUrl: string;
+  };
+  stars: number;
+  likes: number;
+  comments: number;
+  content: string;
 }

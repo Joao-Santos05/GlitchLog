@@ -5,7 +5,7 @@ import GlitchText from "@/components/shared/GlitchText";
 import ReviewCard from "@/components/shared/ReviewCard";
 import StarRating from "@/components/shared/StarRating";
 import { Game } from "@/interfaces/interfaces";
-import { List, Review } from "@/types";
+import { List } from "@/types";
 import { useRouter } from "expo-router";
 import React, { useState, useCallback } from "react";
 import {
@@ -121,7 +121,7 @@ const MOCK_LISTS: List[] = [
   },
 ];
 
-const MOCK_REVIEWS: Review[] = [
+const MOCK_REVIEWS = [
   {
     id: "1",
     game: {
@@ -130,12 +130,35 @@ const MOCK_REVIEWS: Review[] = [
       coverUrl: "https://via.placeholder.com/150x200",
       year: "2025",
     },
-    reviewer: { name: "Adrian", avatarUrl: "https://i.pravatar.cc/150?img=3" },
+    reviewer: {
+      id: "99", // 🚨 Obrigatório para o ProfilePicture funcionar!
+      name: "David",
+      avatarUrl: "https://i.pravatar.cc/150?img=11",
+    },
     stars: 4,
-    likes: 0,
+    likes: 12,
     comments: 8,
     content:
       "Playing through this absolute gem of a game reminded me of when in 2011 i took up skyrim...",
+  },
+  {
+    id: "2",
+    game: {
+      id: "8",
+      title: "Silksong",
+      coverUrl: "https://via.placeholder.com/150x200",
+      year: "2025",
+    },
+    reviewer: {
+      id: "42",
+      name: "Aria",
+      avatarUrl: "https://i.pravatar.cc/150?img=5",
+    },
+    stars: 5,
+    likes: 340,
+    comments: 56,
+    content:
+      "The wait was absolutely worth it. The fluid combat and stunning visuals are a masterpiece.",
   },
 ];
 
@@ -214,8 +237,12 @@ export default function HomeScreen() {
           <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full self-start">
             Recent Friends Review
           </Text>
-          {MOCK_REVIEWS.map((review) => (
-            <ReviewCard key={review.id} review={review} />
+          {MOCK_REVIEWS.map((reviewItem) => (
+            <ReviewCard
+              key={reviewItem.id}
+              review={reviewItem}
+              showGameCover={true}
+            />
           ))}
         </View>
       </ScrollView>
