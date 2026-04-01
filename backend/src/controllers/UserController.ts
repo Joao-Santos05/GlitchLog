@@ -20,7 +20,7 @@ export class UserController {
             const novoUsuario = await prisma.user.create({
                 data: { 
                     name: nome, 
-                    username: username.toLowerCase(), // Salvamos sempre minúsculo para evitar confusão na URL
+                    username: username.toLowerCase(),
                     email: email, 
                     senha_hash: senhaCriptografada 
                 }
@@ -59,7 +59,6 @@ export class UserController {
                 return;
             }
 
-            // 2. Verifica se a senha bate com o hash salvo
             const senhaValida = await bcrypt.compare(senha, user.senha_hash);
             
             if (!senhaValida) {
@@ -67,15 +66,13 @@ export class UserController {
                 return;
             }
 
-            // 3. A MÁGICA: Gera o Token JWT!
             const segredo = process.env.JWT_SECRET as string;
             const token = jwt.sign(
                 { id: user.userId, nome: user.name }, // O que vai dentro do token (Payload)
-                segredo, // A senha do seu .env
+                segredo, // A senha do .env
                 { expiresIn: '7d' } // O token vale por 7 dias
             );
 
-            // 4. Devolve o token e os dados básicos para o Front-end
             res.status(200).json({
                 mensagem: "Login realizado com sucesso!",
                 token: token,
@@ -149,7 +146,7 @@ static async listarUsuarios(req: Request, res: Response) {
             const { username } = req.params;
 
             const usuario = await prisma.user.findUnique({
-                where: { username: String(username) }, 
+                where: { username: String(username).toLowerCase() }, 
                 select: {
                     userId: true,
                     username: true,
