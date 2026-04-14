@@ -1,4 +1,4 @@
-import { Game } from "@/interfaces/interfaces";
+import { Game } from "@/types";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";

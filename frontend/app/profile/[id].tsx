@@ -4,7 +4,7 @@ import RPlayed from "@/components/profile/RPlayed";
 import StatsRow from "@/components/profile/StatsRow";
 import ReviewCard from "@/components/shared/ReviewCard";
 import GoBack from "@/components/shared/GoBack";
-import { Game } from "@/interfaces/interfaces";
+import { Game } from "@/types";
 import { useLocalSearchParams } from "expo-router";
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import {
@@ -26,7 +26,7 @@ const statsMock = [
 
 const favoritesMock: Game[] = [
   {
-    id: 1,
+    id: "1",
     title: "Alien",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     vote_average: 4,
@@ -40,7 +40,7 @@ const favoritesMock: Game[] = [
     publishers: [],
   },
   {
-    id: 2,
+    id: "2",
     title: "Detroit",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     vote_average: 5,
@@ -54,7 +54,7 @@ const favoritesMock: Game[] = [
     publishers: [],
   },
   {
-    id: 3,
+    id: "3",
     title: "Dispatch",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     vote_average: 4,
@@ -68,7 +68,7 @@ const favoritesMock: Game[] = [
     publishers: [],
   },
   {
-    id: 4,
+    id: "4",
     title: "Silksong",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     vote_average: 5,
@@ -85,7 +85,7 @@ const favoritesMock: Game[] = [
 
 const recentGamesMock: Game[] = [
   {
-    id: 5,
+    id: "5",
     title: "Alien",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     vote_average: 4,
@@ -99,7 +99,7 @@ const recentGamesMock: Game[] = [
     publishers: [],
   },
   {
-    id: 6,
+    id: "6",
     title: "Detroit",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     vote_average: 5,
@@ -113,7 +113,7 @@ const recentGamesMock: Game[] = [
     publishers: [],
   },
   {
-    id: 7,
+    id: "7",
     title: "Dispatch",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     vote_average: 4,
@@ -127,7 +127,7 @@ const recentGamesMock: Game[] = [
     publishers: [],
   },
   {
-    id: 8,
+    id: "8",
     title: "Silksong",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     vote_average: 5,

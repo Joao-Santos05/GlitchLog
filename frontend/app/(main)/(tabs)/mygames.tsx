@@ -4,7 +4,7 @@ import FilterDropdown, {
 } from "@/components/shared/FilterDropdown";
 import RatingFilterDropdown from "@/components/shared/RatingFilterDropdown";
 import StarRating from "@/components/shared/StarRating";
-import { Game } from "@/interfaces/interfaces";
+import { Game } from "@/types";
 import { useRouter } from "expo-router";
 import React, { useState, useCallback } from "react";
 import {
@@ -18,7 +18,7 @@ import {
 
 const MOCK_GAMES: Game[] = [
   {
-    id: 1,
+    id: "1",
     title: "Alien",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     release_date: "2014-10-07",
@@ -35,7 +35,7 @@ const MOCK_GAMES: Game[] = [
     publishers: [],
   },
   {
-    id: 2,
+    id: "2",
     title: "Detroit",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     release_date: "2018-05-25",
@@ -52,7 +52,7 @@ const MOCK_GAMES: Game[] = [
     publishers: [],
   },
   {
-    id: 3,
+    id: "3",
     title: "Dispatch",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     release_date: "2024-01-01",
@@ -66,7 +66,7 @@ const MOCK_GAMES: Game[] = [
     publishers: [],
   },
   {
-    id: 4,
+    id: "4",
     title: "Silksong",
     poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
     release_date: "2025-12-31",
