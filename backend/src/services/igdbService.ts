@@ -22,11 +22,17 @@ export class IGDBService {
         const clientId = process.env.IGDB_CLIENT_ID;
         const clientSecret = process.env.IGDB_CLIENT_SECRET;
 
+        console.log("Verificando chaves: ", { clientId, secretExiste: !!clientSecret });
+
         const response = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials`, {
             method: 'POST'
         });
 
-        if (!response.ok) throw new Error("Falha ao gerar o token da Twitch");
+        if (!response.ok) {
+            const erroReal = await response.text(); 
+            console.error("Fofoca da Twitch:", erroReal);
+            throw new Error(`Falha ao gerar o token da Twitch: ${erroReal}`);
+        }
         
         const data = await response.json();
         

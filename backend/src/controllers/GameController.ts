@@ -25,7 +25,7 @@ export class GameController {
             // CONSULTA COM A BUSCA GENÉRICA:
             const jogosBrutos = await IGDBService.fazerQuery({
                 endpoint: 'games',
-                fields: ['name', 'cover.url', 'rating', 'summary', 'first_release_date'],
+                fields: ['id','name', 'cover.url', 'rating', 'summary', 'first_release_date'],
                 search: nomeDoJogo,
                 limit: 10
             });

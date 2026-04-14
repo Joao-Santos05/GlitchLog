@@ -8,8 +8,8 @@ router.post('/cadastrar', UserController.criarUsuario);
 router.post('/login', UserController.login);
 router.delete('/', authMiddleware, UserController.excluirUsuario);
 router.get('/', UserController.listarUsuarios); 
-router.get('/:username', UserController.buscarPerfilPublico);
 router.get('/perfil', authMiddleware, UserController.meuPerfil);
 router.put('/perfil', authMiddleware, UserController.atualizarPerfil);
+router.get('/:username', UserController.buscarPerfilPublico);
 
 export default router;
