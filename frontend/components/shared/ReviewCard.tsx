@@ -3,7 +3,7 @@ import { Heart, MessageCircle } from "lucide-react-native";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import StarRating from "./StarRating";
 import ProfilePicture from "./ProfilePicture";
-import { Review } from "@/interfaces/interfaces";
+import { Review } from "@/types";
 
 interface Props {
   review: Review;
@@ -30,7 +30,7 @@ export default function ReviewCard({ review, showGameCover = true }: Props) {
             <Text className="text-white font-bold text-sm leading-tight">
               {review.game.title}{" "}
               <Text className="text-white text-xs font-normal">
-                {review.game.year}
+                {review.game.release_date}
               </Text>
             </Text>
             <View className="flex-row items-center">
@@ -58,7 +58,11 @@ export default function ReviewCard({ review, showGameCover = true }: Props) {
 
       {showGameCover && (
         <Image
-          source={{ uri: review.game.coverUrl }}
+          source={{
+            uri:
+              review.game.poster_path ||
+              "https://via.placeholder.com/400x600/1A133A/C8ADFF?text=No+Cover",
+          }}
           className="w-20 h-32 rounded-md border border-[#4A3F75]"
         />
       )}

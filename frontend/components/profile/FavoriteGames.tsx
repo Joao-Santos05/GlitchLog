@@ -1,5 +1,5 @@
 import StarRating from "@/components/shared/StarRating";
-import { Game } from "@/interfaces/interfaces";
+import { Game } from "@/types";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";

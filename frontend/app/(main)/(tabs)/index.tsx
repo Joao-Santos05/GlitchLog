@@ -4,8 +4,7 @@ import DrawerMenuButton from "@/components/shared/DrawerMenuButton";
 import GlitchText from "@/components/shared/GlitchText";
 import ReviewCard from "@/components/shared/ReviewCard";
 import StarRating from "@/components/shared/StarRating";
-import { Game } from "@/interfaces/interfaces";
-import { List } from "@/types";
+import { Game, List } from "@/types";
 import { useRouter } from "expo-router";
 import React, { useState, useCallback } from "react";
 import {
@@ -19,7 +18,7 @@ import {
 
 const MOCK_GAMES: Game[] = [
   {
-    id: 1,
+    id: "1",
     title: "Expedition 33",
     poster_path: "https://via.placeholder.com/150x200",
     vote_average: 4.5,
@@ -33,7 +32,7 @@ const MOCK_GAMES: Game[] = [
     publishers: [],
   },
   {
-    id: 2,
+    id: "2",
     title: "Resident Evil",
     poster_path: "https://via.placeholder.com/150x200",
     vote_average: 5,
@@ -47,7 +46,7 @@ const MOCK_GAMES: Game[] = [
     publishers: [],
   },
   {
-    id: 3,
+    id: "3",
     title: "Death Stranding 2",
     poster_path: "https://via.placeholder.com/150x200",
     vote_average: 4,
@@ -61,7 +60,7 @@ const MOCK_GAMES: Game[] = [
     publishers: [],
   },
   {
-    id: 4,
+    id: "4",
     title: "Silksong",
     poster_path: "https://via.placeholder.com/150x200",
     vote_average: 5,

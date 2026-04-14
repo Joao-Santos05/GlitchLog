@@ -15,12 +15,16 @@ const MOCK_REVIEWS: Review[] = [
   {
     id: "1",
     game: {
-      id: "5",
-      title: "Kingdom Come",
-      coverUrl: "https://via.placeholder.com/150x200",
-      year: "2025",
+      id: "1",
+      title: "Alien",
+      poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
+      release_date: "2014-10-07",
     },
-    reviewer: { name: "Adrian", avatarUrl: "https://i.pravatar.cc/150?img=3" },
+    reviewer: {
+      id: "1",
+      name: "David",
+      avatarUrl: "https://i.pravatar.cc/150?img=11",
+    },
     stars: 4,
     likes: 0,
     comments: 8,
@@ -32,7 +36,11 @@ const MOCK_REVIEWS: Review[] = [
 const MOCK_POPULAR = [
   {
     id: "2",
-    reviewer: { name: "Robert", avatarUrl: "https://i.pravatar.cc/150?img=12" },
+    reviewer: {
+      id: "2",
+      name: "Robert",
+      avatarUrl: "https://i.pravatar.cc/150?img=12",
+    },
     game: {
       id: "6",
       title: "Hytale",
@@ -47,7 +55,11 @@ const MOCK_POPULAR = [
   },
   {
     id: "3",
-    reviewer: { name: "Anna", avatarUrl: "https://i.pravatar.cc/150?img=5" },
+    reviewer: {
+      id: "3",
+      name: "Anna",
+      avatarUrl: "https://i.pravatar.cc/150?img=5",
+    },
     game: {
       id: "7",
       title: "Pokémon Pokopia",

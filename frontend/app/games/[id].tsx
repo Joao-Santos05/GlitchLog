@@ -1,7 +1,6 @@
 import GoBack from "@/components/shared/GoBack";
 import StarRating from "@/components/shared/StarRating";
-import { Game } from "@/interfaces/interfaces";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import {
   Edit3,
   Gamepad2,
@@ -24,44 +23,46 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ReviewCard from "../../components/shared/ReviewCard";
-import { Review } from "../../types";
+import { Review, Game } from "../../types";
 
 const MOCK_GAME_DETAILS: Game = {
-  id: 1,
-  title: "Clair Obscur: Expedition 33",
-  poster_path: "https://via.placeholder.com/200x300",
-  backdrop_path: "https://via.placeholder.com/800x600",
-  release_date: "2025-05-12",
-  vote_average: 4.6,
-  vote_count: 40000,
-  overview:
-    "Lead the members of Expedition 33 on a mission to destroy the Artificer so she can never paint death again...",
+  id: "1",
+  title: "Alien",
+  poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
+  vote_average: 4,
+  release_date: "2014-10-07",
+  overview: "",
+  backdrop_path: null,
+  vote_count: 0,
   genres: [],
   platforms: [],
-  developers: [{ id: 1, name: "Sandfall Interactive" }],
+  developers: [],
   publishers: [],
 };
 
-const MOCK_GAME_REVIEW: Review = {
-  id: "1",
-  game: {
+const MOCK_REVIEWS: Review[] = [
+  {
     id: "1",
-    title: "Expedition 33",
-    coverUrl: "https://via.placeholder.com/150x200",
+    game: {
+      id: "1",
+      title: "Alien",
+      poster_path: "https://via.placeholder.com/100x140/2D3748/FFFFFF",
+      release_date: "2014-10-07",
+    },
+    reviewer: {
+      id: "1",
+      name: "David",
+      avatarUrl: "https://i.pravatar.cc/150?img=11",
+    },
+    stars: 4,
+    likes: 0,
+    comments: 8,
+    content:
+      "Playing through this absolute gem of a game reminded me of when in 2011 i took up skyrim...",
   },
-  reviewer: {
-    name: "Dabliuziar",
-    avatarUrl: "https://i.pravatar.cc/150?img=8",
-  },
-  stars: 4,
-  likes: 0,
-  comments: 5,
-  content:
-    "It took me a while to start playing, but I was quite surprised in the first few hours...",
-};
+];
 
 export default function GameDetailsScreen() {
-  const { id } = useLocalSearchParams();
   const router = useRouter();
   const scrollY = useRef(new Animated.Value(0)).current;
   const [refreshing, setRefreshing] = useState(false);
@@ -270,8 +271,13 @@ export default function GameDetailsScreen() {
               <Text className="text-[#FF8A65] text-xs">See All</Text>
             </TouchableOpacity>
           </View>
-          <ReviewCard review={MOCK_GAME_REVIEW} showGameCover={false} />
-          <ReviewCard review={MOCK_GAME_REVIEW} showGameCover={false} />
+          {MOCK_REVIEWS.map((reviewItem) => (
+            <ReviewCard
+              key={reviewItem.id}
+              review={reviewItem}
+              showGameCover={false}
+            />
+          ))}
         </View>
       </Animated.ScrollView>
     </View>
