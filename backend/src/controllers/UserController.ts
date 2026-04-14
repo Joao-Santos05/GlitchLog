@@ -152,8 +152,24 @@ static async listarUsuarios(req: Request, res: Response) {
                     username: true,
                     bio: true,
                     avatar_url: true,
+                    favoritos: {
+                        select: {
+                            slot: true, // Traz em qual posição (1 a 4) o jogo está
+                            game: {     // Faz o "Join" para trazer os detalhes do jogo
+                                select: {
+                                    id_igdb: true,
+                                    name: true,
+                                    cover_url: true
+                                }
+                            }
+                        },
+                        orderBy: {
+                            slot: 'asc'
+                        }
+                    }
                     // NOTA: Adicionar um 'include' aqui para o Prisma já trazer 
-                    // a lista de reviews e os jogos da biblioteca (ou favoritos) desse usuário!
+                    // a lista de reviews desse usuário!
+
                 }
             });
 
@@ -181,6 +197,21 @@ static async listarUsuarios(req: Request, res: Response) {
                     email: true, // Revelamos o email só para o próprio dono!
                     bio: true,
                     avatar_url: true, 
+                    favoritos: {
+                        select: {
+                            slot: true, // Traz em qual posição (1 a 4) o jogo está
+                            game: {     // Faz o "Join" para trazer os detalhes do jogo
+                                select: {
+                                    id_igdb: true,
+                                    name: true,
+                                    cover_url: true
+                                }
+                            }
+                        },
+                        orderBy: {
+                            slot: 'asc'
+                        }
+                    }
                 }
             });
 
