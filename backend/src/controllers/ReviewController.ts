@@ -129,4 +129,101 @@ export class ReviewController {
             res.status(500).json({ erro: "Erro ao buscar as reviews." });
         }
     }
+
+    static async listarReviewsDoUsuario(req: Request, res: Response) {
+        try {
+            const { username } = req.params;
+
+            const reviews = await prisma.review.findMany({
+                where: {
+                    user: {
+                        username: String(username).toLowerCase()
+                    }
+                },
+                orderBy: {
+                    createdAt: 'desc' // Traz as mais recentes primeiro
+                },
+                select: {
+                    reviewId: true,
+                    nota: true,
+                    reviewText: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    // Traz os detalhes do jogo avaliado
+                    game: {
+                        select: {
+                            id_igdb: true,
+                            name: true,
+                            cover_url: true
+                        }
+                    },
+                    // Traz a contagem de interações sociais
+                    _count: {
+                        select: {
+                            curtidas: true,
+                            comentarios: true
+                        }
+                    }
+                }
+            });
+
+            res.status(200).json(reviews);
+
+        } catch (erro) {
+            console.error(erro);
+            res.status(500).json({ erro: "Erro interno ao buscar as reviews do usuário." });
+        }
+    }
+
+    static async toggleLike(req: Request, res: Response) {
+        try {
+            const userId = (req as any).userId;
+            const reviewId = parseInt(String(req.params.reviewId));
+    
+            if (isNaN(reviewId)) {
+                return res.status(400).json({ erro: "ID da review inválido." });
+            }
+    
+            const reviewExiste = await prisma.review.findUnique({
+                where: { reviewId: reviewId }
+            });
+    
+            if (!reviewExiste) {
+                return res.status(404).json({ erro: "Review não encontrada." });
+            }
+    
+            const likeExistente = await prisma.reviewLike.findUnique({
+                where: {
+                    userId_reviewId: {
+                        userId: userId,
+                        reviewId: reviewId
+                    }
+                }
+            });
+    
+            if (likeExistente) {
+                await prisma.reviewLike.delete({
+                    where: {
+                        userId_reviewId: {
+                            userId: userId,
+                            reviewId: reviewId
+                        }
+                    }
+                });
+                return res.status(200).json({ mensagem: "Like removido.", curtiu: false });
+            } else {
+                await prisma.reviewLike.create({
+                    data: {
+                        userId: userId,
+                        reviewId: reviewId
+                    }
+                });
+                return res.status(201).json({ mensagem: "Review curtida!", curtiu: true });
+            }
+    
+        } catch (erro) {
+            console.error(erro);
+            return res.status(500).json({ erro: "Erro interno ao processar o like." });
+        }
+    }
 }

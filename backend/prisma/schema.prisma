@@ -104,6 +104,8 @@ model Review {
   reviewId   Int      @id @default(autoincrement()) @map("review_id")
   nota       Float   
   reviewText String?  @map("review_text")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @default(now()) @map("updated_at")
   
   userId     Int      @map("user_id")
   id_igdb    Int      

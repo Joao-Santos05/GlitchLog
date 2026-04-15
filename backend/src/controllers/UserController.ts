@@ -166,10 +166,21 @@ static async listarUsuarios(req: Request, res: Response) {
                         orderBy: {
                             slot: 'asc'
                         }
-                    }
-                    // NOTA: Adicionar um 'include' aqui para o Prisma já trazer 
-                    // a lista de reviews desse usuário!
-
+                    },
+                    reviews: {
+                        take: 3, // Limita para trazer APENAS as 3 mais recentes
+                        orderBy: {
+                            createdAt: 'desc'
+                        },
+                        select: {
+                            reviewId: true,
+                            nota: true,
+                            reviewText: true,
+                            game: {
+                                select: { id_igdb: true, name: true, cover_url: true }
+                            }
+                        }
+                    },
                 }
             });
 
@@ -211,7 +222,21 @@ static async listarUsuarios(req: Request, res: Response) {
                         orderBy: {
                             slot: 'asc'
                         }
-                    }
+                    },
+                    reviews: {
+                        take: 3, // Limita para trazer APENAS as 3 mais recentes
+                        orderBy: {
+                            createdAt: 'desc'
+                        },
+                        select: {
+                            reviewId: true,
+                            nota: true,
+                            reviewText: true,
+                            game: {
+                                select: { id_igdb: true, name: true, cover_url: true }
+                            }
+                        }
+                    },
                 }
             });
 
