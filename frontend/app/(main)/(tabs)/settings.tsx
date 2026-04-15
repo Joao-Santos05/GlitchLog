@@ -20,7 +20,13 @@ import {
   RefreshControl,
 } from "react-native";
 
-const AVAILABLE_LANGUAGES = ["English", "Português", "Español", "Français"];
+const AVAILABLE_LANGUAGES = [
+  "English",
+  "Português",
+  "Español",
+  "Français",
+  "Deutsch",
+];
 
 export default function SettingsScreen() {
   const router = useRouter();
