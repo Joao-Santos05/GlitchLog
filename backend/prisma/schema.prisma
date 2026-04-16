@@ -25,6 +25,7 @@ model User {
   notificacoes  Notification[]
   favoritos     FavoriteGame[]
   curtidas      ReviewLike[]
+  curtidasComents CommentLike[]
 
   // Auto-relacionamento de Seguidores
   seguidores UserFollow[] @relation("Seguido")
@@ -131,6 +132,8 @@ model Comment {
   user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
   review Review @relation(fields: [reviewId], references: [reviewId], onDelete: Cascade)
 
+  curtidas CommentLike[]
+
   @@map("comments")
 }
 
@@ -146,6 +149,20 @@ model ReviewLike {
   // O usuário só pode curtir a mesma review 1 vez
   @@id([userId, reviewId])
   @@map("review_likes")
+}
+
+model CommentLike {
+  createdAt DateTime @default(now()) @map("created_at")
+
+  userId    Int @map("user_id")
+  commentID Int @map("comment_id")
+
+  user    User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  comment Comment @relation(fields: [commentID], references: [commentID], onDelete: Cascade)
+
+  // O usuário só pode curtir o mesmo comentário 1 vez
+  @@id([userId, commentID])
+  @@map("comment_likes")
 }
 
 model UserFollow {

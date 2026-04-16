@@ -98,35 +98,33 @@ export class ReviewController {
 
     static async listarReviews(req: Request, res: Response) {
         try {
-            const { id_igdb } = req.params;
-            const jogoId = Number(id_igdb);
+            const id_igdb = parseInt(req.params.id_igdb as string);
+            const { sort } = req.query; 
 
-            if (isNaN(jogoId)) {
-                res.status(400).json({ erro: "ID do jogo inválido." });
-                return;
+            let orderLogic: any = { createdAt: 'desc' }; // Padrão: Recentes
+
+            if (sort === 'popular') {
+                orderLogic = { curtidas: { _count: 'desc' } };
             }
 
+            // NOTA FUTURA: Lógica de Mutuals (Amigos)
+            // Implementar quando o sistema de auto-relacionamento (UserFollow) estiver pronto.
+            // Se sort === 'friends', buscar a lista de mutuals e alterar o where abaixo para:
+            // where: { id_igdb: id_igdb, userId: { in: [arrayDeIdsDosAmigos] } }
+
             const reviews = await prisma.review.findMany({
-                where: { id_igdb: jogoId },
+                where: { id_igdb: id_igdb },
+                orderBy: orderLogic,
                 include: {
-                    user: {
-                        select: {
-                            username: true,
-                            avatar_url: true
-                        }
-                    }
-                },
-                // NOTA: Adicionar outras formas de ordenação futuramente (ex: mais curtidas, mais recentes, etc)
-                orderBy: {
-                    reviewId: 'desc' 
+                    user: { select: { username: true, avatar_url: true } },
+                    _count: { select: { curtidas: true, comentarios: true } }
                 }
             });
 
             res.status(200).json(reviews);
-
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ erro: "Erro ao buscar as reviews." });
+            res.status(500).json({ erro: "Erro ao listar reviews." });
         }
     }
 
