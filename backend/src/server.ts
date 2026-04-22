@@ -22,6 +22,9 @@ app.get('/api/status', (req: Request, res: Response) => {
     res.json({ status: 'API rodando, organizada e pronta para o IGDB!' });
 });
 
+import { errorHandler } from './middlewares/ErrorHandler';
+app.use(errorHandler);
+
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta http://localhost:${PORT}`);
 });
