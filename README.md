@@ -45,9 +45,11 @@ Tired of scrolling through endless lists to figure out what to play next? Glitch
 ### Backend (API)
 
 - **Runtime:** Node.js
-- **Framework:** Express.js
+- **Framework:** Express.js (v5)
 - **Database:** PostgreSQL
 - **ORM:** Prisma
+- **Validation:** Zod
+- **External API:** IGDB (Twitch)
 
 ---
 
@@ -92,6 +94,20 @@ To get a local copy up and running, follow these simple steps.
    ```bash
    cd ../backend
    npm install
+   ```
+
+6. **Configure the Environment**
+   - Create a `.env` file in the `backend` folder and add your variables:
+     ```env
+     DATABASE_URL="postgresql://user:password@localhost:5432/glitchlog"
+     JWT_SECRET="your_secret_key"
+     IGDB_CLIENT_ID="your_twitch_client_id"
+     IGDB_SECRET="your_twitch_secret"
+     ```
+
+7. **Sync the Database & Run the Server**
+   ```bash
+   npx prisma db push
    npm run dev
    ```
 
@@ -102,8 +118,9 @@ To get a local copy up and running, follow these simple steps.
 - [x] Custom Routing & Navigation Setup
 - [x] UI/UX Core Design & Implementation
 - [x] Backend Routes Creation
+- [x] Backend Validation (Zod) & Error Handling
+- [x] Database Creation (Prisma)
 - [ ] Connect Frontend to Backend Endpoints
-- [ ] Database Creation
 - [ ] Implement User Authentication (JWT/OAuth)
 - [ ] Recommendation Algorithm integration
 - [ ] Social Features (Follow friends, share lists)
