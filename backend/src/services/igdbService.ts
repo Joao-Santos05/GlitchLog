@@ -45,7 +45,8 @@ export class IGDBService {
     // Função genérica para queries no IGDB
     static async fazerQuery(opcoes: IGDBOptions) {
         const token = await this.getAccessToken();
-        const clientId = process.env.IGDB_CLIENT_ID as string;
+        const clientId = process.env.IGDB_CLIENT_ID;
+        if (!clientId) throw new Error("IGDB_CLIENT_ID não configurado no .env");
 
         let queryBody = `fields ${opcoes.fields.join(', ')};`;
 

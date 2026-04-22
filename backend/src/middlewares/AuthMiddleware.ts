@@ -23,16 +23,20 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
         return;
     }
 
-    const token = parts[1] as string;
+    const token = parts[1];
+    if (!token) {
+        res.status(401).json({ erro: "Token vazio." });
+        return;
+    }
 
     try {
-        const segredo = process.env.JWT_SECRET as string;
+        const segredo = process.env.JWT_SECRET;
+        if (!segredo) throw new Error("JWT_SECRET is missing");
         
-        // Resolvemos o conflito de tipos convertendo primeiro para 'unknown'
         const decoded = jwt.verify(token, segredo) as unknown as TokenPayload;
 
         // Injetamos o ID na requisição
-        (req as any).userId = decoded.id; 
+        req.userId = decoded.id; 
         
         next(); //passar para o Controller
     } catch (erro) {
