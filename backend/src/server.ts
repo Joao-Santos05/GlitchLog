@@ -5,6 +5,8 @@ import gameRoutes from './routes/GameRoutes';
 import libraryRoutes from './routes/LibraryRoutes';
 import reviewRoutes from './routes/ReviewRoutes';
 import favoriteRoutes from './routes/FavoriteRoutes';
+import listRoutes from './routes/ListRoutes';
+import { errorHandler } from './middlewares/ErrorHandler';
 
 const app = express();
 const PORT = 3000;
@@ -16,13 +18,13 @@ app.use('/api/jogos', gameRoutes);
 app.use('/api/biblioteca', libraryRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/favoritos', favoriteRoutes);
+app.use('/api/listas', listRoutes);
 
 // Uma rota de status simples para teste
 app.get('/api/status', (req: Request, res: Response) => {
     res.json({ status: 'API rodando, organizada e pronta para o IGDB!' });
 });
 
-import { errorHandler } from './middlewares/ErrorHandler';
 app.use(errorHandler);
 
 app.listen(PORT, () => {
