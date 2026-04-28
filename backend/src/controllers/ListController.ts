@@ -12,9 +12,15 @@ export class ListController {
         const userId = req.userId;
         const listId = parseInt(req.params.id);
         const { games } = req.body;
-        
+
         const resultado = await ListService.addGamesToList(userId, listId, games);
         res.status(200).json(resultado);
+    }
+
+    static async getMyLists(req: Request, res: Response) {
+        const userId = req.userId;
+        const listas = await ListService.getMyLists(userId);
+        res.status(200).json(listas);
     }
 
     static async getUserLists(req: Request<{ username: string }>, res: Response) {
@@ -47,7 +53,7 @@ export class ListController {
         const userId = req.userId;
         const listId = parseInt(req.params.id);
         const id_igdb = parseInt(req.params.id_igdb);
-        
+
         const resultado = await ListService.removeGameFromList(userId, listId, id_igdb);
         res.status(200).json(resultado);
     }

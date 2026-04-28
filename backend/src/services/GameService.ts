@@ -18,7 +18,7 @@ export class GameService {
 
         const jogosBrutos = await IGDBService.fazerQuery({
             endpoint: 'games',
-            fields: ['id','name', 'cover.url', 'rating', 'summary', 'first_release_date'],
+            fields: ['id', 'name', 'cover.url', 'rating', 'summary', 'first_release_date'],
             search: nomeDoJogo,
             limit: 10
         });
@@ -46,13 +46,13 @@ export class GameService {
             where: { id_igdb: igdbId }
         });
 
-        if (jogoLocal) {
+        if (jogoLocal && jogoLocal.bio) {
             console.log(`Jogo ${jogoLocal.name} encontrado no cache local.`);
             return jogoLocal;
         }
 
         console.log(`Buscando detalhes do jogo ${igdbId} na Twitch...`);
-        
+
         const campos = [
             'name',
             'summary',
@@ -96,7 +96,7 @@ export class GameService {
         if (devPrincipal) {
             desenvolvedora = devPrincipal.company.name;
         } else if (empresasEnvolvidas.length > 0) {
-            desenvolvedora = empresasEnvolvidas[0].company.name; 
+            desenvolvedora = empresasEnvolvidas[0].company.name;
         }
 
         const generos = jogoBruto.genres?.map((g: any) => g.name).join(', ') || 'N/A';
@@ -110,21 +110,33 @@ export class GameService {
         })) || [];
 
         console.log(`Salvando jogo ${jogoBruto.name} no banco de dados local...`);
-        
-        const novoJogoLocal = await prisma.game.create({
-            data: {
-                id_igdb: igdbId,
-                name: jogoBruto.name,
-                bio: jogoBruto.summary, 
-                cover_url: capaGrande,
-                background_url: artworkFundo, 
+
+        const novoJogoLocal = await prisma.game.upsert({
+            where: { id_igdb: igdbId },
+            update: {
+                bio: jogoBruto.summary,
+                background_url: artworkFundo,
                 release_year: anoLancamento,
                 developer: desenvolvedora,
                 genre: generos,
                 platforms: plataformas,
                 rating: notaFormatada,
                 rating_count: jogoBruto.rating_count,
-                similar_games_json: JSON.stringify(jogosSimilares) 
+                similar_games_json: JSON.stringify(jogosSimilares)
+            },
+            create: {
+                id_igdb: igdbId,
+                name: jogoBruto.name,
+                bio: jogoBruto.summary,
+                cover_url: capaGrande,
+                background_url: artworkFundo,
+                release_year: anoLancamento,
+                developer: desenvolvedora,
+                genre: generos,
+                platforms: plataformas,
+                rating: notaFormatada,
+                rating_count: jogoBruto.rating_count,
+                similar_games_json: JSON.stringify(jogosSimilares)
             }
         });
 

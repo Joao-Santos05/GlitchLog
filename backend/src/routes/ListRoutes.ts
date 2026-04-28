@@ -6,11 +6,10 @@ import { createListSchema, updateListSchema, addGamesToListSchema } from '../sch
 
 const router = Router();
 
-// Rotas de leitura (não requerem autenticação)
+router.get('/minhas', authMiddleware, ListController.getMyLists);
 router.get('/usuario/:username', ListController.getUserLists);
 router.get('/:id', ListController.getListById);
 
-// Rotas de criação e edição (requerem autenticação)
 router.post('/', authMiddleware, validate(createListSchema), ListController.createList);
 router.post('/:id/jogos', authMiddleware, validate(addGamesToListSchema), ListController.addGamesToList);
 router.put('/:id', authMiddleware, validate(updateListSchema), ListController.updateList);
