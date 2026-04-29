@@ -29,13 +29,13 @@ export class IGDBService {
         });
 
         if (!response.ok) {
-            const erroReal = await response.text(); 
-            console.error("Fofoca da Twitch:", erroReal);
+            const erroReal = await response.text();
+            console.error("Erro da Twitch:", erroReal);
             throw new Error(`Falha ao gerar o token da Twitch: ${erroReal}`);
         }
-        
+
         const data = await response.json();
-        
+
         this.currentToken = data.access_token;
         this.tokenExpiration = Date.now() + (data.expires_in * 1000);
 
