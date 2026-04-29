@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,23 +7,26 @@ datasource db {
 }
 
 model User {
-  userId     Int     @id @default(autoincrement()) @map("user_id")
-  name       String         // O nome real ou apelido (pode ter espaços)
-  username   String         @unique // O "arroba", usado na URL
-  email      String  @unique
-  senha_hash String 
-  bio        String? 
-  avatar_url String?
+  userId             Int     @id @default(autoincrement()) @map("user_id")
+  name               String // O nome real ou apelido (pode ter espaços)
+  username           String  @unique // O "arroba", usado na URL
+  email              String  @unique
+  senha_hash         String
+  bio                String?
+  avatar_url         String?
+  background_url     String?
+  wishlist_is_public Boolean @default(true)
 
   // Relacionamentos N:1
-  biblioteca    LibraryEntry[]
-  reviews       Review[]
-  listas        List[]
-  
-  comentarios   Comment[]
-  notificacoes  Notification[]
-  favoritos     FavoriteGame[]
-  curtidas      ReviewLike[]
+  biblioteca LibraryEntry[]
+  wishlist   WishlistEntry[]
+  reviews    Review[]
+  listas     List[]
+
+  comentarios     Comment[]
+  notificacoes    Notification[]
+  favoritos       FavoriteGame[]
+  curtidas        ReviewLike[]
   curtidasComents CommentLike[]
 
   // Auto-relacionamento de Seguidores
@@ -35,37 +37,38 @@ model User {
 }
 
 model Game {
-  id_igdb            Int            @id
+  id_igdb            Int     @id
   name               String
-  bio                String?        // Sinopse/Summary do jogo
-  cover_url          String?        // Capa em alta resolução
-  background_url     String?        // Artwork 1080p para o fundo
-  release_year       Int?           // Ano de lançamento
-  developer          String?        // Empresa desenvolvedora principal
-  genre              String?        // Lista de gêneros (ex: "RPG, Adventure")
-  platforms          String?        // Lista de plataformas (ex: "PC, PS5")
-  rating             Float?         // Nota do jogo (ex: 4.7)
-  rating_count       Int?           // Quantidade de avaliações
-  similar_games_json String?        // Lista de jogos similares em formato JSON
+  bio                String? // Sinopse/Summary do jogo
+  cover_url          String? // Capa em alta resolução
+  background_url     String? // Artwork 1080p para o fundo
+  release_year       Int? // Ano de lançamento
+  developer          String? // Empresa desenvolvedora principal
+  genre              String? // Lista de gêneros (ex: "RPG, Adventure")
+  platforms          String? // Lista de plataformas (ex: "PC, PS5")
+  rating             Float? // Nota do jogo (ex: 4.7)
+  rating_count       Int? // Quantidade de avaliações
+  similar_games_json String? // Lista de jogos similares em formato JSON
 
   // Relacionamentos N:1 (Mantidos perfeitamente iguais aos seus)
-  biblioteca         LibraryEntry[]
-  reviews            Review[]
-  listItems          ListItem[]
-  favoritos          FavoriteGame[]
+  biblioteca LibraryEntry[]
+  reviews    Review[]
+  listItems  ListItem[]
+  favoritos  FavoriteGame[]
+  wishlist   WishlistEntry[]
 
   @@map("games")
 }
 
 model LibraryEntry {
-  status            String    @default("Quero Jogar")
+  status            String
   marco_campanha    Boolean   @default(false)
   marco_secundarias Boolean   @default(false)
   started_at        DateTime?
   finished_at       DateTime?
 
   userId  Int @map("user_id")
-  id_igdb Int     
+  id_igdb Int
 
   user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
   game Game @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
@@ -74,13 +77,26 @@ model LibraryEntry {
   @@map("library_entries")
 }
 
+model WishlistEntry {
+  addedAt DateTime @default(now()) @map("added_at")
+
+  userId  Int @map("user_id")
+  id_igdb Int
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  game Game @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
+
+  @@id([userId, id_igdb])
+  @@map("wishlist_entries")
+}
+
 model List {
   listId   Int     @id @default(autoincrement()) @map("list_id")
   title    String
   summary  String?
   isPublic Boolean @default(true) @map("is_public")
-  
-  userId Int @map("user_id")
+
+  userId Int  @map("user_id")
   user   User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   listItems ListItem[]
@@ -90,9 +106,9 @@ model List {
 
 model ListItem {
   ordem Int
-  
+
   listId  Int @map("list_id")
-  id_igdb Int     
+  id_igdb Int
 
   list List @relation(fields: [listId], references: [listId], onDelete: Cascade)
   game Game @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
@@ -103,16 +119,16 @@ model ListItem {
 
 model Review {
   reviewId   Int      @id @default(autoincrement()) @map("review_id")
-  nota       Float   
+  nota       Float
   reviewText String?  @map("review_text")
   createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @default(now()) @map("updated_at")
-  
-  userId     Int      @map("user_id")
-  id_igdb    Int      
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
 
-  user       User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  game       Game     @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
+  userId  Int @map("user_id")
+  id_igdb Int
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  game Game @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
 
   comentarios Comment[]
   curtidas    ReviewLike[]
@@ -180,11 +196,11 @@ model UserFollow {
 
 model Notification {
   notificationID Int      @id @default(autoincrement()) @map("notification_id")
-  type           String   // Ex: "NEW_FOLLOWER", "NEW_LIKE"
+  type           String // Ex: "NEW_FOLLOWER", "NEW_LIKE"
   isRead         Boolean  @default(false) @map("is_read")
   createdAt      DateTime @default(now()) @map("created_at")
 
-  userId Int @map("user_id")
+  userId Int  @map("user_id")
   user   User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@map("notifications")
@@ -200,6 +216,6 @@ model FavoriteGame {
   game Game @relation(fields: [id_igdb], references: [id_igdb], onDelete: Cascade)
 
   // Garante que o usuário não coloque 2 jogos no mesmo slot
-  @@id([userId, slot]) 
+  @@id([userId, slot])
   @@map("favorite_games")
 }

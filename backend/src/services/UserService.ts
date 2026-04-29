@@ -113,6 +113,13 @@ export class UserService {
                 username: true,
                 bio: true,
                 avatar_url: true,
+                background_url: true,
+                _count: {
+                    select: {
+                        seguidores: true,
+                        seguindo: true
+                    }
+                },
                 favoritos: {
                     select: {
                         slot: true,
@@ -161,6 +168,14 @@ export class UserService {
                 email: true,
                 bio: true,
                 avatar_url: true, 
+                background_url: true,
+                wishlist_is_public: true,
+                _count: {
+                    select: {
+                        seguidores: true,
+                        seguindo: true
+                    }
+                },
                 favoritos: {
                     select: {
                         slot: true,
@@ -201,7 +216,7 @@ export class UserService {
     }
 
     static async atualizarPerfil(userId: number, data: any) {
-        const { username, bio, email, oldPassword, newPassword, avatar_url } = data;
+        const { username, bio, email, oldPassword, newPassword, avatar_url, background_url, wishlist_is_public } = data;
 
         const usuarioAtual = await prisma.user.findUnique({
             where: { userId: userId }
@@ -252,6 +267,8 @@ export class UserService {
                 username: username || usuarioAtual.username,
                 bio: bio !== undefined ? bio : usuarioAtual.bio,
                 avatar_url: avatar_url !== undefined ? avatar_url : usuarioAtual.avatar_url,
+                background_url: background_url !== undefined ? background_url : usuarioAtual.background_url,
+                wishlist_is_public: wishlist_is_public !== undefined ? wishlist_is_public : usuarioAtual.wishlist_is_public,
                 email: email || usuarioAtual.email,
                 senha_hash: senhaFinal 
             },
@@ -260,7 +277,9 @@ export class UserService {
                 username: true,
                 email: true,
                 bio: true,
-                avatar_url: true 
+                avatar_url: true,
+                background_url: true,
+                wishlist_is_public: true
             }
         });
 

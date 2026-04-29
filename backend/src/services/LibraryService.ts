@@ -62,6 +62,11 @@ export class LibraryService {
             }
         });
 
+        // Remove da wishlist automaticamente
+        await prisma.wishlistEntry.deleteMany({
+            where: { userId: userId, id_igdb: id_igdb }
+        });
+
         return {
             mensagem: `${jogo.name} foi adicionado à sua biblioteca!`,
             entrada: novaEntrada

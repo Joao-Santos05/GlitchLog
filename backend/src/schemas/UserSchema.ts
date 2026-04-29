@@ -23,7 +23,9 @@ export const atualizarPerfilSchema = z.object({
         email: z.string().email().optional(),
         oldPassword: z.string().optional(),
         newPassword: z.string().min(6).optional(),
-        avatar_url: z.string().url().optional()
+        avatar_url: z.string().url().optional(),
+        background_url: z.string().url().optional(),
+        wishlist_is_public: z.boolean().optional()
     })
 });
 

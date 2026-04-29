@@ -5,6 +5,8 @@ import libraryRoutes from './routes/LibraryRoutes';
 import reviewRoutes from './routes/ReviewRoutes';
 import favoriteRoutes from './routes/FavoriteRoutes';
 import listRoutes from './routes/ListRoutes';
+import wishlistRoutes from './routes/WishlistRoutes';
+import followRoutes from './routes/FollowRoutes';
 import { errorHandler } from './middlewares/ErrorHandler';
 
 const app = express();
@@ -17,6 +19,8 @@ app.use('/api/biblioteca', libraryRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/favoritos', favoriteRoutes);
 app.use('/api/listas', listRoutes);
+app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/seguidores', followRoutes);
 
 // Uma rota de status simples para teste
 app.get('/api/status', (req: Request, res: Response) => {
