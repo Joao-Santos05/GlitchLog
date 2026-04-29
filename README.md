@@ -111,6 +111,13 @@ To get a local copy up and running, follow these simple steps.
    npm run dev
    ```
 
+8. **Run the Tests (Backend)**
+   - Create a `.env.test` file in the `backend` folder (similar to `.env`)
+   - Then run the automated integration tests:
+   ```bash
+   npm test
+   ```
+
 ---
 
 ## 🗺️ Roadmap
@@ -120,6 +127,7 @@ To get a local copy up and running, follow these simple steps.
 - [x] Backend Routes Creation
 - [x] Backend Validation (Zod) & Error Handling
 - [x] Database Creation (Prisma)
+- [x] Automated Integration Tests (Jest + Supertest)
 - [ ] Connect Frontend to Backend Endpoints
 - [ ] Implement User Authentication (JWT/OAuth)
 - [ ] Recommendation Algorithm integration
