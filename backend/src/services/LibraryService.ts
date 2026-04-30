@@ -1,5 +1,6 @@
 import prisma from '../libs/prisma';
 import { IGDBService } from './igdbService';
+import { UserService } from './UserService';
 
 export class LibraryService {
     static async adicionarJogo(userId: number, id_igdb: number, status: string) {
@@ -73,18 +74,12 @@ export class LibraryService {
         };
     }
 
-    static async listarJogos(username: string) {
+    static async listarJogos(requesterId: number | undefined, username: string) {
         if (!username) {
             throw { status: 400, message: "Username é obrigatório." };
         }
 
-        const usuario = await prisma.user.findUnique({
-            where: { username: typeof username === 'string' ? username.toLowerCase() : ''}
-        });
-
-        if (!usuario) {
-            throw { status: 404, message: "Usuário não encontrado." };
-        }
+        const usuario = await UserService.checkPrivacyAccess(requesterId, typeof username === 'string' ? username.toLowerCase() : '');
 
         const biblioteca = await prisma.libraryEntry.findMany({
             where: { 

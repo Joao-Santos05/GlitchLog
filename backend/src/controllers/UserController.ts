@@ -25,7 +25,8 @@ export class UserController {
 
     static async buscarPerfilPublico(req: Request, res: Response) {
         const { username } = req.params;
-        const usuario = await UserService.buscarPerfilPublico(typeof username === 'string' ? username : '');
+        const requesterId = req.userId;
+        const usuario = await UserService.buscarPerfilPublico(requesterId, typeof username === 'string' ? username : '');
         res.status(200).json(usuario);
     }
 

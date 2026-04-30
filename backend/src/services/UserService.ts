@@ -105,7 +105,33 @@ export class UserService {
         return usuarios;
     }
 
-    static async buscarPerfilPublico(username: string) {
+    static async checkPrivacyAccess(requesterId: number | undefined, targetUsername: string) {
+        const targetUser = await prisma.user.findUnique({
+            where: { username: targetUsername.toLowerCase() }
+        });
+
+        if (!targetUser) {
+            throw { status: 404, message: "Usuário não encontrado." };
+        }
+
+        if (!targetUser.isPrivate) return targetUser;
+        if (requesterId && requesterId === targetUser.userId) return targetUser;
+        if (!requesterId) throw { status: 403, message: "Este perfil é privado." };
+
+        const followsTarget = await prisma.userFollow.findUnique({
+            where: { followerID_followingID: { followerID: requesterId, followingID: targetUser.userId } }
+        });
+        const targetFollows = await prisma.userFollow.findUnique({
+            where: { followerID_followingID: { followerID: targetUser.userId, followingID: requesterId } }
+        });
+
+        if (followsTarget && targetFollows) return targetUser;
+        throw { status: 403, message: "Este perfil é privado." };
+    }
+
+    static async buscarPerfilPublico(requesterId: number | undefined, username: string) {
+        await UserService.checkPrivacyAccess(requesterId, typeof username === 'string' ? username : '');
+
         const usuario = await prisma.user.findUnique({
             where: { username: typeof username === 'string' ? username.toLowerCase() : '' }, 
             select: {

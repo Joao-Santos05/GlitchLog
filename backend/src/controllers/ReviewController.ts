@@ -29,8 +29,9 @@ export class ReviewController {
     }
 
     static async listarReviewsDoUsuario(req: Request, res: Response) {
+        const requesterId = req.userId;
         const { username } = req.params;
-        const reviews = await ReviewService.listarReviewsDoUsuario(typeof username === 'string' ? username : '');
+        const reviews = await ReviewService.listarReviewsDoUsuario(requesterId, typeof username === 'string' ? username : '');
         res.status(200).json(reviews);
     }
 

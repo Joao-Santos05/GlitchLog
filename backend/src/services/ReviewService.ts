@@ -1,4 +1,5 @@
 import prisma from '../libs/prisma';
+import { UserService } from './UserService';
 
 export class ReviewService {
     static async criarReview(userId: number, id_igdb: number, data: any) {
@@ -86,7 +87,9 @@ export class ReviewService {
         return reviews;
     }
 
-    static async listarReviewsDoUsuario(username: string) {
+    static async listarReviewsDoUsuario(requesterId: number | undefined, username: string) {
+        await UserService.checkPrivacyAccess(requesterId, typeof username === 'string' ? username.toLowerCase() : '');
+
         const reviews = await prisma.review.findMany({
             where: {
                 user: {

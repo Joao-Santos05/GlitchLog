@@ -43,3 +43,25 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
         res.status(401).json({ erro: "Token inválido ou expirado." });
     }
 }
+
+export function optionalAuthMiddleware(req: Request, res: Response, next: NextFunction) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return next();
+
+    const parts = authHeader.split(' ');
+    if (parts.length !== 2) return next();
+
+    const token = parts[1];
+    if (!token) return next();
+
+    try {
+        const segredo = process.env.JWT_SECRET;
+        if (!segredo) return next();
+        
+        const decoded = jwt.verify(token, segredo) as unknown as TokenPayload;
+        req.userId = decoded.id; 
+    } catch (erro) {
+        // Ignora erros para a autenticação opcional
+    }
+    next();
+}
