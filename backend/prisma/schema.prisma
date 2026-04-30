@@ -16,6 +16,7 @@ model User {
   avatar_url         String?
   background_url     String?
   wishlist_is_public Boolean @default(true)
+  isPrivate          Boolean @default(false) @map("is_private")
 
   // Relacionamentos N:1
   biblioteca LibraryEntry[]
