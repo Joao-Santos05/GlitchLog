@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { UserController } from '../controllers/UserController';
 import { authMiddleware } from '../middlewares/AuthMiddleware';
 import { validate } from '../middlewares/ValidationMiddleware';
-import { criarUsuarioSchema, loginSchema, atualizarPerfilSchema, buscarPerfilPublicoSchema } from '../schemas/UserSchema';
+import { criarUsuarioSchema, loginSchema, atualizarPerfilSchema, buscarPerfilPublicoSchema, alterarSenhaSchema } from '../schemas/UserSchema';
 
 const router = Router();
 
@@ -12,6 +12,8 @@ router.delete('/', authMiddleware, UserController.excluirUsuario);
 router.get('/', UserController.listarUsuarios); 
 router.get('/perfil', authMiddleware, UserController.meuPerfil);
 router.put('/perfil', authMiddleware, validate(atualizarPerfilSchema), UserController.atualizarPerfil);
+router.post('/logout', authMiddleware, UserController.logout);
+router.put('/alterar-senha', authMiddleware, validate(alterarSenhaSchema), UserController.alterarSenha);
 router.get('/:username', validate(buscarPerfilPublicoSchema), UserController.buscarPerfilPublico);
 
 export default router;

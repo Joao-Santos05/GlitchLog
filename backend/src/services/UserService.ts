@@ -114,6 +114,7 @@ export class UserService {
                 bio: true,
                 avatar_url: true,
                 background_url: true,
+                isPrivate: true,
                 _count: {
                     select: {
                         seguidores: true,
@@ -170,6 +171,7 @@ export class UserService {
                 avatar_url: true, 
                 background_url: true,
                 wishlist_is_public: true,
+                isPrivate: true,
                 _count: {
                     select: {
                         seguidores: true,
@@ -216,7 +218,7 @@ export class UserService {
     }
 
     static async atualizarPerfil(userId: number, data: any) {
-        const { username, bio, email, oldPassword, newPassword, avatar_url, background_url, wishlist_is_public } = data;
+        const { username, bio, email, avatar_url, background_url, wishlist_is_public, isPrivate } = data;
 
         const usuarioAtual = await prisma.user.findUnique({
             where: { userId: userId }
@@ -242,25 +244,6 @@ export class UserService {
             }
         }
 
-        const mudandoEmail = email && email !== usuarioAtual.email;
-        const mudandoSenha = newPassword !== undefined && newPassword !== "";
-        let senhaFinal = usuarioAtual.senha_hash;
-
-        if (mudandoEmail || mudandoSenha) {
-            if (!oldPassword) {
-                throw { status: 400, message: "Para alterar seu e-mail ou senha, confirme sua senha atual." };
-            }
-
-            const senhaBate = await bcrypt.compare(oldPassword, usuarioAtual.senha_hash);
-            if (!senhaBate) {
-                throw { status: 401, message: "A senha atual está incorreta." };
-            }
-
-            if (mudandoSenha) {
-                senhaFinal = await bcrypt.hash(newPassword, 10);
-            }
-        }
-
         const usuarioAtualizado = await prisma.user.update({
             where: { userId: userId },
             data: {
@@ -269,8 +252,8 @@ export class UserService {
                 avatar_url: avatar_url !== undefined ? avatar_url : usuarioAtual.avatar_url,
                 background_url: background_url !== undefined ? background_url : usuarioAtual.background_url,
                 wishlist_is_public: wishlist_is_public !== undefined ? wishlist_is_public : usuarioAtual.wishlist_is_public,
-                email: email || usuarioAtual.email,
-                senha_hash: senhaFinal 
+                isPrivate: isPrivate !== undefined ? isPrivate : usuarioAtual.isPrivate,
+                email: email || usuarioAtual.email
             },
             select: {
                 userId: true,
@@ -279,10 +262,39 @@ export class UserService {
                 bio: true,
                 avatar_url: true,
                 background_url: true,
-                wishlist_is_public: true
+                wishlist_is_public: true,
+                isPrivate: true
             }
         });
 
         return { mensagem: "Perfil atualizado com sucesso!", perfil: usuarioAtualizado };
+    }
+
+    static async alterarSenha(userId: number, data: any) {
+        const { senhaAtual, novaSenha } = data;
+
+        const usuarioAtual = await prisma.user.findUnique({
+            where: { userId: userId }
+        });
+
+        if (!usuarioAtual) {
+            throw { status: 404, message: "Usuário não encontrado." };
+        }
+
+        const senhaBate = await bcrypt.compare(senhaAtual, usuarioAtual.senha_hash);
+        if (!senhaBate) {
+            throw { status: 401, message: "A senha atual está incorreta." };
+        }
+
+        const senhaFinal = await bcrypt.hash(novaSenha, 10);
+
+        await prisma.user.update({
+            where: { userId: userId },
+            data: {
+                senha_hash: senhaFinal
+            }
+        });
+
+        return { mensagem: "Senha alterada com sucesso!" };
     }
 }

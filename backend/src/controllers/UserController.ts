@@ -40,4 +40,14 @@ export class UserController {
         const resultado = await UserService.atualizarPerfil(userId, req.body);
         res.status(200).json(resultado);
     }
+
+    static async alterarSenha(req: Request, res: Response) {
+        const userId = req.userId; 
+        const resultado = await UserService.alterarSenha(userId, req.body);
+        res.status(200).json(resultado);
+    }
+
+    static async logout(req: Request, res: Response) {
+        res.status(200).json({ mensagem: "Logout efetuado com sucesso" });
+    }
 }
