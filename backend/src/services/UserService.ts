@@ -118,7 +118,10 @@ export class UserService {
                 _count: {
                     select: {
                         seguidores: true,
-                        seguindo: true
+                        seguindo: true,
+                        biblioteca: true,
+                        reviews: true,
+                        listas: true
                     }
                 },
                 favoritos: {
@@ -175,7 +178,10 @@ export class UserService {
                 _count: {
                     select: {
                         seguidores: true,
-                        seguindo: true
+                        seguindo: true,
+                        biblioteca: true,
+                        reviews: true,
+                        listas: true
                     }
                 },
                 favoritos: {

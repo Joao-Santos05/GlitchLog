@@ -7,5 +7,7 @@ import { toggleFollowSchema } from '../schemas/FollowSchema';
 const router = Router();
 
 router.post('/:username/toggle', authMiddleware, validate(toggleFollowSchema), FollowController.toggleFollow);
+router.get('/:username/followers', validate(toggleFollowSchema), FollowController.getFollowers);
+router.get('/:username/following', validate(toggleFollowSchema), FollowController.getFollowing);
 
 export default router;

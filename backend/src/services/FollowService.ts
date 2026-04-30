@@ -58,4 +58,54 @@ export class FollowService {
             return { mensagem: `Você agora está seguindo ${usuarioAlvo.username}.`, status: 'followed' };
         }
     }
+
+    static async getFollowers(username: string) {
+        const usuario = await prisma.user.findUnique({
+            where: { username: username.toLowerCase() },
+            select: {
+                seguidores: {
+                    select: {
+                        seguidor: {
+                            select: {
+                                username: true,
+                                avatar_url: true,
+                                name: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        if (!usuario) {
+            throw { status: 404, message: "Usuário não encontrado." };
+        }
+
+        return usuario.seguidores.map(f => f.seguidor);
+    }
+
+    static async getFollowing(username: string) {
+        const usuario = await prisma.user.findUnique({
+            where: { username: username.toLowerCase() },
+            select: {
+                seguindo: {
+                    select: {
+                        seguido: {
+                            select: {
+                                username: true,
+                                avatar_url: true,
+                                name: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        if (!usuario) {
+            throw { status: 404, message: "Usuário não encontrado." };
+        }
+
+        return usuario.seguindo.map(f => f.seguido);
+    }
 }
