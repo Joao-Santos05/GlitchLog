@@ -7,6 +7,7 @@ import { createListSchema, updateListSchema, addGamesToListSchema } from '../sch
 const router = Router();
 
 router.get('/minhas', authMiddleware, ListController.getMyLists);
+router.get('/popular', optionalAuthMiddleware, ListController.getPopularLists);
 router.get('/usuario/:username', optionalAuthMiddleware, ListController.getUserLists);
 router.get('/:id', ListController.getListById);
 

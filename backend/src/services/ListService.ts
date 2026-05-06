@@ -127,6 +127,22 @@ export class ListService {
         return listas;
     }
 
+    static async getPopularLists(requesterId: number | undefined) {
+        const listas = await prisma.list.findMany({
+            where: { isPublic: true },
+            include: {
+                _count: { select: { listItems: true } },
+                user: { select: { username: true, avatar_url: true } }
+            },
+            orderBy: {
+                listItems: { _count: 'desc' }
+            },
+            take: 10
+        });
+
+        return listas;
+    }
+
     static async getListById(listId: number) {
         const lista = await prisma.list.findUnique({
             where: { listId },

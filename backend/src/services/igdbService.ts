@@ -4,6 +4,7 @@ export interface IGDBOptions {
     search?: string;
     limit?: number;
     where?: string;
+    sort?: string;
 }
 
 export class IGDBService {
@@ -56,6 +57,10 @@ export class IGDBService {
 
         if (opcoes.where) {
             queryBody += ` where ${opcoes.where};`;
+        }
+
+        if (opcoes.sort) {
+            queryBody += ` sort ${opcoes.sort};`;
         }
 
         const limiteFinal = opcoes.limit ? opcoes.limit : 10;

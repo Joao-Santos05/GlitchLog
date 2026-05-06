@@ -30,6 +30,12 @@ export class ListController {
         res.status(200).json(listas);
     }
 
+    static async getPopularLists(req: Request, res: Response) {
+        const requesterId = req.userId;
+        const listas = await ListService.getPopularLists(requesterId);
+        res.status(200).json(listas);
+    }
+
     static async getListById(req: Request<{ id: string }>, res: Response) {
         const listId = parseInt(req.params.id);
         const lista = await ListService.getListById(listId);
