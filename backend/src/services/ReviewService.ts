@@ -166,4 +166,53 @@ export class ReviewService {
             return { mensagem: "Review curtida!", curtiu: true };
         }
     }
+
+    static async listarReviewsDeAmigos(requesterId: number) {
+        const reviews = await prisma.review.findMany({
+            where: {
+                user: {
+                    seguidores: {
+                        some: { followerID: requesterId }
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+            take: 20,
+            include: {
+                user: { select: { username: true, avatar_url: true, name: true } },
+                game: { select: { id_igdb: true, name: true, cover_url: true } },
+                _count: { select: { curtidas: true, comentarios: true } }
+            }
+        });
+        return reviews;
+    }
+
+    static async listarReviewsPopularesDoMes() {
+        const hoje = new Date();
+        const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+        const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0, 23, 59, 59, 999);
+
+        const reviews = await prisma.review.findMany({
+            where: {
+                createdAt: {
+                    gte: primeiroDiaMes,
+                    lte: ultimoDiaMes
+                }
+            },
+            orderBy: {
+                curtidas: {
+                    _count: 'desc'
+                }
+            },
+            take: 10,
+            include: {
+                user: { select: { username: true, avatar_url: true, name: true } },
+                game: { select: { id_igdb: true, name: true, cover_url: true } },
+                _count: { select: { curtidas: true, comentarios: true } }
+            }
+        });
+        return reviews;
+    }
 }

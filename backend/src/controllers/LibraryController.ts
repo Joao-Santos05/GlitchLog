@@ -16,8 +16,9 @@ export class LibraryController {
         const { username } = req.params;
         const minRatingRaw = req.query.minRating;
         const minRating = minRatingRaw ? Number(minRatingRaw) : undefined;
+        const genre = req.query.genre as string | undefined;
 
-        const biblioteca = await LibraryService.listarJogos(requesterId, typeof username === 'string' ? username : '', minRating);
+        const biblioteca = await LibraryService.listarJogos(requesterId, typeof username === 'string' ? username : '', minRating, genre);
         res.status(200).json(biblioteca);
 
     }
@@ -38,5 +39,12 @@ export class LibraryController {
         const resultado = await LibraryService.removerJogo(userId, Number(id_igdb));
         res.status(200).json(resultado);
 
+    }
+
+    static async listarDiary(req: Request, res: Response) {
+        const requesterId = req.userId;
+        const { username } = req.params;
+        const diary = await LibraryService.listarDiary(requesterId, typeof username === 'string' ? username : '');
+        res.status(200).json(diary);
     }
 }

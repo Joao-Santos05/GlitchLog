@@ -74,7 +74,7 @@ export class LibraryService {
         };
     }
 
-    static async listarJogos(requesterId: number | undefined, username: string, minRating?: number) {
+    static async listarJogos(requesterId: number | undefined, username: string, minRating?: number, genre?: string) {
         if (!username) {
             throw { status: 400, message: "Username é obrigatório." };
         }
@@ -82,8 +82,10 @@ export class LibraryService {
         const usuario = await UserService.checkPrivacyAccess(requesterId, typeof username === 'string' ? username.toLowerCase() : '');
 
         const whereClause: any = { userId: usuario.userId };
-        if (minRating) {
-            whereClause.game = { rating: { gte: minRating } };
+        if (minRating || genre) {
+            whereClause.game = {};
+            if (minRating) whereClause.game.rating = { gte: minRating };
+            if (genre) whereClause.game.genre = { contains: genre, mode: 'insensitive' };
         }
 
         const biblioteca = await prisma.libraryEntry.findMany({
@@ -165,5 +167,26 @@ export class LibraryService {
         }
 
         return { mensagem: "Jogo removido da sua biblioteca." };
+    }
+
+    static async listarDiary(requesterId: number | undefined, username: string) {
+        if (!username) throw { status: 400, message: "Username é obrigatório." };
+        const usuario = await UserService.checkPrivacyAccess(requesterId, typeof username === 'string' ? username.toLowerCase() : '');
+
+        const diary = await prisma.libraryEntry.findMany({
+            where: {
+                userId: usuario.userId,
+                finished_at: { not: null }
+            },
+            orderBy: { finished_at: 'desc' },
+            include: { game: true }
+        });
+
+        return diary.map((entrada: any) => ({
+            id_igdb: entrada.id_igdb,
+            nome: entrada.game.name,
+            cover_url: entrada.game.cover_url,
+            zerou_em: entrada.finished_at
+        }));
     }
 }

@@ -33,6 +33,7 @@ export const listarJogosSchema = z.object({
         username: z.string({ message: "Username é obrigatório" })
     }),
     query: z.object({
-        minRating: z.string().optional().transform(val => val ? parseFloat(val) : undefined)
+        minRating: z.string().optional().transform(val => val ? parseFloat(val) : undefined),
+        genre: z.string().optional()
     }).optional()
 });

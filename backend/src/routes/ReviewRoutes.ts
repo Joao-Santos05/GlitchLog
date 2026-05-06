@@ -8,6 +8,8 @@ import { adicionarComentarioSchema, commentIdParamSchema } from '../schemas/Comm
 
 const router = Router();
 
+router.get('/friends', authMiddleware, ReviewController.listarReviewsDeAmigos);
+router.get('/popular/month', ReviewController.listarReviewsPopularesDoMes);
 router.get('/:id_igdb', validate(listarReviewsSchema), ReviewController.listarReviews);
 router.get('/usuario/:username', optionalAuthMiddleware, validate(usernameParamSchema), ReviewController.listarReviewsDoUsuario);
 router.get('/:reviewId/comentarios', validate(reviewIdParamSchema), CommentController.listarComentarios);

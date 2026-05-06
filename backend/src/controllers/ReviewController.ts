@@ -43,4 +43,15 @@ export class ReviewController {
         res.status(resultado.mensagem === "Review curtida!" ? 201 : 200).json(resultado);
     
     }
+
+    static async listarReviewsDeAmigos(req: Request, res: Response) {
+        const requesterId = req.userId as number;
+        const reviews = await ReviewService.listarReviewsDeAmigos(requesterId);
+        res.status(200).json(reviews);
+    }
+
+    static async listarReviewsPopularesDoMes(req: Request, res: Response) {
+        const reviews = await ReviewService.listarReviewsPopularesDoMes();
+        res.status(200).json(reviews);
+    }
 }
