@@ -11,7 +11,7 @@ export function errorHandler(erro: any, req: Request, res: Response, next: NextF
     }
 
     if (erro.status && erro.message) {
-        res.status(erro.status).json({ erro: erro.message });
+        res.status(erro.status).json({ erro: erro.message, code: erro.code });
         return;
     }
 

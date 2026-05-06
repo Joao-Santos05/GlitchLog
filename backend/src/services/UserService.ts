@@ -1,6 +1,7 @@
 import prisma from '../libs/prisma';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import speakeasy from 'speakeasy';
 
 export class UserService {
     static async criarUsuario(data: any) {
@@ -52,6 +53,27 @@ export class UserService {
         
         if (!senhaValida) {
             throw { status: 401, message: "Senha incorreta." };
+        }
+
+        if (user.isTwoFactorEnabled) {
+            const token2fa = data.token2fa;
+            if (!token2fa) {
+                throw { status: 403, code: "2FA_REQUIRED", message: "Código 2FA é obrigatório para esta conta." };
+            }
+
+            if (!user.twoFactorSecret) {
+                throw { status: 500, message: "Erro interno: Segredo 2FA ausente." };
+            }
+
+            const verified = speakeasy.totp.verify({
+                secret: user.twoFactorSecret,
+                encoding: 'base32',
+                token: token2fa
+            });
+
+            if (!verified) {
+                throw { status: 401, message: "Código 2FA inválido." };
+            }
         }
 
         const segredo = process.env.JWT_SECRET;

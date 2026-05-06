@@ -12,7 +12,8 @@ export const criarUsuarioSchema = z.object({
 export const loginSchema = z.object({
     body: z.object({
         email: z.string({ message: "E-mail é obrigatório" }).email("Formato de e-mail inválido"),
-        senha: z.string({ message: "Senha é obrigatória" })
+        senha: z.string({ message: "Senha é obrigatória" }),
+        token2fa: z.string().optional()
     })
 });
 
