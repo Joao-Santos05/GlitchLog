@@ -1,5 +1,6 @@
 import prisma from '../libs/prisma';
 import { UserService } from './UserService';
+import { NotificationService } from './NotificationService';
 
 export class ReviewService {
     static async criarReview(userId: number, id_igdb: number, data: any) {
@@ -163,6 +164,17 @@ export class ReviewService {
                     reviewId: reviewId
                 }
             });
+
+            const review = await prisma.review.findUnique({ where: { reviewId }, select: { userId: true, game: { select: { name: true } } } });
+            const liker = await prisma.user.findUnique({ where: { userId: userId } });
+            if (review && liker && review.userId !== userId) {
+                await NotificationService.createNotification(
+                    review.userId,
+                    'NEW_LIKE_REVIEW',
+                    `${liker.username} curtiu sua review do jogo ${review.game.name}.`
+                );
+            }
+
             return { mensagem: "Review curtida!", curtiu: true };
         }
     }

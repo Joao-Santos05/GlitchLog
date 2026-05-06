@@ -198,6 +198,7 @@ model UserFollow {
 model Notification {
   notificationID Int      @id @default(autoincrement()) @map("notification_id")
   type           String // Ex: "NEW_FOLLOWER", "NEW_LIKE"
+  message        String?
   isRead         Boolean  @default(false) @map("is_read")
   createdAt      DateTime @default(now()) @map("created_at")
 

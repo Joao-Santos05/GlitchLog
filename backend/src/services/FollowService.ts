@@ -1,4 +1,5 @@
 import prisma from '../libs/prisma';
+import { NotificationService } from './NotificationService';
 
 export class FollowService {
     static async toggleFollow(followerId: number, followingUsername: string) {
@@ -47,13 +48,14 @@ export class FollowService {
                 }
             });
             
-            // Opcional: Criar notificação
-            await prisma.notification.create({
-                data: {
-                    userId: usuarioAlvo.userId,
-                    type: `NEW_FOLLOWER_${followerId}`
-                }
-            });
+            const follower = await prisma.user.findUnique({ where: { userId: followerId } });
+            if (follower) {
+                await NotificationService.createNotification(
+                    usuarioAlvo.userId,
+                    'NEW_FOLLOWER',
+                    `${follower.username} começou a seguir você.`
+                );
+            }
 
             return { mensagem: `Você agora está seguindo ${usuarioAlvo.username}.`, status: 'followed' };
         }
