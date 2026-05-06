@@ -14,7 +14,8 @@ export class LibraryController {
     static async listarJogos(req: Request, res: Response) {
         const requesterId = req.userId;
         const { username } = req.params;
-        const minRating = req.query.minRating as number | undefined;
+        const minRatingRaw = req.query.minRating;
+        const minRating = minRatingRaw ? Number(minRatingRaw) : undefined;
 
         const biblioteca = await LibraryService.listarJogos(requesterId, typeof username === 'string' ? username : '', minRating);
         res.status(200).json(biblioteca);
