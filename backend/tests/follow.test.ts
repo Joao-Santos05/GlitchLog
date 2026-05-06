@@ -88,4 +88,22 @@ describe('Follow Controller (/api/seguidores)', () => {
         expect(response.status).toBe(200);
         expect(response.body._count.seguidores).toBe(1);
     });
+
+    it('[Happy Path] Deve listar os seguidores de um usuário', async () => {
+        const response = await request(app).get(`/api/seguidores/${user2Username}/followers`);
+
+        expect(response.status).toBe(200);
+        expect(Array.isArray(response.body)).toBeTruthy();
+        expect(response.body.length).toBe(1);
+        expect(response.body[0].follower.username).toBe('seguidor');
+    });
+
+    it('[Happy Path] Deve listar quem um usuário segue', async () => {
+        const response = await request(app).get(`/api/seguidores/seguidor/following`);
+
+        expect(response.status).toBe(200);
+        expect(Array.isArray(response.body)).toBeTruthy();
+        expect(response.body.length).toBe(1);
+        expect(response.body[0].following.username).toBe(user2Username);
+    });
 });

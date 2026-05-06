@@ -122,4 +122,27 @@ describe('Library Controller (/api/biblioteca)', () => {
         const checkRes = await request.get(`/api/biblioteca/${username}`);
         expect(checkRes.body.length).toBe(0);
     });
+
+    it('[Happy Path] Deve filtrar a biblioteca por minRating', async () => {
+        // Adicionar jogo de volta
+        await request.post('/api/biblioteca')
+            .set('Authorization', `Bearer ${token}`)
+            .send({ id_igdb: jogoId, name: 'Zelda', status: 'JOGANDO' });
+
+        // Atualizar rating do jogo manualmente
+        await prisma.game.update({
+            where: { id_igdb: jogoId },
+            data: { rating: 95 }
+        });
+
+        // Testar filtro passando
+        const responsePass = await request.get(`/api/biblioteca/${username}?minRating=90`);
+        expect(responsePass.status).toBe(200);
+        expect(responsePass.body.length).toBe(1);
+
+        // Testar filtro falhando
+        const responseFail = await request.get(`/api/biblioteca/${username}?minRating=99`);
+        expect(responseFail.status).toBe(200);
+        expect(responseFail.body.length).toBe(0);
+    });
 });
