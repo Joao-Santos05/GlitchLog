@@ -105,7 +105,33 @@ export class UserService {
         return usuarios;
     }
 
-    static async buscarPerfilPublico(username: string) {
+    static async checkPrivacyAccess(requesterId: number | undefined, targetUsername: string) {
+        const targetUser = await prisma.user.findUnique({
+            where: { username: targetUsername.toLowerCase() }
+        });
+
+        if (!targetUser) {
+            throw { status: 404, message: "Usuário não encontrado." };
+        }
+
+        if (!targetUser.isPrivate) return targetUser;
+        if (requesterId && requesterId === targetUser.userId) return targetUser;
+        if (!requesterId) throw { status: 403, message: "Este perfil é privado." };
+
+        const followsTarget = await prisma.userFollow.findUnique({
+            where: { followerID_followingID: { followerID: requesterId, followingID: targetUser.userId } }
+        });
+        const targetFollows = await prisma.userFollow.findUnique({
+            where: { followerID_followingID: { followerID: targetUser.userId, followingID: requesterId } }
+        });
+
+        if (followsTarget && targetFollows) return targetUser;
+        throw { status: 403, message: "Este perfil é privado." };
+    }
+
+    static async buscarPerfilPublico(requesterId: number | undefined, username: string) {
+        await UserService.checkPrivacyAccess(requesterId, typeof username === 'string' ? username : '');
+
         const usuario = await prisma.user.findUnique({
             where: { username: typeof username === 'string' ? username.toLowerCase() : '' }, 
             select: {
@@ -113,6 +139,17 @@ export class UserService {
                 username: true,
                 bio: true,
                 avatar_url: true,
+                background_url: true,
+                isPrivate: true,
+                _count: {
+                    select: {
+                        seguidores: true,
+                        seguindo: true,
+                        biblioteca: true,
+                        reviews: true,
+                        listas: true
+                    }
+                },
                 favoritos: {
                     select: {
                         slot: true,
@@ -161,6 +198,18 @@ export class UserService {
                 email: true,
                 bio: true,
                 avatar_url: true, 
+                background_url: true,
+                wishlist_is_public: true,
+                isPrivate: true,
+                _count: {
+                    select: {
+                        seguidores: true,
+                        seguindo: true,
+                        biblioteca: true,
+                        reviews: true,
+                        listas: true
+                    }
+                },
                 favoritos: {
                     select: {
                         slot: true,
@@ -201,7 +250,7 @@ export class UserService {
     }
 
     static async atualizarPerfil(userId: number, data: any) {
-        const { username, bio, email, oldPassword, newPassword, avatar_url } = data;
+        const { username, bio, email, avatar_url, background_url, wishlist_is_public, isPrivate } = data;
 
         const usuarioAtual = await prisma.user.findUnique({
             where: { userId: userId }
@@ -227,43 +276,57 @@ export class UserService {
             }
         }
 
-        const mudandoEmail = email && email !== usuarioAtual.email;
-        const mudandoSenha = newPassword !== undefined && newPassword !== "";
-        let senhaFinal = usuarioAtual.senha_hash;
-
-        if (mudandoEmail || mudandoSenha) {
-            if (!oldPassword) {
-                throw { status: 400, message: "Para alterar seu e-mail ou senha, confirme sua senha atual." };
-            }
-
-            const senhaBate = await bcrypt.compare(oldPassword, usuarioAtual.senha_hash);
-            if (!senhaBate) {
-                throw { status: 401, message: "A senha atual está incorreta." };
-            }
-
-            if (mudandoSenha) {
-                senhaFinal = await bcrypt.hash(newPassword, 10);
-            }
-        }
-
         const usuarioAtualizado = await prisma.user.update({
             where: { userId: userId },
             data: {
                 username: username || usuarioAtual.username,
                 bio: bio !== undefined ? bio : usuarioAtual.bio,
                 avatar_url: avatar_url !== undefined ? avatar_url : usuarioAtual.avatar_url,
-                email: email || usuarioAtual.email,
-                senha_hash: senhaFinal 
+                background_url: background_url !== undefined ? background_url : usuarioAtual.background_url,
+                wishlist_is_public: wishlist_is_public !== undefined ? wishlist_is_public : usuarioAtual.wishlist_is_public,
+                isPrivate: isPrivate !== undefined ? isPrivate : usuarioAtual.isPrivate,
+                email: email || usuarioAtual.email
             },
             select: {
                 userId: true,
                 username: true,
                 email: true,
                 bio: true,
-                avatar_url: true 
+                avatar_url: true,
+                background_url: true,
+                wishlist_is_public: true,
+                isPrivate: true
             }
         });
 
         return { mensagem: "Perfil atualizado com sucesso!", perfil: usuarioAtualizado };
+    }
+
+    static async alterarSenha(userId: number, data: any) {
+        const { senhaAtual, novaSenha } = data;
+
+        const usuarioAtual = await prisma.user.findUnique({
+            where: { userId: userId }
+        });
+
+        if (!usuarioAtual) {
+            throw { status: 404, message: "Usuário não encontrado." };
+        }
+
+        const senhaBate = await bcrypt.compare(senhaAtual, usuarioAtual.senha_hash);
+        if (!senhaBate) {
+            throw { status: 401, message: "A senha atual está incorreta." };
+        }
+
+        const senhaFinal = await bcrypt.hash(novaSenha, 10);
+
+        await prisma.user.update({
+            where: { userId: userId },
+            data: {
+                senha_hash: senhaFinal
+            }
+        });
+
+        return { mensagem: "Senha alterada com sucesso!" };
     }
 }

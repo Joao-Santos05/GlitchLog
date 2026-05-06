@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import { ListController } from '../controllers/ListController';
-import { authMiddleware } from '../middlewares/AuthMiddleware';
+import { authMiddleware, optionalAuthMiddleware } from '../middlewares/AuthMiddleware';
 import { validate } from '../middlewares/ValidationMiddleware';
 import { createListSchema, updateListSchema, addGamesToListSchema } from '../schemas/ListSchema';
 
 const router = Router();
 
 router.get('/minhas', authMiddleware, ListController.getMyLists);
-router.get('/usuario/:username', ListController.getUserLists);
+router.get('/popular', optionalAuthMiddleware, ListController.getPopularLists);
+router.get('/usuario/:username', optionalAuthMiddleware, ListController.getUserLists);
 router.get('/:id', ListController.getListById);
 
 router.post('/', authMiddleware, validate(createListSchema), ListController.createList);

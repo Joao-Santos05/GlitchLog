@@ -1,4 +1,5 @@
 import prisma from '../libs/prisma';
+import { NotificationService } from './NotificationService';
 
 export class CommentService {
     static async adicionarComentario(userId: number, reviewId: number, content: string) {
@@ -16,6 +17,16 @@ export class CommentService {
                 user: { select: { username: true, avatar_url: true } }
             }
         });
+
+        const review = await prisma.review.findUnique({ where: { reviewId }, select: { userId: true, game: { select: { name: true } } } });
+        const commentAuthor = await prisma.user.findUnique({ where: { userId } });
+        if (review && commentAuthor && review.userId !== userId) {
+            await NotificationService.createNotification(
+                review.userId,
+                'NEW_COMMENT',
+                `${commentAuthor.username} comentou na sua review de ${review.game.name}.`
+            );
+        }
 
         return { mensagem: "Comentário adicionado!", comentario };
     }
@@ -76,6 +87,17 @@ export class CommentService {
             return { mensagem: "Like removido do comentário.", curtiu: false };
         } else {
             await prisma.commentLike.create({ data: { userId, commentID: commentId } });
+
+            const comment = await prisma.comment.findUnique({ where: { commentID: commentId }, select: { userId: true } });
+            const liker = await prisma.user.findUnique({ where: { userId } });
+            if (comment && liker && comment.userId !== userId) {
+                await NotificationService.createNotification(
+                    comment.userId,
+                    'NEW_LIKE_COMMENT',
+                    `${liker.username} curtiu seu comentário.`
+                );
+            }
+
             return { mensagem: "Comentário curtido!", curtiu: true };
         }
     }

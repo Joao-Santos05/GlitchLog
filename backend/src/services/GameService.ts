@@ -11,17 +11,55 @@ const limparImagem = (url: string | undefined): string | null => {
 };
 
 export class GameService {
-    static async buscarJogo(nomeDoJogo: string) {
-        if (!nomeDoJogo) {
-            throw { status: 400, message: "Você precisa enviar o nome do jogo!" };
-        }
-
+    static async getTrendingGames() {
         const jogosBrutos = await IGDBService.fazerQuery({
             endpoint: 'games',
-            fields: ['id', 'name', 'cover.url', 'rating', 'summary', 'first_release_date'],
-            search: nomeDoJogo,
+            fields: ['id', 'name', 'cover.url', 'rating', 'rating_count', 'summary', 'first_release_date'],
+            where: 'rating_count > 100', 
+            sort: 'rating_count desc',
             limit: 10
         });
+
+        return jogosBrutos.map((jogo: any) => {
+            if (jogo.cover && jogo.cover.url) {
+                let urlLimpa = jogo.cover.url.replace('t_thumb', 't_cover_big');
+                if (urlLimpa.startsWith('//')) urlLimpa = 'https:' + urlLimpa;
+                jogo.cover.url = urlLimpa;
+            }
+            return jogo;
+        });
+    }
+
+    static async buscarJogo(nomeDoJogo?: string, genre?: string, minRating?: number) {
+        if (!nomeDoJogo && !genre) {
+            throw { status: 400, message: "Você precisa enviar o nome do jogo ou um gênero!" };
+        }
+
+        const queryOpts: any = {
+            endpoint: 'games',
+            fields: ['id', 'name', 'cover.url', 'rating', 'summary', 'first_release_date'],
+            limit: 20
+        };
+
+        if (nomeDoJogo) {
+            queryOpts.search = nomeDoJogo;
+        } else {
+            queryOpts.sort = 'rating_count desc';
+        }
+
+        const conditions = [];
+        if (genre) {
+            conditions.push(`genres.name = "${genre}"`);
+        }
+        if (minRating) {
+            conditions.push(`rating >= ${minRating}`);
+        }
+
+        if (conditions.length > 0) {
+            queryOpts.where = conditions.join(' & ');
+        }
+
+        const jogosBrutos = await IGDBService.fazerQuery(queryOpts);
 
         const jogosLimpos = jogosBrutos.map((jogo: any) => {
             if (jogo.cover && jogo.cover.url) {

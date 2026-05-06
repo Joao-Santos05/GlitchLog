@@ -1,4 +1,6 @@
 import prisma from '../libs/prisma';
+import { UserService } from './UserService';
+import { NotificationService } from './NotificationService';
 
 export class ReviewService {
     static async criarReview(userId: number, id_igdb: number, data: any) {
@@ -86,7 +88,9 @@ export class ReviewService {
         return reviews;
     }
 
-    static async listarReviewsDoUsuario(username: string) {
+    static async listarReviewsDoUsuario(requesterId: number | undefined, username: string) {
+        await UserService.checkPrivacyAccess(requesterId, typeof username === 'string' ? username.toLowerCase() : '');
+
         const reviews = await prisma.review.findMany({
             where: {
                 user: {
@@ -160,7 +164,67 @@ export class ReviewService {
                     reviewId: reviewId
                 }
             });
+
+            const review = await prisma.review.findUnique({ where: { reviewId }, select: { userId: true, game: { select: { name: true } } } });
+            const liker = await prisma.user.findUnique({ where: { userId: userId } });
+            if (review && liker && review.userId !== userId) {
+                await NotificationService.createNotification(
+                    review.userId,
+                    'NEW_LIKE_REVIEW',
+                    `${liker.username} curtiu sua review do jogo ${review.game.name}.`
+                );
+            }
+
             return { mensagem: "Review curtida!", curtiu: true };
         }
+    }
+
+    static async listarReviewsDeAmigos(requesterId: number) {
+        const reviews = await prisma.review.findMany({
+            where: {
+                user: {
+                    seguidores: {
+                        some: { followerID: requesterId }
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+            take: 20,
+            include: {
+                user: { select: { username: true, avatar_url: true, name: true } },
+                game: { select: { id_igdb: true, name: true, cover_url: true } },
+                _count: { select: { curtidas: true, comentarios: true } }
+            }
+        });
+        return reviews;
+    }
+
+    static async listarReviewsPopularesDoMes() {
+        const hoje = new Date();
+        const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+        const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0, 23, 59, 59, 999);
+
+        const reviews = await prisma.review.findMany({
+            where: {
+                createdAt: {
+                    gte: primeiroDiaMes,
+                    lte: ultimoDiaMes
+                }
+            },
+            orderBy: {
+                curtidas: {
+                    _count: 'desc'
+                }
+            },
+            take: 10,
+            include: {
+                user: { select: { username: true, avatar_url: true, name: true } },
+                game: { select: { id_igdb: true, name: true, cover_url: true } },
+                _count: { select: { curtidas: true, comentarios: true } }
+            }
+        });
+        return reviews;
     }
 }

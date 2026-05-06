@@ -25,7 +25,8 @@ export class UserController {
 
     static async buscarPerfilPublico(req: Request, res: Response) {
         const { username } = req.params;
-        const usuario = await UserService.buscarPerfilPublico(typeof username === 'string' ? username : '');
+        const requesterId = req.userId;
+        const usuario = await UserService.buscarPerfilPublico(requesterId, typeof username === 'string' ? username : '');
         res.status(200).json(usuario);
     }
 
@@ -39,5 +40,15 @@ export class UserController {
         const userId = req.userId; 
         const resultado = await UserService.atualizarPerfil(userId, req.body);
         res.status(200).json(resultado);
+    }
+
+    static async alterarSenha(req: Request, res: Response) {
+        const userId = req.userId; 
+        const resultado = await UserService.alterarSenha(userId, req.body);
+        res.status(200).json(resultado);
+    }
+
+    static async logout(req: Request, res: Response) {
+        res.status(200).json({ mensagem: "Logout efetuado com sucesso" });
     }
 }

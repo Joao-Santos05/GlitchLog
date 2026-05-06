@@ -29,8 +29,9 @@ export class ReviewController {
     }
 
     static async listarReviewsDoUsuario(req: Request, res: Response) {
+        const requesterId = req.userId;
         const { username } = req.params;
-        const reviews = await ReviewService.listarReviewsDoUsuario(typeof username === 'string' ? username : '');
+        const reviews = await ReviewService.listarReviewsDoUsuario(requesterId, typeof username === 'string' ? username : '');
         res.status(200).json(reviews);
     }
 
@@ -41,5 +42,16 @@ export class ReviewController {
         const resultado = await ReviewService.toggleLike(userId, reviewId);
         res.status(resultado.mensagem === "Review curtida!" ? 201 : 200).json(resultado);
     
+    }
+
+    static async listarReviewsDeAmigos(req: Request, res: Response) {
+        const requesterId = req.userId as number;
+        const reviews = await ReviewService.listarReviewsDeAmigos(requesterId);
+        res.status(200).json(reviews);
+    }
+
+    static async listarReviewsPopularesDoMes(req: Request, res: Response) {
+        const reviews = await ReviewService.listarReviewsPopularesDoMes();
+        res.status(200).json(reviews);
     }
 }

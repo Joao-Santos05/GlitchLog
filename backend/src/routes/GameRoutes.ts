@@ -6,6 +6,7 @@ import { buscarJogoSchema, buscarDetalhesPorIdSchema } from '../schemas/GameSche
 const router = Router();
 
 //rota final: GET /api/jogos/buscar?nome=nomedojogo
+router.get('/trending', GameController.getTrendingGames);
 router.get('/buscar', validate(buscarJogoSchema), GameController.buscarJogo);
 router.get('/:id', validate(buscarDetalhesPorIdSchema), GameController.buscarDetalhesPorId);
 

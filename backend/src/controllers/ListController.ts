@@ -24,8 +24,15 @@ export class ListController {
     }
 
     static async getUserLists(req: Request<{ username: string }>, res: Response) {
+        const requesterId = req.userId;
         const { username } = req.params;
-        const listas = await ListService.getUserLists(username);
+        const listas = await ListService.getUserLists(requesterId, typeof username === 'string' ? username : '');
+        res.status(200).json(listas);
+    }
+
+    static async getPopularLists(req: Request, res: Response) {
+        const requesterId = req.userId;
+        const listas = await ListService.getPopularLists(requesterId);
         res.status(200).json(listas);
     }
 

@@ -1,5 +1,6 @@
 import prisma from '../libs/prisma';
 import { IGDBService } from './igdbService';
+import { UserService } from './UserService';
 
 export class LibraryService {
     static async adicionarJogo(userId: number, id_igdb: number, status: string) {
@@ -62,29 +63,33 @@ export class LibraryService {
             }
         });
 
+        // Remove da wishlist automaticamente
+        await prisma.wishlistEntry.deleteMany({
+            where: { userId: userId, id_igdb: id_igdb }
+        });
+
         return {
             mensagem: `${jogo.name} foi adicionado à sua biblioteca!`,
             entrada: novaEntrada
         };
     }
 
-    static async listarJogos(username: string) {
+    static async listarJogos(requesterId: number | undefined, username: string, minRating?: number, genre?: string) {
         if (!username) {
             throw { status: 400, message: "Username é obrigatório." };
         }
 
-        const usuario = await prisma.user.findUnique({
-            where: { username: typeof username === 'string' ? username.toLowerCase() : ''}
-        });
+        const usuario = await UserService.checkPrivacyAccess(requesterId, typeof username === 'string' ? username.toLowerCase() : '');
 
-        if (!usuario) {
-            throw { status: 404, message: "Usuário não encontrado." };
+        const whereClause: any = { userId: usuario.userId };
+        if (minRating || genre) {
+            whereClause.game = {};
+            if (minRating) whereClause.game.rating = { gte: minRating };
+            if (genre) whereClause.game.genre = { contains: genre, mode: 'insensitive' };
         }
 
         const biblioteca = await prisma.libraryEntry.findMany({
-            where: { 
-                userId: usuario.userId 
-            },
+            where: whereClause,
             include: { game: true },
             orderBy: { started_at: 'desc' }
         });
@@ -162,5 +167,26 @@ export class LibraryService {
         }
 
         return { mensagem: "Jogo removido da sua biblioteca." };
+    }
+
+    static async listarDiary(requesterId: number | undefined, username: string) {
+        if (!username) throw { status: 400, message: "Username é obrigatório." };
+        const usuario = await UserService.checkPrivacyAccess(requesterId, typeof username === 'string' ? username.toLowerCase() : '');
+
+        const diary = await prisma.libraryEntry.findMany({
+            where: {
+                userId: usuario.userId,
+                finished_at: { not: null }
+            },
+            orderBy: { finished_at: 'desc' },
+            include: { game: true }
+        });
+
+        return diary.map((entrada: any) => ({
+            id_igdb: entrada.id_igdb,
+            nome: entrada.game.name,
+            cover_url: entrada.game.cover_url,
+            zerou_em: entrada.finished_at
+        }));
     }
 }

@@ -1,5 +1,6 @@
 import prisma from '../libs/prisma';
 import { IGDBService } from './igdbService';
+import { UserService } from './UserService';
 
 const limparImagem = (url: string | undefined): string | null => {
     if (!url) return null;
@@ -108,14 +109,8 @@ export class ListService {
         return listas;
     }
 
-    static async getUserLists(username: string) {
-        const user = await prisma.user.findUnique({
-            where: { username: username.toLowerCase() }
-        });
-
-        if (!user) {
-            throw { status: 404, message: "Usuário não encontrado." };
-        }
+    static async getUserLists(requesterId: number | undefined, username: string) {
+        const user = await UserService.checkPrivacyAccess(requesterId, typeof username === 'string' ? username.toLowerCase() : '');
 
         const listas = await prisma.list.findMany({
             where: { userId: user.userId, isPublic: true },
@@ -127,6 +122,22 @@ export class ListService {
             orderBy: {
                 listId: 'desc'
             }
+        });
+
+        return listas;
+    }
+
+    static async getPopularLists(requesterId: number | undefined) {
+        const listas = await prisma.list.findMany({
+            where: { isPublic: true },
+            include: {
+                _count: { select: { listItems: true } },
+                user: { select: { username: true, avatar_url: true } }
+            },
+            orderBy: {
+                listItems: { _count: 'desc' }
+            },
+            take: 10
         });
 
         return listas;
