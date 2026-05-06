@@ -180,4 +180,88 @@ export class GameService {
 
         return novoJogoLocal;
     }
+
+    static async discoverGames(userId: number) {
+        const library = await prisma.libraryEntry.findMany({ where: { userId }, select: { id_igdb: true } });
+        const wishlist = await prisma.wishlistEntry.findMany({ where: { userId }, select: { id_igdb: true } });
+        
+        const excludedIds = [...library, ...wishlist].map(e => e.id_igdb);
+
+        let seedGames = await prisma.favoriteGame.findMany({
+            where: { userId },
+            include: { game: true }
+        });
+
+        if (seedGames.length === 0) {
+            const highReviews = await prisma.review.findMany({
+                where: { userId, nota: { gte: 4 } },
+                include: { game: true }
+            });
+            seedGames = highReviews as any;
+        }
+
+        if (seedGames.length === 0) {
+            const activeLib = await prisma.libraryEntry.findMany({
+                where: { userId, status: { in: ['Zerado', 'Jogando'] } },
+                include: { game: true }
+            });
+            seedGames = activeLib as any;
+        }
+
+        if (seedGames.length === 0) {
+            return this.getTrendingGames();
+        }
+
+        const genreCounts: Record<string, number> = {};
+        seedGames.forEach((entry: any) => {
+            const game = entry.game;
+            if (game && game.genre && game.genre !== 'N/A') {
+                const genres = game.genre.split(',').map((g: string) => g.trim());
+                genres.forEach((g: string) => {
+                    genreCounts[g] = (genreCounts[g] || 0) + 1;
+                });
+            }
+        });
+
+        const sortedGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]);
+        
+        if (sortedGenres.length === 0) {
+            return this.getTrendingGames();
+        }
+
+        const topGenres = sortedGenres.slice(0, 2).map(g => g[0]);
+
+        const conditions = [];
+        if (topGenres.length > 1) {
+            conditions.push(`(genres.name = "${topGenres[0]}" | genres.name = "${topGenres[1]}")`);
+        } else {
+            conditions.push(`genres.name = "${topGenres[0]}"`);
+        }
+
+        conditions.push(`rating_count > 50`);
+        conditions.push(`rating > 75`);
+
+        if (excludedIds.length > 0) {
+            conditions.push(`id != (${excludedIds.join(',')})`);
+        }
+
+        const igdbData = await IGDBService.fazerQuery({
+            endpoint: 'games',
+            fields: ['id', 'name', 'cover.url', 'rating', 'rating_count', 'summary', 'first_release_date'],
+            where: conditions.join(' & '),
+            sort: 'rating desc',
+            limit: 10
+        });
+
+        const jogosLimpos = igdbData.map((jogo: any) => {
+            if (jogo.cover && jogo.cover.url) {
+                let urlLimpa = jogo.cover.url.replace('t_thumb', 't_cover_big');
+                if (urlLimpa.startsWith('//')) urlLimpa = 'https:' + urlLimpa;
+                jogo.cover.url = urlLimpa;
+            }
+            return jogo;
+        });
+
+        return jogosLimpos;
+    }
 }

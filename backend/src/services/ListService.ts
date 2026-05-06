@@ -1,6 +1,7 @@
 import prisma from '../libs/prisma';
 import { IGDBService } from './igdbService';
 import { UserService } from './UserService';
+import { GameService } from './GameService';
 
 const limparImagem = (url: string | undefined): string | null => {
     if (!url) return null;
@@ -209,12 +210,69 @@ export class ListService {
         if (lista.userId !== userId) {
             throw { status: 403, message: "Você não tem permissão para excluir esta lista." };
         }
-
-        await prisma.list.delete({
+        const deleted = await prisma.list.delete({
             where: { listId }
         });
 
-        return { message: "Lista excluída com sucesso." };
+        return { mensagem: "Lista excluída com sucesso!", listId: deleted.listId };
+    }
+
+    static async suggestGames(listId: number) {
+        const lista = await prisma.list.findUnique({
+            where: { listId },
+            include: { listItems: true }
+        });
+
+        if (!lista) throw { status: 404, message: "Lista não encontrada." };
+
+        const currentIds = lista.listItems.map(item => item.id_igdb);
+
+        if (currentIds.length === 0) {
+            return GameService.getTrendingGames();
+        }
+
+        const igdbData = await IGDBService.fazerQuery({
+            endpoint: 'games',
+            fields: ['similar_games.id', 'similar_games.name', 'similar_games.cover.url'],
+            where: `id = (${currentIds.join(',')})`,
+            limit: 50
+        });
+
+        const similarCounts: Record<number, { id: number, name: string, cover_url: string, count: number }> = {};
+
+        igdbData.forEach((game: any) => {
+            if (game.similar_games) {
+                game.similar_games.forEach((sim: any) => {
+                    if (!currentIds.includes(sim.id)) {
+                        if (!similarCounts[sim.id]) {
+                            let urlLimpa = sim.cover?.url?.replace('t_thumb', 't_cover_big') || null;
+                            if (urlLimpa && urlLimpa.startsWith('//')) urlLimpa = 'https:' + urlLimpa;
+                            similarCounts[sim.id] = {
+                                id: sim.id,
+                                name: sim.name,
+                                cover_url: urlLimpa,
+                                count: 0
+                            };
+                        }
+                        similarCounts[sim.id]!.count += 1;
+                    }
+                });
+            }
+        });
+
+        const sortedSuggestions = Object.values(similarCounts)
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 10);
+
+        if (sortedSuggestions.length === 0) {
+            return GameService.getTrendingGames();
+        }
+
+        return sortedSuggestions.map(s => ({
+            id_igdb: s.id,
+            name: s.name,
+            cover_url: s.cover_url
+        }));
     }
 
     static async removeGameFromList(userId: number, listId: number, id_igdb: number) {

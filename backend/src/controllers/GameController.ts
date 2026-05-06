@@ -23,4 +23,10 @@ export class GameController {
         const jogo = await GameService.buscarDetalhesPorId(igdbId);
         res.status(200).json(jogo);
     }
+
+    static async discoverGames(req: Request, res: Response) {
+        const userId = req.userId as number;
+        const jogos = await GameService.discoverGames(userId);
+        res.status(200).json(jogos);
+    }
 }

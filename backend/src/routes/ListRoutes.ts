@@ -9,7 +9,8 @@ const router = Router();
 router.get('/minhas', authMiddleware, ListController.getMyLists);
 router.get('/popular', optionalAuthMiddleware, ListController.getPopularLists);
 router.get('/usuario/:username', optionalAuthMiddleware, ListController.getUserLists);
-router.get('/:id', ListController.getListById);
+router.get('/:id', optionalAuthMiddleware, ListController.getListById);
+router.get('/:id/suggest', optionalAuthMiddleware, ListController.suggestGames);
 
 router.post('/', authMiddleware, validate(createListSchema), ListController.createList);
 router.post('/:id/jogos', authMiddleware, validate(addGamesToListSchema), ListController.addGamesToList);
