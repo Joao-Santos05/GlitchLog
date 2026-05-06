@@ -27,3 +27,12 @@ export const removerJogoBibliotecaSchema = z.object({
         id_igdb: z.string().regex(/^\d+$/, "id_igdb deve ser um número válido")
     })
 });
+
+export const listarJogosSchema = z.object({
+    params: z.object({
+        username: z.string({ message: "Username é obrigatório" })
+    }),
+    query: z.object({
+        minRating: z.string().optional().transform(val => val ? parseFloat(val) : undefined)
+    }).optional()
+});

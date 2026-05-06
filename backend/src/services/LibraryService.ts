@@ -74,17 +74,20 @@ export class LibraryService {
         };
     }
 
-    static async listarJogos(requesterId: number | undefined, username: string) {
+    static async listarJogos(requesterId: number | undefined, username: string, minRating?: number) {
         if (!username) {
             throw { status: 400, message: "Username é obrigatório." };
         }
 
         const usuario = await UserService.checkPrivacyAccess(requesterId, typeof username === 'string' ? username.toLowerCase() : '');
 
+        const whereClause: any = { userId: usuario.userId };
+        if (minRating) {
+            whereClause.game = { rating: { gte: minRating } };
+        }
+
         const biblioteca = await prisma.libraryEntry.findMany({
-            where: { 
-                userId: usuario.userId 
-            },
+            where: whereClause,
             include: { game: true },
             orderBy: { started_at: 'desc' }
         });
