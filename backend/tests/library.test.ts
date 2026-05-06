@@ -129,19 +129,18 @@ describe('Library Controller (/api/biblioteca)', () => {
             .set('Authorization', `Bearer ${token}`)
             .send({ id_igdb: jogoId, name: 'Zelda', status: 'JOGANDO' });
 
-        // Atualizar rating do jogo manualmente
-        await prisma.game.update({
-            where: { id_igdb: jogoId },
-            data: { rating: 95 }
-        });
+        // Adicionar review do usuário para este jogo
+        await request.post(`/api/reviews/${jogoId}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({ id_igdb: jogoId, name: 'Zelda', nota: 5, reviewText: 'Excelente jogo!' });
 
         // Testar filtro passando
-        const responsePass = await request.get(`/api/biblioteca/${username}?minRating=90`);
+        const responsePass = await request.get(`/api/biblioteca/${username}?minRating=4`);
         expect(responsePass.status).toBe(200);
         expect(responsePass.body.length).toBe(1);
 
         // Testar filtro falhando
-        const responseFail = await request.get(`/api/biblioteca/${username}?minRating=99`);
+        const responseFail = await request.get(`/api/biblioteca/${username}?minRating=5.5`);
         expect(responseFail.status).toBe(200);
         expect(responseFail.body.length).toBe(0);
     });

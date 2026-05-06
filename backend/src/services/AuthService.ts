@@ -41,7 +41,12 @@ export class AuthService {
 
         await sendMail(user.email, "GlitchLog - Redefinição de Senha", message);
 
-        return { message: "Se o e-mail existir, um link de recuperação foi enviado." };
+        const responsePayload: any = { message: "Se o e-mail existir, um link de recuperação foi enviado." };
+        if (process.env.NODE_ENV === 'test') {
+            responsePayload.testToken = resetToken;
+        }
+
+        return responsePayload;
     }
 
     static async resetPassword(token: string, novaSenha: string) {

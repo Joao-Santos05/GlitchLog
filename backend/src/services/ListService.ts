@@ -214,7 +214,7 @@ export class ListService {
             where: { listId }
         });
 
-        return { mensagem: "Lista excluída com sucesso!", listId: deleted.listId };
+        return { message: "Lista excluída com sucesso." };
     }
 
     static async suggestGames(listId: number) {

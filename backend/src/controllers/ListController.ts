@@ -52,7 +52,7 @@ export class ListController {
     static async deleteList(req: Request<{ id: string }>, res: Response) {
         const userId = req.userId;
         const listId = parseInt(req.params.id);
-        const result = await ListService.deleteList(listId, userId);
+        const result = await ListService.deleteList(userId as number, listId);
         res.status(200).json(result);
     }
 
