@@ -32,6 +32,8 @@ const router = Router();
  *                 type: integer
  *               name:
  *                 type: string
+ *               cover_url:
+ *                 type: string
  *               status:
  *                 type: string
  *                 enum: [JOGANDO, FINALIZADO, ABANDONADO]
@@ -132,6 +134,7 @@ router.get('/:username/diary', optionalAuthMiddleware, validate(listarJogosSchem
  *             properties:
  *               status:
  *                 type: string
+ *                 enum: [JOGANDO, FINALIZADO, ABANDONADO]
  *     responses:
  *       200:
  *         description: Status atualizado

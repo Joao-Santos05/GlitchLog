@@ -30,6 +30,10 @@ const router = Router();
  *             properties:
  *               id_igdb:
  *                 type: integer
+ *               name:
+ *                 type: string
+ *               cover_url:
+ *                 type: string
  *               slot:
  *                 type: integer
  *                 description: De 1 a 4

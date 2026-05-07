@@ -153,6 +153,12 @@ router.get('/:reviewId/comentarios', validate(reviewIdParamSchema), CommentContr
  *           schema:
  *             type: object
  *             properties:
+ *               id_igdb:
+ *                 type: integer
+ *               name:
+ *                 type: string
+ *               cover_url:
+ *                 type: string
  *               nota:
  *                 type: number
  *               reviewText:

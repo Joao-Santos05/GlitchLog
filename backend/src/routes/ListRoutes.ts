@@ -148,11 +148,11 @@ router.get('/:id/suggest', optionalAuthMiddleware, ListController.suggestGames);
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               title:
  *                 type: string
- *               description:
+ *               summary:
  *                 type: string
- *               isPrivate:
+ *               isPublic:
  *                 type: boolean
  *     responses:
  *       201:
@@ -189,10 +189,15 @@ router.post('/', authMiddleware, validate(createListSchema), ListController.crea
  *           schema:
  *             type: object
  *             properties:
- *               gameIds:
+ *               games:
  *                 type: array
  *                 items:
- *                   type: integer
+ *                   type: object
+ *                   properties:
+ *                     id_igdb:
+ *                       type: integer
+ *                     ordem:
+ *                       type: integer
  *     responses:
  *       200:
  *         description: Jogos adicionados
@@ -228,11 +233,11 @@ router.post('/:id/jogos', authMiddleware, validate(addGamesToListSchema), ListCo
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               title:
  *                 type: string
- *               description:
+ *               summary:
  *                 type: string
- *               isPrivate:
+ *               isPublic:
  *                 type: boolean
  *     responses:
  *       200:

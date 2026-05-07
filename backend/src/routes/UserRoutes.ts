@@ -25,7 +25,7 @@ const router = Router();
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               nome:
  *                 type: string
  *               username:
  *                 type: string
@@ -161,10 +161,20 @@ router.get('/perfil', authMiddleware, UserController.meuPerfil);
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               username:
  *                 type: string
  *               bio:
  *                 type: string
+ *               email:
+ *                 type: string
+ *               avatar_url:
+ *                 type: string
+ *               background_url:
+ *                 type: string
+ *               wishlist_is_public:
+ *                 type: boolean
+ *               isPrivate:
+ *                 type: boolean
  *     responses:
  *       200:
  *         description: Perfil atualizado

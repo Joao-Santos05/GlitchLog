@@ -31,8 +31,6 @@ const router = Router();
  *             properties:
  *               id_igdb:
  *                 type: integer
- *               name:
- *                 type: string
  *     responses:
  *       201:
  *         description: Jogo adicionado à wishlist
