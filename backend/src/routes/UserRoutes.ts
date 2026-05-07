@@ -216,9 +216,9 @@ router.post('/logout', authMiddleware, UserController.logout);
  *           schema:
  *             type: object
  *             properties:
- *               senhaAntiga:
+ *               senhaAtual:
  *                 type: string
- *               senhaNova:
+ *               novaSenha:
  *                 type: string
  *     responses:
  *       200:
