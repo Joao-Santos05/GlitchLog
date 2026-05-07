@@ -8,6 +8,7 @@ import listRoutes from './routes/ListRoutes';
 import wishlistRoutes from './routes/WishlistRoutes';
 import followRoutes from './routes/FollowRoutes';
 import notificationRoutes from './routes/NotificationRoutes';
+import authRoutes from './routes/AuthRoutes';
 import { errorHandler } from './middlewares/ErrorHandler';
 
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api/listas', listRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/seguidores', followRoutes);
 app.use('/api/notificacoes', notificationRoutes);
+app.use('/api/auth', authRoutes);
 
 // Uma rota de status simples para teste
 app.get('/api/status', (req: Request, res: Response) => {

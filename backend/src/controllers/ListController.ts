@@ -52,8 +52,14 @@ export class ListController {
     static async deleteList(req: Request<{ id: string }>, res: Response) {
         const userId = req.userId;
         const listId = parseInt(req.params.id);
-        const resultado = await ListService.deleteList(userId, listId);
-        res.status(200).json(resultado);
+        const result = await ListService.deleteList(userId as number, listId);
+        res.status(200).json(result);
+    }
+
+    static async suggestGames(req: Request<{ id: string }>, res: Response) {
+        const listId = parseInt(req.params.id);
+        const suggestions = await ListService.suggestGames(listId);
+        res.status(200).json(suggestions);
     }
 
     static async removeGameFromList(req: Request<{ id: string, id_igdb: string }>, res: Response) {

@@ -83,8 +83,15 @@ export class LibraryService {
 
         const whereClause: any = { userId: usuario.userId };
         if (minRating || genre) {
-            whereClause.game = {};
-            if (minRating) whereClause.game.rating = { gte: minRating };
+            whereClause.game = { ...whereClause.game };
+            if (minRating) {
+                whereClause.game.reviews = {
+                    some: {
+                        userId: usuario.userId,
+                        nota: { gte: minRating }
+                    }
+                };
+            }
             if (genre) whereClause.game.genre = { contains: genre, mode: 'insensitive' };
         }
 

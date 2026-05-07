@@ -18,6 +18,12 @@ model User {
   wishlist_is_public Boolean @default(true)
   isPrivate          Boolean @default(false) @map("is_private")
 
+  // Autenticação Avançada
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
+  twoFactorSecret      String?
+  isTwoFactorEnabled   Boolean @default(false) @map("is_two_factor_enabled")
+
   // Relacionamentos N:1
   biblioteca LibraryEntry[]
   wishlist   WishlistEntry[]

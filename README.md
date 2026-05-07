@@ -28,6 +28,8 @@ Tired of scrolling through endless lists to figure out what to play next? Glitch
 - **Comprehensive Database:** Search and filter through thousands of games using dynamic genre and rating dropdowns.
 - **Detailed Game Profiles:** View in-depth stats, developer info, community ratings, and user reviews in a highly visual interface.
 - **Player Profiles:** Track your gaming journey with detailed statistics, favorite games, and recently played lists.
+- **Social & Auth:** Follow friends, receive intelligent notifications, recover your password via e-mail, and secure your account with Two-Factor Authentication (2FA).
+- **Smart Discovery Algorithm:** Personalized game suggestions that intelligently fallback from your Favorites, Reviews, and Library to provide tailored recommendations.
 - **Fully Custom UI:** Built from the ground up with custom typography, immersive "Glow" effects, custom components (like the "F" keycap button), and responsive layouts that adapt to any device notch or safe area.
 
 ---
@@ -50,6 +52,7 @@ Tired of scrolling through endless lists to figure out what to play next? Glitch
 - **ORM:** Prisma
 - **Validation:** Zod
 - **External API:** IGDB (Twitch)
+- **Security & Mail:** speakeasy (2FA), bcrypt, Nodemailer (Ethereal)
 
 ---
 
@@ -128,10 +131,10 @@ To get a local copy up and running, follow these simple steps.
 - [x] Backend Validation (Zod) & Error Handling
 - [x] Database Creation (Prisma)
 - [x] Automated Integration Tests (Jest + Supertest)
+- [x] Implement User Authentication (JWT, 2FA, Password Recovery)
+- [x] Recommendation Algorithm Integration (Cascade Fallback & IGDB Similar Games)
+- [x] Social Features (Follow friends, Share lists, Notifications)
 - [ ] Connect Frontend to Backend Endpoints
-- [ ] Implement User Authentication (JWT/OAuth)
-- [ ] Recommendation Algorithm integration
-- [ ] Social Features (Follow friends, share lists)
 
 ---
 
