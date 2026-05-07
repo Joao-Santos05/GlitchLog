@@ -10,10 +10,15 @@ import followRoutes from './routes/FollowRoutes';
 import notificationRoutes from './routes/NotificationRoutes';
 import authRoutes from './routes/AuthRoutes';
 import { errorHandler } from './middlewares/ErrorHandler';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './docs/swagger';
 
 const app = express();
 
 app.use(express.json());
+
+// Swagger Documentation Route
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/api/usuarios', userRoutes);
 app.use('/api/jogos', gameRoutes);
