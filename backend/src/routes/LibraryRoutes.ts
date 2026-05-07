@@ -34,7 +34,7 @@ const router = Router();
  *                 type: string
  *               status:
  *                 type: string
- *                 enum: [QUERO_JOGAR, JOGANDO, ZERADO, ABANDONADO]
+ *                 enum: [JOGANDO, FINALIZADO, ABANDONADO]
  *     responses:
  *       201:
  *         description: Jogo adicionado à biblioteca
