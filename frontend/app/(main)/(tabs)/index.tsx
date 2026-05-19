@@ -193,7 +193,20 @@ export default function HomeScreen() {
       >
         <HomeHeader />
 
-        <View className="mt-8 px-6">
+        <View className="mt-8 px-6 pb-4">
+          <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full self-start">
+            Recent Friends Review
+          </Text>
+          {MOCK_REVIEWS.map((reviewItem) => (
+            <ReviewCard
+              key={reviewItem.id}
+              review={reviewItem}
+              showGameCover={true}
+            />
+          ))}
+        </View>
+
+        <View className="px-6">
           <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full self-start">
             Popular Games This Month
           </Text>
@@ -230,19 +243,6 @@ export default function HomeScreen() {
             Popular Lists This Month
           </Text>
           <PopularLists lists={MOCK_LISTS} />
-        </View>
-
-        <View className="mt-8 px-6 pb-24">
-          <Text className="text-white text-lg font-bold mb-4 bg-light-400 px-4 py-1.5 rounded-full self-start">
-            Recent Friends Review
-          </Text>
-          {MOCK_REVIEWS.map((reviewItem) => (
-            <ReviewCard
-              key={reviewItem.id}
-              review={reviewItem}
-              showGameCover={true}
-            />
-          ))}
         </View>
       </ScrollView>
     </View>
