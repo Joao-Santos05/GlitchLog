@@ -9,7 +9,6 @@ export default function PrivacySecurity() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [isPrivate, setIsPrivate] = useState(false);
-  const [showActivity, setShowActivity] = useState(true);
   const [twoFactor, setTwoFactor] = useState(false);
 
   return (
@@ -29,7 +28,7 @@ export default function PrivacySecurity() {
           Visibility
         </Text>
         <View className="bg-[#2D214F] rounded-2xl px-4 py-2 border border-[#4A3F75] mb-8">
-          <View className="flex-row items-center justify-between py-3 border-b border-[#4A3F75]/50">
+          <View className="flex-row items-center justify-between py-3">
             <View className="flex-row items-center flex-1 pr-4">
               <Eye size={20} color="#C8ADFF" />
               <View className="ml-3">
@@ -44,25 +43,6 @@ export default function PrivacySecurity() {
             <Switch
               value={isPrivate}
               onValueChange={setIsPrivate}
-              trackColor={{ false: "#4A3F75", true: "#ff8945" }}
-              thumbColor="#FFFFFF"
-            />
-          </View>
-          <View className="flex-row items-center justify-between py-3">
-            <View className="flex-row items-center flex-1 pr-4">
-              <Shield size={20} color="#C8ADFF" />
-              <View className="ml-3">
-                <Text className="text-white font-medium text-base">
-                  Show Activity
-                </Text>
-                <Text className="text-[#7D70A3] text-xs mt-0.5">
-                  Let others see when you are online or playing.
-                </Text>
-              </View>
-            </View>
-            <Switch
-              value={showActivity}
-              onValueChange={setShowActivity}
               trackColor={{ false: "#4A3F75", true: "#ff8945" }}
               thumbColor="#FFFFFF"
             />
